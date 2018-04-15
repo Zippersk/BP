@@ -1,0 +1,34 @@
+\documentclass[../projekt.tex]{subfiles}
+\begin{document}
+
+
+\section{Flask}\label{flask}
+Flask je volne šíriteľný mikro framework napísaný v~jazyku Python, ktorý vznikol v~roku 2004. Aj keď ešte stále nevyšla verzia 1.0, svoje uplatnenie si našiel vo veľkých spoločnostiach ako Pinterest alebo LinkedIn. Od polovice roku 2016 je najpopulárnejším Python repozitárom na GitHube.
+\newline
+\newline
+Flask si zakladá na svojej jednoduchosti. Serverová aplikácia, ktorá po navštívení URL adresy \texttt{/zdroj} vypíše vetu "\texttt{Tu budu data zdroja.}", môže vyzerať následovne.
+\begin{lstlisting}[language=Python, caption=Jednoduchá aplikácia,frame=tlrb]
+from flask import Flask
+app = Flask(__name__)
+
+@app.route("/zdroj")
+def zdroj():
+    return "Tu budu data zdroja."
+\end{lstlisting}
+
+
+\subsection{Rozšírenia}
+Kedže sa Flask považuje za micro framework, sám o~sebe neobsahuje pokročilé funkcionality ako abstraktnú databázovú vrstvu, validáciu formulárov, alebo stránkovanie výsledkov z~kolekcie. Avšak Flask podporuje rozšírenia, ktoré dokážu aplikáciam pridať požadované funkcionality. V~súčasnosti existuje množstvo rozšírení, ako napríklad validácia formulárov, spracovanie nahrávaných súborov alebo rozšírenia pre rôzne formy autentifikácií.
+
+
+\subsubsection{Flask-RESTPlus}
+Flask-RESTPlus je populárne rozšírenie frameworku Flask. Poskytuje kolekciu dekoratérov a nástrojov na opis RESTful API. Taktiež dokáže zo zdrojového kódu za behu generovať dokumentáciu vo formáte Open Api Specification 2.0.
+
+
+
+
+\subsubsection{Flask-SQLAlchemy}
+Jedná sa o~rozšírenie, ktoré výrazne uľahčuje prístup k~databáze, vytvorením abstraktnej vrstvy medzi databázou a aplikáciou. Zároveň výrazne neovplyvňuje výkon a flexibilitu aplikácie.
+
+
+\end{document}

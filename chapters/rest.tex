@@ -1,0 +1,44 @@
+\documentclass[../projekt.tex]{subfiles}
+\begin{document}
+
+
+\section{Architektúra REST}\label{rest}
+REST je úzko spojený s~protokolom HTTP, keďže ho prvý krát navrhol a popísal Roy Fielding - jeden zo spoluautorov protokolu HTTP, v~rámci jeho dizertačnej práce v~roku 2000 \cite{dizertackaREST}.
+Architektúra REST sa používa pre jednotný prístup ku zdrojom. Jedná sa o~spôsob, ako klient môže pomocou základných HTTP volaní vytvárať, čítať, editovať alebo mazať informácie zo serveru. Zdrojom môžu byť dáta alebo stav aplikácie, pokiaľ sa dá dátami vyjadriť. K~jednotlivým zdrojom sa pristupuje pomocou URI (Uniform Resource Identifier – jednotný identifikátor zdroja). Každý zdroj musí mať vlastný identifikátor URI.
+
+\label{zasadyREST}
+\subsection{Zásady architektúry REST}
+Aby služba mohla byť považovaná za RESTful, musí spĺňať šesť formálnych obmedzení. Vďaka nim sú služby vytvorené pomocou REST architektúry výkonné, škálovateľné, jednoduché, ľahko upraviteľné, prenositeľné a spoľahlivé.
+
+\subsubsection{Architektúra klient-server}
+Jednou z~najdôležitejších zásad architektúry REST je klient-server architektúra. Vďaka tomu je možné rovnomernejšie rozložiť záťaž. Server negeneruje pre užívateľa grafické rozhranie a môže obslúžiť viac užívateľov. Taktiež rozloženie záťaže umožňuje jednoduchú prenositeľnosť užívateľského rozhrania na viaceré platformy.
+
+\subsubsection{Bezstavová architektúra (Statelessness)}
+Jedná sa o~bezstavovú architektúru z~pohľadu servera. Medzi dotazmi sa na serveri nemôžu ukladať žiadne informácie o~stave klienta. Každá žiadosť od akéhokoľvek klienta musí obsahovať všetky potrebné informácie na vybavenie dotazu. Svoj stav si klient uchováva sám. Trvalý stav klienta môže server uchovávať v~databázy.
+
+\subsubsection{Možnosť uchovávať zdroje v~medzipamäti (Cacheability)}
+Pre zlepšenie výkonnosti celého systému musí server označiť zdroje ako uložitelné alebo neuložitelné do medzipamäte. Uložitelné zdroje sú také, ktoré sa často nemenia. Keď si klient požiada o~takýto zdroj, server mu odpovie okrem dát z~daného zdroja aj informáciou, do kedy má uchovať dané dáta v~medzipamäti. Keď bude klient v~budúcnosti potrebovať prístup k~dátam, ktoré má uložené v~medzipamäti, a nevypršala exspiračná doba dát, načíta si dáta z~medzipamäti. Tým pádom nezaťažuje server a pristúpi k~dátam rýchlejšie. 
+
+\subsubsection{Vrstevnatelnosť (Layered system)}
+Klient zvyčajne nemôže povedať či je pripojený ku koncovému serveru alebo len k~nejakému sprostredkovateľovi. Sprostredkovateľské servery sa používajú na zlepšenie škálovateľnosti systému tým, že umožnia rozložiť záťaž. Môžu tiež uplatňovať bezpečnostné pravidlá (napríklad ochrana proti DDoS útokom).
+
+\subsubsection{Zaslanie klientovi spustiteľného kódu (Code on demand)}
+Jedná sa o~voliteľné obmedzenie. Server môže klientovi zaslať spustiteľný kód (zvyčajne v~skriptovacom jazyku ako Javascript). Vďaka tomu môže server dočasne rozšíriť alebo prispôsobiť finkčnosť klienta.
+
+\subsubsection{Jednotné rozhranie}
+Základom akejkoľvek služby REST je jednotné rozhranie medzi klientom a serverom. Jedná sa hlavne o~typy správ, ktoré môžu byť vo viacerých formátoch (HTML, XML, JSON).
+
+\subsection{Metódy pre prístup ku zdrojom}
+Architektúra REST definuje štyri základné metódy pre prístup k~jednotlivým zdrojom. Tieto metódy sú implementované pomocou zodpovedajúcich metód HTTP protokolu. Významy metód sa líšia v~závislosti od toho, či boli zavolané nad kolekciou, alebo nad určitým prvkom.
+\begin{itemize}
+    \item \textbf{GET} - ak bol zavolaný na kolekciou, odpoveď obsahuje pole prvkov kolekcie. Tiež môže obsahovať doplňujúce údaje (tzv. metadata), napríklad koľko prvkov je v~kolekcii.
+    Pri zavolaní nad konkrétnym záznamom, vráti informácie o~zázname.
+    \item \textbf{POST} - vytvorí nový záznam v~kolekcii. ID záznamu je zvyčajne automaticky vytvorené a vrátené v~odpovedi dotazu.
+    \item \textbf{PUT} - upraví záznam, alebo ak neexistuje tak záznam vytvorí.
+    \item \textbf{DELETE} - zmaže celú kolekciu alebo konkrétny záznam.
+\end{itemize}
+
+
+
+
+\end{document}

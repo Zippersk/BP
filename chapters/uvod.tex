@@ -1,0 +1,19 @@
+\documentclass[../projekt.tex]{subfiles}
+\begin{document}
+
+
+\chapter{Úvod}\label{uvod}
+V~súčasnosti je používanie aplikačného protokolu HTTP pre sieťový prenos textových dát v~rámci služby World Wide Web (WWW) veľmi rozšírené. Spoločne s~elektronickou poštou je HTTP najviac používaným protokolom, ktorý sa zaslúžil o~obrovský rozmach internetu v~posledných rokoch. Jedným z~autorov protokolu HTTP je Roy Fielding, ktorý vo svojej dizertačnej práci opisuje Representation State Transfer (REST). REST je architektúra, ktorá poskytuje obecné rozhranie pre vzdialené aplikácie, ktoré komunikujú cez sieť. Napriek tomu, že REST nie je určený priamo pre HTTP, je takmer vždy spojovaný s~týmto protokolom.
+
+V~tejto práci popisujem všeobecný opis a implementáciu aplikačné rozhranie spĺňajúce zásady architektúry REST (viď \ref{zasadyREST}) pre systém Fitcrack. Jedná sa o~výkonný systém na obnovu hesiel, ktorý prerozdeľuje prácu medzi viacero pripojených klientov, a tým pádom zvyšuje výpočetnú silu celého systému (detailnejšie je Fitcrack popísaný v~kapitole \ref{Fitcrack}). Konkrétne sa v~mojej práci zaoberám jeho serverovou časťou, ktorá slúži na správu celého systému. Mojim cieľom je nahradiť súčasné nevyhovujúce riešenie administrácie systému, ktoré bolo navrhnuté len ako prototyp, novým riešením.
+
+Súčasná implementácia je veľmi ťažko rozšíriteľná. Taktiež obsahuje niekoľko bezpečnostných dier. Nové riešenie prináša do systému Fitcrack väčšiu bezpečnosť a rozšíriteľnosť, umožňuje testovanie systému, a vďaka architektúre klient-server znižuje záťaž na serverovú časť systému.
+
+Táto práca pozostáva z~piatich kapitol. Popis systému Fitcrack spolu s~nástrojmi, ktoré využíva sa nachádza v~kapitole \ref{Fitcrack}. Opis využitých technológií, ktoré som pri návrhu nového systému na vzdialenú správu Fitcracku použil, sa nachádza v~kapitole \ref{technologie}. Samotným návrhom riešenia, ktorý je rozdelený do modulov, sa zaoberám v~kapitole \ref{navrh}. V~jednotlivých podkapitolách popisujem každý modul. Nakoniec v~závere hodnotím výsledky mojej práce. 
+
+
+
+
+
+
+\end{document}
