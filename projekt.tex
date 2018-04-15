@@ -212,16 +212,290 @@ Department of Information Systems} % Ústav v angličtině - pro využití této
   % ----------------------------------------------
   %\input{chapters/projekt-01-uvod}
 
+\chapter{Úvod}\label{uvod}
+V~súčasnosti je používanie aplikačného protokolu HTTP pre sieťový prenos textových dát v~rámci služby World Wide Web (WWW) veľmi rozšírené. Spoločne s~elektronickou poštou je HTTP najviac používaným protokolom, ktorý sa zaslúžil o~obrovský rozmach internetu v~posledných rokoch. Jedným z~autorov protokolu HTTP je Roy Fielding, ktorý vo svojej dizertačnej práci opisuje Representation State Transfer (REST). REST je architektúra, ktorá poskytuje obecné rozhranie pre vzdialené aplikácie, ktoré komunikujú cez sieť. Napriek tomu, že REST nie je určený priamo pre HTTP, je takmer vždy spojovaný s~týmto protokolom.
+
+V~tejto práci popisujem všeobecný opis a implementáciu aplikačné rozhranie spĺňajúce zásady architektúry REST (viď \ref{zasadyREST}) pre systém Fitcrack. Jedná sa o~výkonný systém na obnovu hesiel, ktorý prerozdeľuje prácu medzi viacero pripojených klientov, a tým pádom zvyšuje výpočetnú silu celého systému (detailnejšie je Fitcrack popísaný v~kapitole \ref{Fitcrack}). Konkrétne sa v~mojej práci zaoberám jeho serverovou časťou, ktorá slúži na správu celého systému. Mojim cieľom je nahradiť súčasné nevyhovujúce riešenie administrácie systému, ktoré bolo navrhnuté len ako prototyp, novým riešením.
+
+Súčasná implementácia je veľmi ťažko rozšíriteľná. Taktiež obsahuje niekoľko bezpečnostných dier. Nové riešenie prináša do systému Fitcrack väčšiu bezpečnosť a rozšíriteľnosť, umožňuje testovanie systému, a vďaka architektúre klient-server znižuje záťaž na serverovú časť systému.
+
+Táto práca pozostáva z~piatich kapitol. Popis systému Fitcrack spolu s~nástrojmi, ktoré využíva sa nachádza v~kapitole \ref{Fitcrack}. Opis využitých technológií, ktoré som pri návrhu nového systému na vzdialenú správu Fitcracku použil, sa nachádza v~kapitole \ref{technologie}. Samotným návrhom riešenia, ktorý je rozdelený do modulov, sa zaoberám v~kapitole \ref{navrh}. V~jednotlivých podkapitolách popisujem každý modul. Nakoniec v~závere hodnotím výsledky mojej práce. 
 
 
 
-              \subfile{chapters/uvod}
-              \subfile{chapters/fitcrack}
-              \subfile{chapters/technologie}
-              \subfile{chapters/navrh}
-              %\subfile{chapters/openapispec}
-              \subfile{chapters/implementacia}
-              \subfile{chapters/zaver}
+\chapter{Systém Fitcrack}\label{Fitcrack}
+Fitcrack je systém, ktorý slúži na obnovu hesiel. Vďaka tomu že ide o~distribuovaný systém, je možné rozdelovať prácu na predom neobmedzený počet staníc, ktoré môžu byť rozmiestnené po celom svete. Je tvorený  architektúrou klient-server. Serverová časť sa stará o~prerozdeľovanie úloh medzi klientov. Klienti pracujú na výpočte kryptografických hešov a svoje výsledky posielajú na server, kde sa spracujú a vyhodnotia.
+\cite{fitcrackSprava}
+
+
+\label{hashcat}
+\section{Hashcat}
+Hashcat\footnote{\url{https://hashcat.net}} je výkonný nástroj na obnovu hesiel, ktorý využíva technológiu OpenCL. Podporuje viac ako 200 typov kryptografických hešov. O~jeho rýchlostí svedčí aj to, že v~rokoch 2010, 2012, 2014 a 2015, tím, pozostávajúci z~členov vývojárov Hashcatu, získal prvé miesto v~súťaži \textit{Crack Me If you Can}\footnote{\url{http://contest-2010.korelogic.com/team_hashcat.html}}. Žiaľ, tento nástroj sám o~sebe nepodporuje výpočet na viacerých staniciach súčasne.
+
+
+\section{BOINC}
+Systém Fitcrack je postavený na voľne šíriteľnom frameworku \textit{Berkeley Open Infrastructure for Network Computing} (BOINC)\footnote{\url{https://boinc.berkeley.edu/}}. Vďaka frameworku BOINC systém Fitcrack distribuuje dielčie úlohy medzi pripojených klientov, na ktorých prebieha pokus o~nájdenia hesla pomocou nástroja Hashcat.
+
+Systém BOINC tvorí server a klienti. Pri distribuovaní výpočetných úloh prebieha komunikácia medzi klientom a serverom prostredníctvom XML správ, ktoré sa prenášajú pomocou protokolu HTTP alebo HTTPS.
+Server je hlavnou súčasťou infraštruktúry BOINC. Stará sa o~distribuovanie úloh medzi klientov a spracováva výsledky od užívateľov.
+Každý klient sa periodicky dotazuje na server a žiada si novú úlohu. Po prijatí výpočetnej úlohy ju spracuje a výsledok odošle na serverom. Následne žiada o~pridelenie novej úlohy.\cite{boinccitace}
+
+
+\section{Architektúra systému Fitcrack}
+Ako je možné vidieť na obrázku \ref{fig:archFitcrack}, architektúra systému Fitcrack je rozdelená do niekoľkých funkčných blokov. Hlavné časti systému sú serverová a klientská.
+
+Serverová časť systému Fitcrack beží na samostatnom stroji. Dohliada na výpočetné uzly (klientov) a má na starosti plánovanie a generovanie úloh, spracovanie výsledkov z~výpočetných uzlov a riadenie distribuovaného výpočtu. Server sa na samotnom výpočte kryptografických hešov nepodiela. Serverová časť sa dá ďalej rozdeliť na moduly. Jedným z~nich je \textit{Generator}, ktorý sa stará o~vytváranie úloh pre výpočetné uzly. Ďalším modulom je \textit{Validator}. Ten slúži na overenie syntaxe odpovedi od výpočetného uzlu. \textit{Assimilator} funguje na princípe nekonečného cyklu, ktorý periodicky kontroluje a spracováva nové výsledky. V~prípade nájdenia hesla výsledok priradí do databázy, a všetkým výpočetným uzlom pošle správu aby zanechali prácu. Nástroj \textit{XtoHashcat} slúži na extrakciu šifrovacie kľúča z~rôznych typov súborov. Modul \textit{WebAdmin} poskytuje užívateľovi prototyp grafického rozhrania na správu systému. Ostatné moduly serverovej časti sú súčasťou siete BOINC.
+
+Klient (výpočetný uzol), po pripojení žiada od servera novú úlohu, ktorú spracuje, vyrieši\footnote{Zvyčajne sa jedná o~výpočet kryptografických hešov, ale existujú aj iné typy úloh, ktoré výpočetné uzly systému Fitcrack riešia. Napríklad meranie výkonu.}, a výsledok odošle na server. V~súčasnosti sa pridelené úlohy na klientovi riešia pomocou nástroja Hashcat (viď \ref{hashcat}), ktorý nie je potrebné inštalovať, pretože sa automaticky po pripojení uzlu odošle klientovi jeho binárna verzia. Po dokončení pridelenej úlohy si klient žiada o~ďalšiu.
+
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.5]{obrazky/fitcrack_arch_web.png}
+    \caption{Architektúra systému Fitcrack \cite{fitcrackSprava}}
+    \label{fig:archFitcrack}
+\end{figure}
+
+
+
+\chapter{Popis použitých technológií}\label{technologie}
+
+
+\section{Hypertext Transfer Protocol (HTTP)}\label{http}
+Pôvodne bol protokol HTTP určený pre výmenu dokumentov vo formáte HTML, ale v~súčasnosti sa používa aj pre prenos iných informácií. Vďaka rozšíreniu MIME (Multipurpose Internet Mail Extensions) je tento protokol schopný prenášať akýkoľvek súbor \cite{httpRFC}.
+
+\subsection{Princíp protokolu HTTP}
+Protokol HTTP funguje na princípe dotaz-odpoveď. Užívateľ (klient/user-agent) pošle serveru dotaz. Ten server spracuje a klientovi odpovie. V~odpovedi server popisuje výsledok dotazu informáciami, či sa podarilo žiadaný zdroj nájsť, či zdroj existuje, v~akom formáte je telo odpovede atď.
+
+
+\subsection{Rozšírenie HTTPS}
+Protokol HTTP neumožňuje zabezpečené spojenie, preto sa často používa protokol TLS (Transport Layer Security) nad vrstvou TCP. Vďaka tomu je možné vytvoriť šifrovaný kanál. Toto spojenie je označované ako HTTPS \cite{httpsRFC}.
+
+
+\subsection{Stavové kódy protokolu HTTP}
+Úspešnosť dotazu vieme zistiť podľa stavových kódov, ktoré sú pribalené v~odpovedi servera na dotaz klienta. Vďaka stavovým kódom vieme presne určiť, či behom spracovávania dotazu došlo k~chybe. Tým pádom môže klient reagovať na chyby.
+
+Zoznam stavových kódov má na starosti organizácia IANA (Internet Assigned Numbers Authority). Jedná sa o~trojciferné číslo v~desiatkovej sústave. Prvé číslo určuje kategóriu odpovede a ostatné ju bližšie špecifikujú.
+
+\subsubsection{1XX}
+Kódy, začínajúci číslom 1, sú tzv. informačné. Indikujú že server dotaz spracoval a pochopil. Bližší význam záleží na zvyšných dvoch číslach. V~niektorých prípadoch môže klientovi naznačovať, že sa finálna odpoveď ešte spracováva a má na ňu počkať. Tiež môže naznačovať zmenu protokolu.
+
+\label{2XX}
+\subsubsection{2XX}
+Stavové kódy začínajúce číslom 2 indikujú, že dotaz bol serverom obdržaný, pochopený a správne vyhodnotený.
+
+\subsubsection{3XX}
+Tieto kódy naznačujú, že na získanie požadovaného zdroja, je potrebné vykonať ďalšiu akciu. Zvyčajne sa jedná o~presmerovanie.
+
+\label{4XX}
+\subsubsection{4XX}
+Stavové kódy, ktoré začínajú číslom 4, indikujú, že nastala chyba na strane užívateľa. Ďalšie 2 čísla presnejšie určujú o~akú chybu ide. Najčastejšie sa jedná o~chybu \texttt{404 Not Found}, ktorá hovorí že žiadaný zdroj nebol na serveri nájdený, ale môže ísť aj o~menej časté chyby ako \texttt{429 Too Many Requests}, ktorá sa vyskytuje v~prípade, že uživateľ žiadal o~daný zdroj príliš veľa krát v~určitom časovom úseku.
+
+\label{5XX}
+\subsubsection{5XX}
+Stavové kódy začínajúce číslom 5, hovoria o~tom, že došlo k~chybe na strane servera. Aj keď dotaz mohol byť validný, server ho nedokázal spracovať. Mohlo sa tak stať napríklad kvôli výpadku servera (preťaženie, údržba).
+
+\subsection{Druhy žiadostí/metódy HTTP}
+Protokol HTTP využíva niekoľko žiadostí, z~ktorých najčastejšie sú:
+\begin{itemize}
+    \item \textbf{GET} - ide o~najbežnejší typ žiadostí. Jej výsledkom je žiadaný zdroj uvedení v~dotaze URL. Tento typ dotazu neobsahuje telo správy.
+    \item \textbf{POST} - k~dotazu je pridané telo správy. Zvyčajne obsahuje hodnoty z~HTML formulára.
+    \item \textbf{PUT} - využíva sa na nahranie súboru na určitú URI.
+    \item \textbf{DELETE} - tento typ žiadosti je len zriedka implementovaní. Zmaže zdroj uvedení v~URI.
+    \item \textbf{HEAD} - ide o~podobný typ žiadosti ako GET, ale na rozdiel od GET, server vracia len hlavičku odpovede.
+    \item \textbf{OPTIONS} - v~odpovedi vracia metódy, ktoré sú povelené na danej URI.
+\end{itemize}
+
+
+
+
+\newpage
+
+\subsection{Príklad komunikácie}
+
+Klient začína komunikáciu poslaním dotazu na server. Na výpise \ref{lst:httpReqExample} sa nachádza ukážka dotazu, ktorý obsahuje zvyčajne viac informácií, ale pre zjednodušenie príkladu nie sú uvedené. Server v~dotaze špecifikuje metódu žiadosti, svoju totožnosť (Opera verzia 10.60) a podporované kódovanie.
+\begin{lstlisting}[caption=príklad HTTP dotazu,frame=tlrb,label={lst:httpReqExample}]
+GET / HTTP/1.1
+Host: www.fit.vutbr.cz
+User-Agent: Opera/9.80 (Windows NT 5.1; U; sk) Presto/2.5.29 Version/10.60
+Accept-Charset: UTF-8,*
+\end{lstlisting}
+Príklad nasledovnej reakcie servera na dotaz sa nachádza na výpise \ref{lst:httpResExample}. Server odpovedá stavovým kódom \texttt{200 OK}, čo značí, že dotaz sa podarilo úspešne spracovať. Ďalej hlavička odpovedi okrem iného obsahuje dátum a čas vybavenia žiadosti, a informácie o~vrátenom zdroji ako typ (text/HTML), použité kódovanie (UTF-8) a dĺžku odpovede. 
+\begin{lstlisting}[caption=príklad HTTP odpovedi,frame=tlrb,label={lst:httpResExample}]
+HTTP/1.1 200 OK
+Content-Length: 3059
+Server: GWS/2.0
+Date: Sat, 11 Jan 2003 02:44:04 GMT
+Content-Type: text/html
+Cache-control: private
+Connection: keep-alive
+\end{lstlisting}
+
+
+
+\section{Architektúra REST}\label{rest}
+REST je úzko spojený s~protokolom HTTP, keďže ho prvý krát navrhol a popísal Roy Fielding - jeden zo spoluautorov protokolu HTTP, v~rámci jeho dizertačnej práce v~roku 2000 \cite{dizertackaREST}.
+Architektúra REST sa používa pre jednotný prístup ku zdrojom. Jedná sa o~spôsob, ako klient môže pomocou základných HTTP volaní vytvárať, čítať, editovať alebo mazať informácie zo serveru. Zdrojom môžu byť dáta alebo stav aplikácie, pokiaľ sa dá dátami vyjadriť. K~jednotlivým zdrojom sa pristupuje pomocou URI (Uniform Resource Identifier – jednotný identifikátor zdroja). Každý zdroj musí mať vlastný identifikátor URI.
+
+\label{zasadyREST}
+\subsection{Zásady architektúry REST}
+Aby služba mohla byť považovaná za RESTful, musí spĺňať šesť formálnych obmedzení. Vďaka nim sú služby vytvorené pomocou REST architektúry výkonné, škálovateľné, jednoduché, ľahko upraviteľné, prenositeľné a spoľahlivé.
+
+\subsubsection{Architektúra klient-server}
+Jednou z~najdôležitejších zásad architektúry REST je klient-server architektúra. Vďaka tomu je možné rovnomernejšie rozložiť záťaž. Server negeneruje pre užívateľa grafické rozhranie a môže obslúžiť viac užívateľov. Taktiež rozloženie záťaže umožňuje jednoduchú prenositeľnosť užívateľského rozhrania na viaceré platformy.
+
+\subsubsection{Bezstavová architektúra (Statelessness)}
+Jedná sa o~bezstavovú architektúru z~pohľadu servera. Medzi dotazmi sa na serveri nemôžu ukladať žiadne informácie o~stave klienta. Každá žiadosť od akéhokoľvek klienta musí obsahovať všetky potrebné informácie na vybavenie dotazu. Svoj stav si klient uchováva sám. Trvalý stav klienta môže server uchovávať v~databázy.
+
+\subsubsection{Možnosť uchovávať zdroje v~medzipamäti (Cacheability)}
+Pre zlepšenie výkonnosti celého systému musí server označiť zdroje ako uložitelné alebo neuložitelné do medzipamäte. Uložitelné zdroje sú také, ktoré sa často nemenia. Keď si klient požiada o~takýto zdroj, server mu odpovie okrem dát z~daného zdroja aj informáciou, do kedy má uchovať dané dáta v~medzipamäti. Keď bude klient v~budúcnosti potrebovať prístup k~dátam, ktoré má uložené v~medzipamäti, a nevypršala exspiračná doba dát, načíta si dáta z~medzipamäti. Tým pádom nezaťažuje server a pristúpi k~dátam rýchlejšie. 
+
+\subsubsection{Vrstevnatelnosť (Layered system)}
+Klient zvyčajne nemôže povedať či je pripojený ku koncovému serveru alebo len k~nejakému sprostredkovateľovi. Sprostredkovateľské servery sa používajú na zlepšenie škálovateľnosti systému tým, že umožnia rozložiť záťaž. Môžu tiež uplatňovať bezpečnostné pravidlá (napríklad ochrana proti DDoS útokom).
+
+\subsubsection{Zaslanie klientovi spustiteľného kódu (Code on demand)}
+Jedná sa o~voliteľné obmedzenie. Server môže klientovi zaslať spustiteľný kód (zvyčajne v~skriptovacom jazyku ako Javascript). Vďaka tomu môže server dočasne rozšíriť alebo prispôsobiť finkčnosť klienta.
+
+\subsubsection{Jednotné rozhranie}
+Základom akejkoľvek služby REST je jednotné rozhranie medzi klientom a serverom. Jedná sa hlavne o~typy správ, ktoré môžu byť vo viacerých formátoch (HTML, XML, JSON).
+
+\subsection{Metódy pre prístup ku zdrojom}
+Architektúra REST definuje štyri základné metódy pre prístup k~jednotlivým zdrojom. Tieto metódy sú implementované pomocou zodpovedajúcich metód HTTP protokolu. Významy metód sa líšia v~závislosti od toho, či boli zavolané nad kolekciou, alebo nad určitým prvkom.
+\begin{itemize}
+    \item \textbf{GET} - ak bol zavolaný na kolekciou, odpoveď obsahuje pole prvkov kolekcie. Tiež môže obsahovať doplňujúce údaje (tzv. metadata), napríklad koľko prvkov je v~kolekcii.
+    Pri zavolaní nad konkrétnym záznamom, vráti informácie o~zázname.
+    \item \textbf{POST} - vytvorí nový záznam v~kolekcii. ID záznamu je zvyčajne automaticky vytvorené a vrátené v~odpovedi dotazu.
+    \item \textbf{PUT} - upraví záznam, alebo ak neexistuje tak záznam vytvorí.
+    \item \textbf{DELETE} - zmaže celú kolekciu alebo konkrétny záznam.
+\end{itemize}
+
+
+
+\chapter{Návrh}\label{navrh}
+
+
+
+\section{Návrh serverovej časti}\label{navrhServer}
+V~tejto kapitole sa zaoberám návrhom implementácie webového servera pre systém Fitcrack. Ako implementačné prostredie som zvolil Python3. Pri jeho výbere som bral v~úvahu už zaužívané technológie v~systéme Fitcrack, požadovanú funkčnosť systému a taktiež jeho prenositeľnosť.
+
+\subsection{Rozdelenie systému na moduly}
+Pre lepšiu organizáciu som celý systém rozdelil do niekoľko modulov (viď obr. \ref{fig:moduly}). Jednotlivé moduly sú detailnejšie rozobrané v~nasledujúcich podkapitolách. 
+
+\begin{figure}[h]
+    \label{fig:moduly}
+    \centering
+    \includegraphics[scale=0.6]{obrazky/moduly.png}
+    \caption{Rozdelenie systému do modulov}
+\end{figure}
+
+\subsubsection{Jadro systému}
+Najhlavnejším modulom v~systéme je jeho jadro, ktoré spĺňa úlohu webového servera a sú v~ňom uložené nastavenia celého systému (prístupové údaje do databázy, zložka pre nahrávanie súborov, cesta k~nástroju Hashcat atď.). Pri zlyhaní jadra webový server odpovedá HTTP správy s~kódom začínajúcim číslom 5 (viď \ref{5XX}).
+
+
+\subsubsection{Logika konečných bodov}
+Jedná sa o~modul, v~ktorom sú obslúžené dotazy na konkrétne URI adresy. Zoznam dostupných URI je uvedený v~tabuľke \ref{zoznamURItable}. Pri chybe v~tomto module, webový server odpovedá HTTP správami, ktoré začínajú číslom 4 (viď \ref{4XX}). Ak užívateľ žiada o~neplatnú kombináciu URI adresy a HTTP metódy, je mu vrátená HTTP správa s~kódom 404. V~prípade že je užívateľ neprihlásený a žiada o~zdroj, ktorý vyžaduje autentifikáciu, v~odpovedi dostane HTTP správu s~kódom 401. Pokiaľ je užívateľ prihlásený, ale na zdroj o~ktorý žiada nemá dostačujúce oprávnenia, tento modul vracia HTTP správu s~kódom 403. V~inakšom prípade je dotaz týmto modulom spracovaný. Ak nedôjde k~chybe počas spracovávania dotazu, modul vygeneruje odpoveď vo formáte JSON, ktorú pridá do tela HTTP odpovede s~kódom 200 (viď \ref{2XX}).
+
+
+\begin{table}[h]
+  \begin{center}
+        \begin{tabular}{ |p{7.7cm}|p{4.9cm}|p{1.5cm}|  }
+         \hline
+         \multicolumn{3}{|c|}{Jednotlivé URI adresy} \\
+         \hline
+         Názov služby& URI& Metóda\\
+         \hline
+         Prihlásenie užívateľa& /user/login & POST\\
+         Registrácia užívateľa& /user/register& POST\\
+         Odhlásenie užívateľa& /user/logout& GET\\
+         Zoznam podporovaných hešov & /hashTypes & GET\\
+         Zoznam podporovaných typov útokov & /attackModes & GET\\
+         Zobrazenie kolekcie balíkov & /package & GET\\
+         Pridať balík & /package & POST\\
+         Zmazať balík & /package/\{packageID\} & DELETE\\
+         Upraviť balík & /package\{packageID\} & UPDATE\\
+         Zobrazí podrobné informácie o~balíku& /package/\{packageID\} & GET\\
+         Operácia nad balíkom (reštart, štart, stop) & /package/\{packageID\}/action & POST\\
+         Vráti kolekciu úloh, na ktoré je balík rozdelený& /package/\{packageID\}/job & GET\\
+         Zobrazí hosťov, ktorí sú pridelení k~balíku & /package/\{packageID\}/host & GET\\
+         Pridá hostí k~balíku & /package/\{packageID\}/host & POST\\
+         Odoberie hostí z~práce na balíku & /package/\{packageID\}/host & DELETE\\
+         Zobrazí kolekciu hostí& /host & GET\\
+         Deaktivuje konkrétneho hosťa& /host/\{hostID\} & DELETE\\
+         Vráti kolekciu slovníkov& /dictionary & GET\\
+         Vráti obsah konkrétneho slovníka& /dictionary/\{dictionaryID\} & GET\\
+         Vymaže slovník zo systému& /dictionary/\{dictionaryID\} & DELETE\\
+         Informácie o~serveri& /server/info& GET\\
+         Operácia so serverom (reštart, štart, stop) & /server/action & POST\\
+         \hline
+        \end{tabular}
+      \caption{Zoznam dostupných URI.}
+      \label{zoznamURItable}
+  \end{center}
+\end{table}
+
+\subsubsection{Obálka nástroja Hashcat}
+Aj keď serverová časť systému Fitcrack nepoužíva priamo nástroj Hashcat na generovanie hešov kryptografických funkcií, používa ho na rôzne vedľajšie účely, ako napríklad získavanie podporovaných typov útokov a kryptografických hešov. Z~tohto dôvodu je potrebné implementovať obálku na tento nástroj vo forme objektu (triedy) s~požadovanými funkciami. To nám uľahčí prístup k~nástroju Hashcat a taktiež bezpečnejšie narábanie s~ním.
+
+\subsubsection{Abstraktná vrstva nad databázou}
+Jedná sa o~modul, ktorý výrazne uľahčuje prístup k~databáze. Zároveň výrazne neovplyvňuje výkon a flexibilitu systému. Vďaka tomu, že systém s~databázou nekomunikuje priamo, ale využíva abstraktnú vrstvu, je databáza lepšie chránená (ochrana pred útokmi typu SQL injection).
+
+
+\subsubsection{Databáza}
+Vzhľadom nato, že systém Fitcrack využíva databázový server MySQL, rozhodol som sa napojiť na túto databázu. Aby bolo možné implementovať všetky rozšírenia systému, bude potrebné modifikovať štruktúru databázy.
+
+
+\subsubsection{Generátor dokumentácie}
+Generátor dokumentácie po spustení webového servera spracuje zdrojové kódy aj s~komentárami a vytvorí pomocou nich interaktívnu dokumentáciu (viď obr. \ref{fig:doc}). Z~nej je potom možné zistiť všetky dostupné koncové body spolu s~príkladmi odpovede. Generovanie dokumentácie automaticky nastáva aj pri zmene zdrojových súborov.
+
+\begin{figure}[H]
+    \centering
+    \label{fig:doc}
+    \includegraphics[scale=0.45]{obrazky/doc.PNG}
+    \caption{Ukážka vygenerovanej dokumentácie}
+\end{figure}
+
+\subsection{Autentifikácia a oprávnenia užívateľov}
+Súčasný systém Fitcrack nepodporuje viacerých užívateľov. Aby bolo možné toto vylepšenie implementovať, je potrebné do databázy pridať tabuľku \texttt{fc\_users}. Okrem mena užívateľa a zahešovaného hesla táto tabuľka obsahuje užívateľský email a všeobecné právomoci užívateľa na serveri. Jedná sa o~číslo, ktoré čím je väčšie, tým väčšie má právomoci užívateľ. Napríklad ak má užívateľ v~stĺpci \texttt{competence\_level} číslo 9, môže pridávať do systému nové užívateľské účty, robiť operácie so serverom (napríklad reštart), a vidieť všetky balíčky ktoré sa v~systéme nachádzajú. Oproti nemu, užívateľ so všeobecnými oprávneniami nastavenými na 1, nemôže pridávať nových užívateľov, ani vykonávať operácie so serverom a má prístup len k~balíčkom, ktoré sú mu pridelené.
+
+Pre jednoduchšiu implementáciu oprávnení užívateľov k~balíkom som pridal ďalšiu tabuľku \texttt{fc\_permissions} ( upravená štruktúra databázy je zobrazená na obrázku \ref{fig:db}). Základné oprávnenia užívateľa k~balíku sú tri. Najzákladnejšie oprávnenie dovoľuje užívateľovi vidieť balík medzi kolekciou balíkov, a zároveň zobraziť detailné informácie o~balíku. Ďalšie oprávnenie dovoľuje užívateľovi vykonávať operácie s~balíkom (štart, stop, reštart a úprava hosťov, ktorí sa podieľajú na balíku). Posledné oprávnenie dovoľuje užívateľovi vymazať balík z~databázy.
+
+\begin{figure}[h]
+    \centering
+    \label{fig:db}
+    \includegraphics[scale=0.6]{obrazky/users.png}
+    \caption{Časť entitno - relačného diagramu databázy systému Fitcrack. Tabuľky označené zelenou farbou sú nové.}
+\end{figure}
+
+
+\section{Návrh klientskej časti}\label{navrhKlient}
+Ahoj ako sa máš?
+
+
+\chapter{Implementácia}\label{implementacia}
+Implementácia v~prostredí python3
+
+
+\section{Štruktúra databázy}
+Štruktúra databázy je pre implementáciu aplikačného rozhrania kľúčová. Do pôvodnej databázy systému fitcrack som niektoré tabuľky pridal a iné upravil.
+
+/*vymenovat tabulky*/
+
+
+\section{Podpora užívateľov}
+
+\section{Autorizácia}
+
+\section{Flask}
+
+\section{Stránkovanie}
+
+
+\chapter{Záver}\label{zaver}
+V~tejto práci sa mi podarilo navrhnúť implementáciu serverovej časti systému Fitcrack s~automaticky generovanou dokumentáciou. Zameral som sa na vylepšenia súčasnej verzie webového prostredia Fitcracku a navrhol som rozšírenia, ku príkladu systém viacerých užívateľov, ktoré spríjemnia užívateľom používanie. Taktiež som odstránil nedokonalosti súčasného riešenia, ako napríklad dostupnosť len z~webovej platformy. Systém, implementovaný podľa môjho návrhu bude dostupný zo všetkých platforiem, ktoré sú schopné sieťovej komunikácie. Súčasne sa zníži záťaž na server, pretože bude prerozdelená medzi klienta a server. Vďaka implementácie pomocou modulov bude celý systém ľahko rozšíriteľný. Návrh opísaný v~tejto práci tiež ošetruje niekoľko bezpečnostných dier súčasnej implementácie. Návrh spĺňa všetky zásady architektúry REST (viď \ref{zasadyREST}), a taktiež je vhodný na testovacie účely systému.
+
+Keďže som v~rámci tejto práce zhromaždil potrebné znalosti, v~nasledujúcom semestri budem pracovať na implementácií navrhnutého systému. Tiež sa budem venovať testovaniu spoľahlivosti a experimentom. Systém podrobím výkonnostným testom a výsledky porovnám so súčasným riešením. 
+Mojou snahou je vytvoriť aplikačné rozhranie na vzdialené ovládanie systému Fitcrack takým spôsobom, aby implementácia klientskej časti užívateľského rozhrania bola jednoduchá a vyžadovala čo najmenej informácií o~štruktúre serverovej časti. 
+
 
 
 
