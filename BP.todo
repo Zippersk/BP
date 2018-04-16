@@ -1,0 +1,56 @@
+OSNOVA:
+    ☐ Úvod
+
+    ✔ Fitcrack @done (18-04-15 21:42)
+        ✔ Hashcat @done (18-04-15 22:05)
+        ✔ BOINC @done (18-04-15 22:05)
+        ✔ Architektúra Fitcracku @done (18-04-15 22:05)
+
+    ✔ Technológie @done (18-04-15 22:05)
+        ✔ HTTP @done (18-04-15 22:07)
+        ✔ REST @done (18-04-15 22:07)
+        ✔ Open api specification @done (18-04-15 22:16)
+        ☐ Python
+            ☐ Flask
+            ☐ RestPlusFlask
+        ☐ Vue
+            ☐ Vuetify
+
+
+    ✔ Návrh systému @done (18-04-15 22:07)
+        ✔ Servoerová časť @done (18-04-15 22:07)
+            ✔ Jadro API @done (18-04-15 22:13)
+            ✔ Endpointy @done (18-04-15 22:13)
+            ✔ Abstraktná vrstva nad DB @done (18-04-15 22:13)
+            ✔ Databáza @done (18-04-15 22:13)
+                ☐ ER diagram
+            ✘ Obálka nástroja hashcat @cancelled (18-04-15 22:12)
+            ✔ Generátor dokumentácie @done (18-04-15 22:13)
+            ☐ Uživatelia
+        ☐ Uživateľské rozhranie
+            ☐ Návrh grafického rozhrania
+
+    ☐ Implementácia
+        ☐ Backend
+            ☐ Spracovanie jednotlivých útokov
+                ☐ Slovníkový
+                ☐ Maska
+                ☐ Kombinačný
+                ☐ Hybridné útoky
+            ☐ Uživatelia
+                ☐ Notifikacie
+                ☐ Opravnenia
+        ☐ Frontend
+            ☐ Vuetify
+
+    ☐ Testovanie/Experimenty
+        ☐ Testovanie slovníkového útoku - vygenerovať random slovník a zobrať z neho jedno heslo. To heslo zahashovať podla nejakeho algoritmu. Hash vložiť do webadmina a spustiť job. Sledovať čo sa stane. Naprj je potrebne asi napísať hypotézu
+        ☐ Testovanie maskovacieho útoku - podobne ako predchadzajúci experiment.
+
+    ☐ Záver
+
+LINKY:
+    ☐ https://www.herout.net/blog/2012/03/struktura-diplomove-prace/
+
+
+

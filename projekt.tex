@@ -468,8 +468,23 @@ Pre jednoduchšiu implementáciu oprávnení užívateľov k~balíkom som pridal
 
 
 \section{Návrh klientskej časti}\label{navrhKlient}
-Ahoj ako sa máš?
+Klientskú časť tvorí moderná webová aplikácia napísaná pomocou frameworku Vue. Analýzou požiadavkov som zistil, že aplikácia by mala byť čo najlepšie ovládateľná a prehľadná pre užívateľa. Taktiež je veľmi dôležité aby bol vzhľad stránky dobre štrukturovaný a pútavý.
 
+Keďže je systém uzavretý a vyžaduje prihlasovanie, je vhodné, aby úvodná stránka aplikácie obsahovala prihlasovací formulár. 
+\begin{figure}[h]
+    \label{fig:moduly}
+    \centering
+    \includegraphics[scale=0.4]{obrazky/loginscreen.png}
+    \caption{Návrh úvodnej stránky aplikácie.}
+\end{figure}
+
+Všetky ostatné stránky bude tvoriť jednotné rozhranie, ktoré sa skladá z postranného bočného panelu, hornej lišty a hlavného obsahu, ktorý bude generický pre každú stránku. Tento bočný panel obsahuje logo Fitcracku, a navigáciu. Pre zachovanie responzívnosti celej aplikácie sa tento panel pri zariadeniach  s menším rozlíšením skryje, a zobrazí až po stlačení tlačítka Menu. Horná lišta obsahuje vľavo tlačítko Menu a napravo tlačítko Upozornenia, ktoré indikuje počet nových upozornení. Po stlačení tlačítka Upozornenia sa z pravej strany obrazovky vysunie panel s upozorneniami.
+\begin{figure}[h]
+    \label{fig:moduly}
+    \centering
+    \includegraphics[scale=0.8]{obrazky/mainPage.png}
+    \caption{Návrh úvodnej stránky aplikácie.}
+\end{figure}
 
 \chapter{Implementácia}\label{implementacia}
 Implementácia v~prostredí python3
