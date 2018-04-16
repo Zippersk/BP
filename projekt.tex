@@ -382,10 +382,10 @@ V~tejto kapitole sa zaoberám návrhom implementácie webového servera pre syst
 Pre lepšiu organizáciu som celý systém rozdelil do niekoľko modulov (viď obr. \ref{fig:moduly}). Jednotlivé moduly sú detailnejšie rozobrané v~nasledujúcich podkapitolách. 
 
 \begin{figure}[h]
-    \label{fig:moduly}
     \centering
     \includegraphics[scale=0.6]{obrazky/moduly.png}
     \caption{Rozdelenie systému do modulov}
+    \label{fig:moduly}
 \end{figure}
 
 \subsubsection{Jadro systému}
@@ -449,9 +449,9 @@ Generátor dokumentácie po spustení webového servera spracuje zdrojové kódy
 
 \begin{figure}[H]
     \centering
-    \label{fig:doc}
     \includegraphics[scale=0.45]{obrazky/doc.PNG}
     \caption{Ukážka vygenerovanej dokumentácie}
+    \label{fig:doc}
 \end{figure}
 
 \subsection{Autentifikácia a oprávnenia užívateľov}
@@ -461,30 +461,42 @@ Pre jednoduchšiu implementáciu oprávnení užívateľov k~balíkom som pridal
 
 \begin{figure}[h]
     \centering
-    \label{fig:db}
     \includegraphics[scale=0.6]{obrazky/users.png}
     \caption{Časť entitno - relačného diagramu databázy systému Fitcrack. Tabuľky označené zelenou farbou sú nové.}
+    \label{fig:db}
 \end{figure}
 
 
 \section{Návrh klientskej časti}\label{navrhKlient}
-Klientskú časť tvorí moderná webová aplikácia napísaná pomocou frameworku Vue. Analýzou požiadavkov som zistil, že aplikácia by mala byť čo najlepšie ovládateľná a prehľadná pre užívateľa. Taktiež je veľmi dôležité aby bol vzhľad stránky dobre štrukturovaný a pútavý.
+Klientskú časť bude tvoriť moderná webová aplikácia, ktorá bude pomocou HTTP žiadostí (viď \ref{http}). Analýzou požiadavkov som zistil, že aplikácia by mala byť čo najlepšie ovládateľná a prehľadná pre užívateľa. Taktiež je veľmi dôležité aby bol vzhľad stránky dobre štrukturovaný a pútavý. Aplikácia musí byť dostupná aj pre užívateľov s menším rozlíšeným displeja ako klasický počítačový monitor. Z tohto dôvodu sa bude aplikácia prispôsobovať užívateľskému rozlíšeniu (responzívnosť).
 
-Keďže je systém uzavretý a vyžaduje prihlasovanie, je vhodné, aby úvodná stránka aplikácie obsahovala prihlasovací formulár. 
+Keďže je systém uzavretý a vyžaduje prihlasovanie, je vhodné, aby úvodná stránka aplikácie obsahovala prihlasovací formulár (viď obrázok \ref{fig:loginScreen}). Systém bude distribuovaný s jedným užívateľom v databáze, ktorý bude slúžiť na prvotné prihlásenie. Cez tohto užívateľa sa budú dať vytvárať noví užívatelia vo vnútri aplikácie.
+
+
+
+
 \begin{figure}[h]
-    \label{fig:moduly}
+\centering
+\begin{minipage}{.5\textwidth}
     \centering
-    \includegraphics[scale=0.4]{obrazky/loginscreen.png}
+    \includegraphics[width=0.95\linewidth]{obrazky/loginscreen.png}
     \caption{Návrh úvodnej stránky aplikácie.}
+    \label{fig:loginScreen}
+\end{minipage}%
+\begin{minipage}{.5\textwidth}
+    \centering
+    \includegraphics[width=0.95\linewidth]{obrazky/mainPage.png}
+    \caption{Návrh úvodnej stránky aplikácie.}
+    \label{fig:mainPage}\label{fig:mainPage}
+\end{minipage}
 \end{figure}
 
-Všetky ostatné stránky bude tvoriť jednotné rozhranie, ktoré sa skladá z postranného bočného panelu, hornej lišty a hlavného obsahu, ktorý bude generický pre každú stránku. Tento bočný panel obsahuje logo Fitcracku, a navigáciu. Pre zachovanie responzívnosti celej aplikácie sa tento panel pri zariadeniach  s menším rozlíšením skryje, a zobrazí až po stlačení tlačítka Menu. Horná lišta obsahuje vľavo tlačítko Menu a napravo tlačítko Upozornenia, ktoré indikuje počet nových upozornení. Po stlačení tlačítka Upozornenia sa z pravej strany obrazovky vysunie panel s upozorneniami.
-\begin{figure}[h]
-    \label{fig:moduly}
-    \centering
-    \includegraphics[scale=0.8]{obrazky/mainPage.png}
-    \caption{Návrh úvodnej stránky aplikácie.}
-\end{figure}
+Všetky ostatné stránky bude tvoriť jednotné rozhranie, ktoré sa skladá z postranného bočného panelu, hornej lišty a hlavného obsahu, ktorý bude generický pre každú stránku. Tento bočný panel obsahuje logo Fitcracku, a navigáciu. Pre zachovanie responzívnosti celej aplikácie sa tento panel pri zariadeniach  s menším rozlíšením skryje, a zobrazí až po stlačení tlačítka Menu. Horná lišta obsahuje vľavo tlačítko Menu a napravo tlačítko Upozornenia, ktoré indikuje počet nových upozornení. Po stlačení tlačítka Upozornenia sa z pravej strany obrazovky vysunie panel s upozorneniami. Vďaka jednotnému rozmiestneniu navigačných prvkov pre všetky stránky, bude mať užívateľ vždy prístup k všetkým rubrikám. Návrh štruktúry rozloženia stránky je možné vidieť na obrázku \ref{fig:mainPage}
+
+
+
+
+
 
 \chapter{Implementácia}\label{implementacia}
 Implementácia v~prostredí python3

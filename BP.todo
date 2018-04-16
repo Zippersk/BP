@@ -27,7 +27,7 @@ OSNOVA:
             ✘ Obálka nástroja hashcat @cancelled (18-04-15 22:12)
             ✔ Generátor dokumentácie @done (18-04-15 22:13)
             ☐ Uživatelia
-        ☐ Uživateľské rozhranie
+        ✔ Uživateľské rozhranie @done (18-04-16 14:59)
             ☐ Návrh grafického rozhrania
 
     ☐ Implementácia
