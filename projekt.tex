@@ -104,6 +104,7 @@
 % This solves the problems with links which leads after the picture
 \usepackage[all]{hypcap}
 \usepackage{subcaption}
+\usepackage{varwidth}
 \captionsetup{compatibility=false}
 
 % Informace o práci/projektu / Information about the thesis
@@ -337,14 +338,16 @@ Connection: keep-alive
 
 \section{Architektúra REST}\label{rest}
 REST je úzko spojený s~protokolom HTTP, keďže ho prvý krát navrhol a popísal Roy Fielding - jeden zo spoluautorov protokolu HTTP, v~rámci jeho dizertačnej práce v~roku 2000 \cite{dizertackaREST}.
-Architektúra REST sa používa pre jednotný prístup ku zdrojom. Jedná sa o~spôsob, ako klient môže pomocou základných HTTP volaní vytvárať, čítať, editovať alebo mazať informácie zo serveru. Zdrojom môžu byť dáta alebo stav aplikácie, pokiaľ sa dá dátami vyjadriť. K~jednotlivým zdrojom sa pristupuje pomocou URI\ref{URI}. Každý zdroj musí mať vlastný identifikátor URI.
+Architektúra REST sa používa pre jednotný prístup ku zdrojom. Jedná sa o~spôsob, ako klient môže pomocou základných HTTP volaní vytvárať, čítať, editovať alebo mazať informácie zo serveru. Zdrojom môžu byť dáta alebo stav aplikácie, pokiaľ sa dá dátami vyjadriť. K~jednotlivým zdrojom sa pristupuje pomocou URI (viď. \ref{URI}). Každý zdroj musí mať vlastný identifikátor URI.
 
 \subsection{URI} \label{URI}
-URI (Uniform Resource Identifier – jednotný identifikátor zdroja) je veľmi obecný koncept. Základný formát je veľmi volný. Jedná sa o názov takzvanej schémy, oddelenej dvojbodkou od zvyšku URI. Tento zvyšok tvorí v podstate ľubovoľný reťazec znakov. Záleží na zvolenej schéme\cite{URIRFC}. V architektúre REST sa URI používa hlavne s použitím schémy HTTP alebo HTTPS. Príklad takejto URI s jej jednotlivými komponentami je uvedený nižšie na obrázku \ref{fig:formátURI}.
+URI (Uniform Resource Identifier – jednotný identifikátor zdroja) je veľmi obecný koncept. Základný formát je veľmi volný. Jedná sa o názov takzvanej schémy, oddelenej dvojbodkou od zvyšku URI. Tento zvyšok tvorí v podstate ľubovoľný reťazec znakov. Záleží na zvolenej schéme\cite{URIRFC}. V architektúre REST sa URI používa hlavne s použitím schémy HTTP alebo HTTPS. Príklad takejto URI s jej jednotlivými komponentami je uvedený nižšie na obrázku \ref{fig:formatURI}. Všeobecne sa URI so schémou http skladá z IP adresy alebo názvu hosta, nepovinne sa za hostom uvádza port (ak nie je uvedený tak sa predpokladá pre http port 80 a pre https 443). Ďalej sa uvádza cesta k zdroju a následne nepovinné query parametre oddelené ampersandom. Na konci URI sa môže objaviť fragment stránky, ktorý často obsahuje id HTML elementu na ktorý sa má prehliadač po otvorení URI zamerať.
 
 
 
-\begin{figure}
+\begin{figure}[H]
+\begin{center}
+\begin{varwidth}{\linewidth}
 \begin{verbatim}
             hierarchická časť
          ____________|_____________                  
@@ -354,12 +357,14 @@ URI (Uniform Resource Identifier – jednotný identifikátor zdroja) je veľmi 
                          |        |
   http://fitcrack.cz:8080/jobs/801?page=0&filter=date#fragid1
   |__|   |_________| |__|          |________________| |_____|
-    |         |       |                    |             |
- schéma      host    port                query        fragment
+    |         |       |                    |               |
+ schéma      host    port                query paramtre  fragment
 
 \end{verbatim}
+\end{varwidth}
+\end{center}
 \caption{Formát URI pri použití schémy HTTP}
-\label{fig:formátURI}
+\label{fig:formatURI}
 \end{figure}
 
 
@@ -423,7 +428,7 @@ Najhlavnejším modulom v~systéme je jeho jadro, ktoré spĺňa úlohu webovéh
 
 
 \subsubsection{Logika konečných bodov}
-Jedná sa o~modul, v~ktorom sú obslúžené dotazy na konkrétne URI adresy. Zoznam dostupných URI je uvedený v~tabuľke \ref{zoznamURItable}. Väčšina konečných bodov podporuje viac typov HTTP metód\ref{httpMetody}. Podľa výberu metódy sa vykoná operácia so zdrojom. Niektoré konečné body podporujú parametre za url adresov. Pri chybe v~tomto module, webový server odpovedá HTTP správami, ktoré začínajú číslom 4 (viď \ref{4XX}). Ak užívateľ žiada o~neplatnú kombináciu URI adresy a HTTP metódy, je mu vrátená HTTP správa s~kódom 404. V~prípade že je užívateľ neprihlásený a žiada o~zdroj, ktorý vyžaduje autentifikáciu, v~odpovedi dostane HTTP správu s~kódom 401. Pokiaľ je užívateľ prihlásený, ale na zdroj o~ktorý žiada nemá dostačujúce oprávnenia, tento modul vracia HTTP správu s~kódom 403. V~inakšom prípade je dotaz týmto modulom spracovaný. Ak nedôjde k~chybe počas spracovávania dotazu, modul vygeneruje odpoveď vo formáte JSON, ktorú pridá do tela HTTP odpovede s~kódom 200 (viď \ref{2XX}).
+Jedná sa o~modul, v~ktorom sú obslúžené dotazy na konkrétne URI (viď. \ref{URI}). Zoznam dostupných URI je uvedený v~tabuľke (viď. \ref{zoznamURItable}). Väčšina konečných bodov podporuje viac typov HTTP metód (viď. \ref{httpMetody}). Podľa výberu metódy sa vykoná operácia so zdrojom. Niektoré konečné body podporujú takzvané query parametre za url adresou. Pri chybe v~tomto module, webový server odpovedá HTTP správami, ktoré začínajú číslom 4 (viď \ref{4XX}). Ak užívateľ žiada o~neplatnú kombináciu URI adresy a HTTP metódy, je mu vrátená HTTP správa s~kódom 404. V~prípade že je užívateľ neprihlásený a žiada o~zdroj, ktorý vyžaduje autentifikáciu, v~odpovedi dostane HTTP správu s~kódom 401. Pokiaľ je užívateľ prihlásený, ale na zdroj o~ktorý žiada nemá dostačujúce oprávnenia, tento modul vracia HTTP správu s~kódom 403. V~inakšom prípade je dotaz týmto modulom spracovaný. Ak nedôjde k~chybe počas spracovávania dotazu, modul vygeneruje odpoveď vo formáte JSON, ktorú pridá do tela HTTP odpovede s~kódom 200 (viď \ref{2XX}).
 
 
 \begin{table}[h]
@@ -486,7 +491,7 @@ Jedná sa o~modul, v~ktorom sú obslúžené dotazy na konkrétne URI adresy. Zo
 \end{table}
 
 \subsubsection{Obálka nástroja Hashcat}
-Aj keď serverová časť systému Fitcrack nepoužíva priamo nástroj Hashcat na generovanie hešov kryptografických funkcií, používa ho na rôzne vedľajšie účely, ako napríklad získavanie podporovaných typov útokov a kryptografických hešov. Z~tohto dôvodu je potrebné implementovať obálku na tento nástroj vo forme objektu (triedy) s~požadovanými funkciami. To nám uľahčí prístup k~nástroju Hashcat a taktiež bezpečnejšie narábanie s~ním.
+Aj keď serverová časť systému Fitcrack nepoužíva priamo nástroj Hashcat na generovanie hešov kryptografických funkcií, používa ho na rôzne vedľajšie účely, ako napríklad získavanie podporovaných typov útokov a kryptografických hešov, alebo výpočet veľkosti množiny hesiel pre útok. Z~tohto dôvodu je potrebné implementovať obálku na tento nástroj vo forme objektu (triedy) s~požadovanými funkciami. To nám uľahčí prístup k~nástroju Hashcat a taktiež bezpečnejšie narábanie s~ním.
 
 \subsubsection{Abstraktná vrstva nad databázou}
 Jedná sa o~modul, ktorý výrazne uľahčuje prístup k~databáze. Zároveň výrazne neovplyvňuje výkon a flexibilitu systému. Vďaka tomu, že systém s~databázou nekomunikuje priamo, ale využíva abstraktnú vrstvu, je databáza lepšie chránená (ochrana pred útokmi typu SQL injection).
@@ -494,6 +499,13 @@ Jedná sa o~modul, ktorý výrazne uľahčuje prístup k~databáze. Zároveň v�
 
 \subsubsection{Databáza}
 Vzhľadom nato, že systém Fitcrack využíva databázový server MySQL, rozhodol som sa napojiť na túto databázu. Aby bolo možné implementovať všetky rozšírenia systému, bude potrebné modifikovať štruktúru databázy.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.58]{obrazky/ER.PNG}
+    \caption{entitno relačný diagram databázy}
+    \label{fig:ER}
+\end{figure}
 
 
 \subsubsection{Generátor dokumentácie}
