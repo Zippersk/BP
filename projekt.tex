@@ -15,7 +15,10 @@
 %   projekt-01-kapitoly-chapters.tex - obsah práce / the thesis content
 %   projekt-30-prilohy-appendices.tex - přílohy / appendices
 %==============================================================================
-\documentclass[slovak,cprint]{fitthesis} % bez zadání - pro začátek práce, aby nebyl problém s překladem
+\documentclass[slovak]{fitthesis}
+%\documentclass[slovak, cprint]{fitthesis}
+
+% bez zadání - pro začátek práce, aby nebyl problém s překladem
 %\documentclass[english]{fitthesis} % without assignment - for the work start to avoid compilation problem
 %\documentclass[zadani]{fitthesis} % odevzdani do wisu - odkazy jsou barevné
 %\documentclass[english,zadani]{fitthesis} % for submission to the IS FIT - links are color
@@ -228,8 +231,7 @@ Fitcrack je systém, ktorý slúži na obnovu hesiel. Vďaka tomu že ide o~dist
 \cite{fitcrackSprava}
 
 
-\label{hashcat}
-\section{Hashcat}
+\section{Hashcat}\label{hashcat}
 Hashcat\footnote{\url{https://hashcat.net}} je výkonný nástroj na obnovu hesiel, ktorý využíva technológiu OpenCL. Podporuje viac ako 200 typov kryptografických hešov. O~jeho rýchlostí svedčí aj to, že v~rokoch 2010, 2012, 2014 a 2015, tím, pozostávajúci z~členov vývojárov Hashcatu, získal prvé miesto v~súťaži \textit{Crack Me If you Can}\footnote{\url{http://contest-2010.korelogic.com/team_hashcat.html}}. Žiaľ, tento nástroj sám o~sebe nepodporuje výpočet na viacerých staniciach súčasne.
 
 
@@ -335,10 +337,35 @@ Connection: keep-alive
 
 \section{Architektúra REST}\label{rest}
 REST je úzko spojený s~protokolom HTTP, keďže ho prvý krát navrhol a popísal Roy Fielding - jeden zo spoluautorov protokolu HTTP, v~rámci jeho dizertačnej práce v~roku 2000 \cite{dizertackaREST}.
-Architektúra REST sa používa pre jednotný prístup ku zdrojom. Jedná sa o~spôsob, ako klient môže pomocou základných HTTP volaní vytvárať, čítať, editovať alebo mazať informácie zo serveru. Zdrojom môžu byť dáta alebo stav aplikácie, pokiaľ sa dá dátami vyjadriť. K~jednotlivým zdrojom sa pristupuje pomocou URI (Uniform Resource Identifier – jednotný identifikátor zdroja). Každý zdroj musí mať vlastný identifikátor URI.
+Architektúra REST sa používa pre jednotný prístup ku zdrojom. Jedná sa o~spôsob, ako klient môže pomocou základných HTTP volaní vytvárať, čítať, editovať alebo mazať informácie zo serveru. Zdrojom môžu byť dáta alebo stav aplikácie, pokiaľ sa dá dátami vyjadriť. K~jednotlivým zdrojom sa pristupuje pomocou URI\ref{URI}. Každý zdroj musí mať vlastný identifikátor URI.
 
-\label{zasadyREST}
-\subsection{Zásady architektúry REST}
+\subsection{URI} \label{URI}
+URI (Uniform Resource Identifier – jednotný identifikátor zdroja) je veľmi obecný koncept. Základný formát je veľmi volný. Jedná sa o názov takzvanej schémy, oddelenej dvojbodkou od zvyšku URI. Tento zvyšok tvorí v podstate ľubovoľný reťazec znakov. Záleží na zvolenej schéme\cite{URIRFC}. V architektúre REST sa URI používa hlavne s použitím schémy HTTP alebo HTTPS. Príklad takejto URI s jej jednotlivými komponentami je uvedený nižšie na obrázku \ref{fig:formátURI}.
+
+
+
+\begin{figure}
+\begin{verbatim}
+            hierarchická časť
+         ____________|_____________                  
+         |                        |
+                           cesta
+                         ____|_____
+                         |        |
+  http://fitcrack.cz:8080/jobs/801?page=0&filter=date#fragid1
+  |__|   |_________| |__|          |________________| |_____|
+    |         |       |                    |             |
+ schéma      host    port                query        fragment
+
+\end{verbatim}
+\caption{Formát URI pri použití schémy HTTP}
+\label{fig:formátURI}
+\end{figure}
+
+
+
+
+\subsection{Zásady architektúry REST} \label{zasadyREST}
 Aby služba mohla byť považovaná za RESTful, musí spĺňať šesť formálnych obmedzení. Vďaka nim sú služby vytvorené pomocou REST architektúry výkonné, škálovateľné, jednoduché, ľahko upraviteľné, prenositeľné a spoľahlivé.
 
 \subsubsection{Architektúra klient-server}
@@ -359,7 +386,7 @@ Jedná sa o~voliteľné obmedzenie. Server môže klientovi zaslať spustiteľn�
 \subsubsection{Jednotné rozhranie}
 Základom akejkoľvek služby REST je jednotné rozhranie medzi klientom a serverom. Jedná sa hlavne o~typy správ, ktoré môžu byť vo viacerých formátoch (HTML, XML, JSON).
 
-\subsection{Metódy pre prístup ku zdrojom}
+\subsection{Metódy pre prístup ku zdrojom}\label{httpMetody}
 Architektúra REST definuje štyri základné metódy pre prístup k~jednotlivým zdrojom. Tieto metódy sú implementované pomocou zodpovedajúcich metód HTTP protokolu. Významy metód sa líšia v~závislosti od toho, či boli zavolané nad kolekciou, alebo nad určitým prvkom.
 \begin{itemize}
     \item \textbf{GET} - ak bol zavolaný na kolekciou, odpoveď obsahuje pole prvkov kolekcie. Tiež môže obsahovať doplňujúce údaje (tzv. metadata), napríklad koľko prvkov je v~kolekcii.
@@ -372,7 +399,10 @@ Architektúra REST definuje štyri základné metódy pre prístup k~jednotlivý
 
 
 \chapter{Návrh}\label{navrh}
-
+V tejto kapitole je popísaný koncepčný návrh systému. Součástí tohoto návrhu je
+diagram prípadov užitia, návrh databáze, ....
+@TODO:
+Poslednú časť tejto kapitoly tvorí návrh webovej prezentácie.
 
 
 \section{Návrh serverovej časti}\label{navrhServer}
@@ -393,39 +423,61 @@ Najhlavnejším modulom v~systéme je jeho jadro, ktoré spĺňa úlohu webovéh
 
 
 \subsubsection{Logika konečných bodov}
-Jedná sa o~modul, v~ktorom sú obslúžené dotazy na konkrétne URI adresy. Zoznam dostupných URI je uvedený v~tabuľke \ref{zoznamURItable}. Pri chybe v~tomto module, webový server odpovedá HTTP správami, ktoré začínajú číslom 4 (viď \ref{4XX}). Ak užívateľ žiada o~neplatnú kombináciu URI adresy a HTTP metódy, je mu vrátená HTTP správa s~kódom 404. V~prípade že je užívateľ neprihlásený a žiada o~zdroj, ktorý vyžaduje autentifikáciu, v~odpovedi dostane HTTP správu s~kódom 401. Pokiaľ je užívateľ prihlásený, ale na zdroj o~ktorý žiada nemá dostačujúce oprávnenia, tento modul vracia HTTP správu s~kódom 403. V~inakšom prípade je dotaz týmto modulom spracovaný. Ak nedôjde k~chybe počas spracovávania dotazu, modul vygeneruje odpoveď vo formáte JSON, ktorú pridá do tela HTTP odpovede s~kódom 200 (viď \ref{2XX}).
+Jedná sa o~modul, v~ktorom sú obslúžené dotazy na konkrétne URI adresy. Zoznam dostupných URI je uvedený v~tabuľke \ref{zoznamURItable}. Väčšina konečných bodov podporuje viac typov HTTP metód\ref{httpMetody}. Podľa výberu metódy sa vykoná operácia so zdrojom. Niektoré konečné body podporujú parametre za url adresov. Pri chybe v~tomto module, webový server odpovedá HTTP správami, ktoré začínajú číslom 4 (viď \ref{4XX}). Ak užívateľ žiada o~neplatnú kombináciu URI adresy a HTTP metódy, je mu vrátená HTTP správa s~kódom 404. V~prípade že je užívateľ neprihlásený a žiada o~zdroj, ktorý vyžaduje autentifikáciu, v~odpovedi dostane HTTP správu s~kódom 401. Pokiaľ je užívateľ prihlásený, ale na zdroj o~ktorý žiada nemá dostačujúce oprávnenia, tento modul vracia HTTP správu s~kódom 403. V~inakšom prípade je dotaz týmto modulom spracovaný. Ak nedôjde k~chybe počas spracovávania dotazu, modul vygeneruje odpoveď vo formáte JSON, ktorú pridá do tela HTTP odpovede s~kódom 200 (viď \ref{2XX}).
 
 
 \begin{table}[h]
   \begin{center}
-        \begin{tabular}{ |p{7.7cm}|p{4.9cm}|p{1.5cm}|  }
+        \begin{tabular}{ |p{8cm}|p{7.4cm}|  }
          \hline
-         \multicolumn{3}{|c|}{Jednotlivé URI adresy} \\
+         Popis& URI\\
          \hline
-         Názov služby& URI& Metóda\\
-         \hline
-         Prihlásenie užívateľa& /user/login & POST\\
-         Registrácia užívateľa& /user/register& POST\\
-         Odhlásenie užívateľa& /user/logout& GET\\
-         Zoznam podporovaných hešov & /hashTypes & GET\\
-         Zoznam podporovaných typov útokov & /attackModes & GET\\
-         Zobrazenie kolekcie balíkov & /package & GET\\
-         Pridať balík & /package & POST\\
-         Zmazať balík & /package/\{packageID\} & DELETE\\
-         Upraviť balík & /package\{packageID\} & UPDATE\\
-         Zobrazí podrobné informácie o~balíku& /package/\{packageID\} & GET\\
-         Operácia nad balíkom (reštart, štart, stop) & /package/\{packageID\}/action & POST\\
-         Vráti kolekciu úloh, na ktoré je balík rozdelený& /package/\{packageID\}/job & GET\\
-         Zobrazí hosťov, ktorí sú pridelení k~balíku & /package/\{packageID\}/host & GET\\
-         Pridá hostí k~balíku & /package/\{packageID\}/host & POST\\
-         Odoberie hostí z~práce na balíku & /package/\{packageID\}/host & DELETE\\
-         Zobrazí kolekciu hostí& /host & GET\\
-         Deaktivuje konkrétneho hosťa& /host/\{hostID\} & DELETE\\
-         Vráti kolekciu slovníkov& /dictionary & GET\\
-         Vráti obsah konkrétneho slovníka& /dictionary/\{dictionaryID\} & GET\\
-         Vymaže slovník zo systému& /dictionary/\{dictionaryID\} & DELETE\\
-         Informácie o~serveri& /server/info& GET\\
-         Operácia so serverom (reštart, štart, stop) & /server/action & POST\\
+          Operácie s kolekciou znakových sád & /charset/ \\
+          Operácie s konkrétnou znakovou sadou & /charset/<id> \\
+          Stiahnutie znakovej sady & /charset/<id>/download \\
+          Operácie s kolekciou slovníkov & /dictionary/ \\
+          Operácie s konskrétnym slovníkom & /dictionary/<id> \\
+          Dáta na vykreslenie grafu podielu práce hostov & /graph/hostPercentage/<job\_id> \\
+          Dáta na vykreslenie grafu vyťaženosti hostov & /graph/hostsComputing \\
+          Dáta na vykreslenie grafu vyťaženosti hosta & /graph/hostsComputing/<id> \\
+          Dáta na vykreslenie grafu progresu úloh & /graph/packagesProgress \\
+          Dáta na vykreslenie grafu progresu úlohy & /graph/packagesProgress/<id> \\
+          Útoky podporované nástrojom hashcat\ref{hashcat} & /hashcat/attackModes \\
+          Typy hashov podporované nástrojom hashcat\ref{hashcat} & /hashcat/hashTypes \\
+          Operácie s kolekciou hosťov & /hosts/ \\
+           & /hosts/<id> \\
+           & /hosts/info \\
+           & /job/ \\
+           & /job/<id> \\
+           & /job/<id>/action \\
+           & /job/<id>/host \\
+           & /job/<id>/job \\
+           & /job/crackingTime \\
+           & /job/info \\
+           & /job/verifyHash \\
+           & /markovChains/ \\
+           & /markovChains/<id> \\
+           & /markovChains/makeFromDictionary \\
+           & /masks/ \\
+           & /masks/<id> \\
+           & /masks/<id>/download \\
+           & /masks/<id>/update \\
+           & /notifications/ \\
+           & /notifications/count \\
+           & /protectedFiles/ \\
+           & /protectedFiles/<id> \\
+           & /rule/ \\
+           & /rule/<id> \\
+           & /rule/<id>/download \\
+           & /serverInfo/control \\
+           & /serverInfo/info \\
+           & /user/ \\
+           & /user/<id> \\
+           & /user/isLoggedIn \\
+           & /user/login \\
+           & /user/logout \\
+           & /user/role \\
+           & /user/role/<id> \\
          \hline
         \end{tabular}
       \caption{Zoznam dostupných URI.}
@@ -468,7 +520,7 @@ Pre jednoduchšiu implementáciu oprávnení užívateľov k~balíkom som pridal
 
 
 \section{Návrh klientskej časti}\label{navrhKlient}
-Klientskú časť bude tvoriť moderná webová aplikácia, ktorá bude pomocou HTTP žiadostí (viď \ref{http}). Analýzou požiadavkov som zistil, že aplikácia by mala byť čo najlepšie ovládateľná a prehľadná pre užívateľa. Taktiež je veľmi dôležité aby bol vzhľad stránky dobre štrukturovaný a pútavý. Aplikácia musí byť dostupná aj pre užívateľov s menším rozlíšeným displeja ako klasický počítačový monitor. Z tohto dôvodu sa bude aplikácia prispôsobovať užívateľskému rozlíšeniu (responzívnosť).
+Klientskú časť bude tvoriť moderná webová aplikácia, ktorá bude pomocou HTTP žiadostí komunikovať so serverom (viď \ref{http}). Analýzou požiadavkov som zistil, že aplikácia by mala byť čo najlepšie ovládateľná a prehľadná pre užívateľa. Taktiež je veľmi dôležité, aby bol vzhľad stránky dobre štrukturovaný a pútavý. Aplikácia musí byť dostupná aj pre užívateľov s menším rozlíšením displeja ako klasický počítačový monitor. Z tohto dôvodu sa bude aplikácia prispôsobovať užívateľskému rozlíšeniu (responzívnosť).
 
 Keďže je systém uzavretý a vyžaduje prihlasovanie, je vhodné, aby úvodná stránka aplikácie obsahovala prihlasovací formulár (viď obrázok \ref{fig:loginScreen}). Systém bude distribuovaný s jedným užívateľom v databáze, ktorý bude slúžiť na prvotné prihlásenie. Cez tohto užívateľa sa budú dať vytvárať noví užívatelia vo vnútri aplikácie.
 
