@@ -5,15 +5,18 @@ OSNOVA:
         ✔ Hashcat @done (18-04-15 22:05)
         ✔ BOINC @done (18-04-15 22:05)
         ✔ Architektúra Fitcracku @done (18-04-15 22:05)
+        ☐ Opísať jednotlivé súbory. Dictionary, markove reťazce, masky, charstey...
 
     ✔ Technológie @done (18-04-15 22:05)
         ✔ HTTP @done (18-04-15 22:07)
+            ☐ AJAX?
         ✔ REST @done (18-04-15 22:07)
         ✔ Open api specification @done (18-04-15 22:16)
         ☐ Python
             ☐ Flask
             ☐ RestPlusFlask
         ☐ Vue
+            ☐ SPA?
             ☐ Vuetify
 
 
@@ -23,12 +26,18 @@ OSNOVA:
             ✔ Endpointy @done (18-04-15 22:13)
             ✔ Abstraktná vrstva nad DB @done (18-04-15 22:13)
             ✔ Databáza @done (18-04-15 22:13)
-                ☐ ER diagram
+                ✔ ER diagram @done (18-04-19 16:34)
             ✘ Obálka nástroja hashcat @cancelled (18-04-15 22:12)
             ✔ Generátor dokumentácie @done (18-04-15 22:13)
             ☐ Uživatelia
+     
         ✔ Uživateľské rozhranie @done (18-04-16 14:59)
             ☐ Návrh grafického rozhrania
+        ☐ Grafy
+            ☐ Package progress
+            ☐ Host progress
+            ☐ Pie
+        ☐ Typy podporovaných útokov
 
     ☐ Implementácia
         ☐ Backend
@@ -51,6 +60,11 @@ OSNOVA:
 
 LINKY:
     ☐ https://www.herout.net/blog/2012/03/struktura-diplomove-prace/
+
+
+FIXY:
+    ☐ Do ER diagramu pridať Encrypted files
+    ☐ Do návrhu pridať text
 
 
 

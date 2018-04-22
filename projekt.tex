@@ -236,7 +236,7 @@ Fitcrack je systém, ktorý slúži na obnovu hesiel. Vďaka tomu že ide o~dist
 Hashcat\footnote{\url{https://hashcat.net}} je výkonný nástroj na obnovu hesiel, ktorý využíva technológiu OpenCL. Podporuje viac ako 200 typov kryptografických hešov. O~jeho rýchlostí svedčí aj to, že v~rokoch 2010, 2012, 2014 a 2015, tím, pozostávajúci z~členov vývojárov Hashcatu, získal prvé miesto v~súťaži \textit{Crack Me If you Can}\footnote{\url{http://contest-2010.korelogic.com/team_hashcat.html}}. Žiaľ, tento nástroj sám o~sebe nepodporuje výpočet na viacerých staniciach súčasne.
 
 
-\section{BOINC}
+\section{BOINC} \label{BOINC}
 Systém Fitcrack je postavený na voľne šíriteľnom frameworku \textit{Berkeley Open Infrastructure for Network Computing} (BOINC)\footnote{\url{https://boinc.berkeley.edu/}}. Vďaka frameworku BOINC systém Fitcrack distribuuje dielčie úlohy medzi pripojených klientov, na ktorých prebieha pokus o~nájdenia hesla pomocou nástroja Hashcat.
 
 Systém BOINC tvorí server a klienti. Pri distribuovaní výpočetných úloh prebieha komunikácia medzi klientom a serverom prostredníctvom XML správ, ktoré sa prenášajú pomocou protokolu HTTP alebo HTTPS.
@@ -245,19 +245,34 @@ Každý klient sa periodicky dotazuje na server a žiada si novú úlohu. Po pri
 
 
 \section{Architektúra systému Fitcrack}
-Ako je možné vidieť na obrázku \ref{fig:archFitcrack}, architektúra systému Fitcrack je rozdelená do niekoľkých funkčných blokov. Hlavné časti systému sú serverová a klientská.
-
-Serverová časť systému Fitcrack beží na samostatnom stroji. Dohliada na výpočetné uzly (klientov) a má na starosti plánovanie a generovanie úloh, spracovanie výsledkov z~výpočetných uzlov a riadenie distribuovaného výpočtu. Server sa na samotnom výpočte kryptografických hešov nepodiela. Serverová časť sa dá ďalej rozdeliť na moduly. Jedným z~nich je \textit{Generator}, ktorý sa stará o~vytváranie úloh pre výpočetné uzly. Ďalším modulom je \textit{Validator}. Ten slúži na overenie syntaxe odpovedi od výpočetného uzlu. \textit{Assimilator} funguje na princípe nekonečného cyklu, ktorý periodicky kontroluje a spracováva nové výsledky. V~prípade nájdenia hesla výsledok priradí do databázy, a všetkým výpočetným uzlom pošle správu aby zanechali prácu. Nástroj \textit{XtoHashcat} slúži na extrakciu šifrovacie kľúča z~rôznych typov súborov. Modul \textit{WebAdmin} poskytuje užívateľovi prototyp grafického rozhrania na správu systému. Ostatné moduly serverovej časti sú súčasťou siete BOINC.
-
-Klient (výpočetný uzol), po pripojení žiada od servera novú úlohu, ktorú spracuje, vyrieši\footnote{Zvyčajne sa jedná o~výpočet kryptografických hešov, ale existujú aj iné typy úloh, ktoré výpočetné uzly systému Fitcrack riešia. Napríklad meranie výkonu.}, a výsledok odošle na server. V~súčasnosti sa pridelené úlohy na klientovi riešia pomocou nástroja Hashcat (viď \ref{hashcat}), ktorý nie je potrebné inštalovať, pretože sa automaticky po pripojení uzlu odošle klientovi jeho binárna verzia. Po dokončení pridelenej úlohy si klient žiada o~ďalšiu.
-
+Ako je možné vidieť na obrázku \ref{fig:archFitcrack}, architektúra systému Fitcrack je rozdelená na niekoľko častí. Na obrázku je uvedená zjednodušená architektúra bez niektorých systémov BOINC.
 
 \begin{figure}[h]
     \centering
-    \includegraphics[scale=0.5]{obrazky/fitcrack_arch_web.png}
-    \caption{Architektúra systému Fitcrack \cite{fitcrackSprava}}
+    \includegraphics[scale=0.7]{obrazky/FitcrackSystem.png}
+    \caption{Architektúra systému Fitcrack}
     \label{fig:archFitcrack}
 \end{figure}
+
+
+\subsection{Webový server}
+Cieľom mojej bakalárskej práce je navrhnúť a implementovať webový server, cez ktorý budú môcť užívatelia spravovať celý systém Fitcrack. K webovému serveru môže byť naraz pripojených viacero užívateľov, ktorí vykonávajú rôzne činnosti (analyzovanie výsledkov dokončených úloh, sledovanie aktivity jednotlivých hosťov, pridávanie nových úloh, sledovanie progresu práve prebiehajúcich úloh atď.). Po pripojení užívateľa na webový server cez internetový prehliadač, sa užívateľovi odošle webová aplikácia, ktorá komunikuje so serverom prostredníctvom REST API (viď \ref{rest}). Prostredníctvom webovej aplikácie je možné do systému pridávať nové úlohy, monitorovať prebiehajúce, analyzovať dokončené úlohy, monitorovať správanie hosťov a podobne. Viac o návrhu webového servera sa je možné dočítať v kapitole \ref{navrh}.
+
+\subsection{Generátor}
+Keď užívateľ prostredníctvom webovej aplikácie pridá do systému úlohu, generátor, v prípade že nastal čas zahájenia úlohy, začne generovať pracovné jednotky pre priradených hosťov k úlohe. Jedná sa o program, ktorý beží v nekonečnom cykle. Generátor systému Fitcrack vytvára dva typy pracovných jednotiek.
+\begin{itemize}
+    \item \textbf{Meranie výkonu} - tieto pracovné jednotky sú generované hosťom, ktorý sa práve do systému alebo k úlohe pripojili, poprípade hosťom, u ktorých nastala chyba. Slúžia k zmeraniu výkonu daného hosťa. Meranie výkonu má veľký význam pri generovaní normálnych pracovných jednotiek, pretože vďaka nameraným údajom vieme odhadnúť správne množstvo práce pre hosťa. Výsledkom tejto úlohy je počet vygenerovaných kryptografických šifier určitého formátu za jednu sekundu. 
+    \item \textbf{Normálne} - obsahujú potrebné informácie pre zvolený spôsob útoku. Môžu obsahovať slovník, masku, rozsah stavového priestoru, súbor s pravidlami, cudzojazyčné znakové sady a podobne. Počet hesiel na overenie v jednej pracovnej jednotke (náročnosť pracovnej jednotky) závisí na zložitosti výpočtu danej kryptografickej šifry a nameraného výkonu hosťa. Cieľom je aby sa doba výpočtu jednej pracovnej jednotky čo najviac približovala času zadaného pri vytváraní úlohy. Generátor udržuje v databázy dve naplánované úlohy pre jedného hosťa (pokiaľ sa už nevyčerpal celý stavový priestor hesiel). Prvá úloha sa práve počíta a druhá je pripravená k odoslaniu hneď po obdržaní výsledku prvej úlohy.
+\end{itemize}
+
+\subsection{Asimilátor}
+Asimilátor slúži na spracovanie výsledkov od hosťov. Beží v nekonečnom slučke. Na začiatku každého cyklu kontroluje prítomnosť ešte nespracovaných výsledkov a tieto výsledky overí. Správa pre asimilátor môže obsahovať rôzne informácie (nájdené heslo, správu o chybe, čas výpočtu, typ pracovnej jednotky, stavový kód výsledku a podobne). Podľa obsahu správy asimilátor upravuje databázu. Napríklad v prípade že hosť heslo našiel hľadané heslo, asimilátor na základe tejto odpovedi upraví databázu. Vďaka tejto úprave ostatní hostia podieľajúci sa na danej úlohe, dostanú správu o zastavení výpočtu.
+
+\subsection{Hosť}
+Hosť je jeden výpočetný uzol pripojený k systému Fitcrack. Na hosťoch beží aplikácia Runner, ktorá prijíma úlohy od Generátora. Samotný výpočet potom riadu Runner a prebieha pomocou nástroja hashcat (viď \ref{hashcat}).
+
+
+
 
 
 
@@ -366,7 +381,6 @@ URI (Uniform Resource Identifier – jednotný identifikátor zdroja) je veľmi 
 \caption{Formát URI pri použití schémy HTTP}
 \label{fig:formatURI}
 \end{figure}
-
 
 
 
@@ -494,16 +508,16 @@ Jedná sa o~modul, v~ktorom sú obslúžené dotazy na konkrétne URI (viď. \re
 Aj keď serverová časť systému Fitcrack nepoužíva priamo nástroj Hashcat na generovanie hešov kryptografických funkcií, používa ho na rôzne vedľajšie účely, ako napríklad získavanie podporovaných typov útokov a kryptografických hešov, alebo výpočet veľkosti množiny hesiel pre útok. Z~tohto dôvodu je potrebné implementovať obálku na tento nástroj vo forme objektu (triedy) s~požadovanými funkciami. To nám uľahčí prístup k~nástroju Hashcat a taktiež bezpečnejšie narábanie s~ním.
 
 \subsubsection{Abstraktná vrstva nad databázou}
-Jedná sa o~modul, ktorý výrazne uľahčuje prístup k~databáze. Zároveň výrazne neovplyvňuje výkon a flexibilitu systému. Vďaka tomu, že systém s~databázou nekomunikuje priamo, ale využíva abstraktnú vrstvu, je databáza lepšie chránená (ochrana pred útokmi typu SQL injection).
+Jedná sa o~modul, ktorý uľahčuje prístup k~databáze. Zároveň výrazne neovplyvňuje výkon a flexibilitu systému. Vďaka tomu, že systém s~databázou nekomunikuje priamo, ale využíva abstraktnú vrstvu, je databáza lepšie chránená (ochrana pred útokmi typu SQL injection).
 
 
-\subsubsection{Databáza}
-Vzhľadom nato, že systém Fitcrack využíva databázový server MySQL, rozhodol som sa napojiť na túto databázu. Aby bolo možné implementovať všetky rozšírenia systému, bude potrebné modifikovať štruktúru databázy.
+\subsubsection{Databáza}\label{navrhDB}
+Vzhľadom nato, že systém Fitcrack využíva databázový server MySQL, rozhodol som sa napojiť na túto databázu. Aby bolo možné implementovať všetky rozšírenia systému, bude potrebné modifikovať štruktúru databázy. Na obrázku \ref{fig:ER} je možné vidieť entitno relačný diagram upravenej databázy. Zelenou farbou sú na ňom označené tabuľky, ktoré bude nutné do systému zaviesť. 
 
 \begin{figure}[H]
     \centering
     \includegraphics[scale=0.58]{obrazky/ER.PNG}
-    \caption{Entitno-relačný diagram databázy}
+    \caption{Entitno-relačný diagram databázy. Zelenou farbou sú vyznačené nové tabuľky.}
     \label{fig:ER}
 \end{figure}
 
@@ -519,22 +533,26 @@ Generátor dokumentácie po spustení webového servera spracuje zdrojové kódy
 \end{figure}
 
 \subsection{Autentifikácia a oprávnenia užívateľov}
-Súčasný systém Fitcrack nepodporuje viacerých užívateľov. Aby bolo možné toto vylepšenie implementovať, je potrebné do databázy pridať tabuľku \texttt{fc\_users}. Okrem mena užívateľa a zahešovaného hesla táto tabuľka obsahuje užívateľský email a všeobecné právomoci užívateľa na serveri. Jedná sa o~číslo, ktoré čím je väčšie, tým väčšie má právomoci užívateľ. Napríklad ak má užívateľ v~stĺpci \texttt{competence\_level} číslo 9, môže pridávať do systému nové užívateľské účty, robiť operácie so serverom (napríklad reštart), a vidieť všetky balíčky ktoré sa v~systéme nachádzajú. Oproti nemu, užívateľ so všeobecnými oprávneniami nastavenými na 1, nemôže pridávať nových užívateľov, ani vykonávať operácie so serverom a má prístup len k~balíčkom, ktoré sú mu pridelené.
+Súčasná verzia systému Fitcrack nepodporuje viacerých užívateľov. Aby bolo možné do systému pridať užívateľov, je nutné rozšíriť databázu (viď. \ref{navrhDB}). Ako spôsob riešenia právomocí užívateľom som vybral systém oprávnení na základe rolí. Každý užívateľ bude mať uvedenú roľu, ktorá mu udeľuje právomoci na určité akcie. Jedná sa o jednoduchý systém, plne postačujúci pre menší počet užívateľov. Jednotlivé právomoci sú nasledujúce.
 
-Pre jednoduchšiu implementáciu oprávnení užívateľov k~balíkom som pridal ďalšiu tabuľku \texttt{fc\_permissions} ( upravená štruktúra databázy je zobrazená na obrázku \ref{fig:db}). Základné oprávnenia užívateľa k~balíku sú tri. Najzákladnejšie oprávnenie dovoľuje užívateľovi vidieť balík medzi kolekciou balíkov, a zároveň zobraziť detailné informácie o~balíku. Ďalšie oprávnenie dovoľuje užívateľovi vykonávať operácie s~balíkom (štart, stop, reštart a úprava hosťov, ktorí sa podieľajú na balíku). Posledné oprávnenie dovoľuje užívateľovi vymazať balík z~databázy.
 
-\begin{figure}[h]
-    \centering
-    \includegraphics[scale=0.6]{obrazky/users.png}
-    \caption{Časť entitno - relačného diagramu databázy systému Fitcrack. Tabuľky označené zelenou farbou sú nové.}
-    \label{fig:db}
-\end{figure}
+\begin{itemize}
+    \item \textbf{Spravovanie užívateľov} - S takýmto oprávnením môže užívateľ vytvárať, mazať a modifikovať iných užívateľov.
+    \item \textbf{Pridávanie novej úlohy} - Užívateľ môže pridať do systému novú úlohu
+    \item \textbf{Nahrávanie súborov} - Užívateľ má oprávnenie do systému nahrať slovník, cudzojazyčné znakové sady, súbory s pravidlami, masky a súbory s markovými reťazcami. @TODO: Na všetko sa odkazovať do teórie
+    \item \textbf{Zobrazenie všetkých úloh} - Užívateľ vidí v systéme všetky vytvorené úlohy.
+    \item \textbf{Editovanie úloh} - Užívateľ môže všetky úlohy modifikovať.
+    \item \textbf{Operácie s úlohami} - Užívateľ môže vykonávať s úlohami operácie štart, stop a reštart.
+\end{itemize}
+
+
+
 
 
 \section{Návrh klientskej časti}\label{navrhKlient}
-Klientskú časť bude tvoriť moderná webová aplikácia, ktorá bude pomocou HTTP žiadostí komunikovať so serverom (viď \ref{http}). Analýzou požiadavkov som zistil, že aplikácia by mala byť čo najlepšie ovládateľná a prehľadná pre užívateľa. Taktiež je veľmi dôležité, aby bol vzhľad stránky dobre štrukturovaný a pútavý. Aplikácia musí byť dostupná aj pre užívateľov s menším rozlíšením displeja ako klasický počítačový monitor. Z tohto dôvodu sa bude aplikácia prispôsobovať užívateľskému rozlíšeniu (responzívnosť).
+Klientskú časť tvorí moderná webová aplikácia, ktorá pomocou HTTP žiadostí komunikuje so serverom (viď \ref{http}). Analýzou požiadavkov som zistil, že aplikácia by mala byť čo najlepšie ovládateľná a prehľadná pre užívateľa. Taktiež je veľmi dôležité, aby bol vzhľad stránky dobre štrukturovaný a pútavý. Aplikácia musí byť dostupná aj pre užívateľov s menším rozlíšením displeja ako klasický počítačový monitor. Z tohto dôvodu sa bude aplikácia prispôsobovať užívateľskému rozlíšeniu (responzívnosť).
 
-Keďže je systém uzavretý a vyžaduje prihlasovanie, je vhodné, aby úvodná stránka aplikácie obsahovala prihlasovací formulár (viď obrázok \ref{fig:loginScreen}). Systém bude distribuovaný s jedným užívateľom v databáze, ktorý bude slúžiť na prvotné prihlásenie. Cez tohto užívateľa sa budú dať vytvárať noví užívatelia vo vnútri aplikácie.
+Keďže je systém uzavretý a vyžaduje prihlasovanie, je vhodné, aby úvodná stránka aplikácie obsahovala prihlasovací formulár (viď obrázok \ref{fig:loginScreen}). Systém bude distribuovaný s jedným užívateľom v databáze, ktorý bude slúžiť na prvotné prihlásenie. Po prihlásení prostredníctvom tohoto užívateľa je možné vytvárať nových užívateľov vo vnútri aplikácie.
 
 
 
@@ -555,9 +573,28 @@ Keďže je systém uzavretý a vyžaduje prihlasovanie, je vhodné, aby úvodná
 \end{minipage}
 \end{figure}
 
-Všetky ostatné stránky bude tvoriť jednotné rozhranie, ktoré sa skladá z postranného bočného panelu, hornej lišty a hlavného obsahu, ktorý bude generický pre každú stránku. Tento bočný panel obsahuje logo Fitcracku, a navigáciu. Pre zachovanie responzívnosti celej aplikácie sa tento panel pri zariadeniach  s menším rozlíšením skryje, a zobrazí až po stlačení tlačítka Menu. Horná lišta obsahuje vľavo tlačítko Menu a napravo tlačítko Upozornenia, ktoré indikuje počet nových upozornení. Po stlačení tlačítka Upozornenia sa z pravej strany obrazovky vysunie panel s upozorneniami. Vďaka jednotnému rozmiestneniu navigačných prvkov pre všetky stránky, bude mať užívateľ vždy prístup k všetkým rubrikám. Návrh štruktúry rozloženia stránky je možné vidieť na obrázku \ref{fig:mainPage}
+Všetky ostatné stránky tvorí jednotné rozhranie, ktoré sa skladá z postranného bočného panelu, hornej lišty a hlavného obsahu, ktorý je generický pre každú stránku. Tento bočný panel obsahuje logo Fitcracku, a navigáciu. Pre zachovanie responzívnosti celej aplikácie sa tento panel pri zariadeniach  s menším rozlíšením skryje, a zobrazí až po stlačení tlačítka Menu. Horná lišta obsahuje vľavo tlačítko Menu a napravo tlačítko Upozornenia, ktoré indikuje počet nových upozornení. Po stlačení tlačítka Upozornenia sa z pravej strany obrazovky vysunie panel s upozorneniami. Vďaka jednotnému rozmiestneniu navigačných prvkov pre všetky stránky, má užívateľ vždy prístup k všetkým rubrikám. Návrh štruktúry rozloženia stránky je možné vidieť na obrázku \ref{fig:mainPage}.
 
 
+\section{Typy útokov v systéme Fitcrack}
+V systéme Fitcrack je možné vytvárať päť druhov útokov. Pôvodný systém Fitcrack podporoval len dva základné. Každý útok je jedinečný a vhodný na iné situácie.
+
+
+\subsection{Útok s maskami}
+Jedná sa o útok hrubou silou. Užívateľ  vo webovej aplikácií zadá jednotlivé masky. Maska je textový reťazec pozostávajúci z pevne daných znakov a zástupných symbolov. Zástupné symboly sa označujú znakom ''?'' a symbolom znakovej sady. Zabudované znakové sady sú:
+
+
+\begin{itemize}
+    \item \textbf{?l} - Znaková sada obsahuje malé písmená anglickej abecedy (abcdefghijklmnopqrstuvwxyz).
+    \item \textbf{?u} - Táto znaková sada obsahuje veľké písmená anglickej abecedy (ABCDEFGHIJKLMNOPQRSTUVWXYZ).
+    \item \textbf{?d} - Znaková sada obsahujúca arabské číslice (0123456789).
+    \item \textbf{?h} - hexadecimálna znaková sada s malými písmenami (0123456789abcdef).
+    \item \textbf{?H} - Hexadecimálna znaková sada s veľkými písmenami (0123456789ABCDEF)
+    \item \textbf{?s} - Špeciálne znaky ako napríklad medzera, !"\#\$\%\&
+    '()*+,-./:;<=>?@
+    \item \textbf{?a} - Jedná sa o zjednotenie znakových sád ?l?u?d?s
+    \item \textbf{?b} - V tejto znakovej sade sa nachádzajú všetky ASCII znaky (0x00 - 0xff).
+\end{itemize}
 
 
 
