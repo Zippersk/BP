@@ -105,6 +105,8 @@
 \usepackage[all]{hypcap}
 \usepackage{subcaption}
 \usepackage{varwidth}
+\usepackage{amsmath}
+\usepackage{kbordermatrix,blkarray}
 \captionsetup{compatibility=false}
 
 % Informace o práci/projektu / Information about the thesis
@@ -581,26 +583,57 @@ V systéme Fitcrack je možné vytvárať päť druhov útokov. Pôvodný systé
 
 
 \subsection{Útok s maskami}
-Jedná sa o útok hrubou silou. Užívateľ  vo webovej aplikácií zadá jednotlivé masky. Maska je textový reťazec pozostávajúci z pevne daných znakov a zástupných symbolov. Zástupné symboly sa označujú znakom ''?'' a symbolom znakovej sady. Zabudované znakové sady sú:
-
-
+Jedná sa o útok hrubou silou. Užívateľ  vo webovej aplikácií zadá jednotlivé masky. Maska je textový reťazec pozostávajúci z pevne daných znakov a zástupných symbolov. Zástupné symboly sa označujú znakom ''\texttt{?}'' a symbolom znakovej sady. Napríklad mask \texttt{password?d} bude generovať heslá \texttt{password0 - password9}. Zabudované znakové sady v systéme sú nasledovné.
 \begin{itemize}
-    \item \textbf{?l} - Znaková sada obsahuje malé písmená anglickej abecedy (abcdefghijklmnopqrstuvwxyz).
-    \item \textbf{?u} - Táto znaková sada obsahuje veľké písmená anglickej abecedy (ABCDEFGHIJKLMNOPQRSTUVWXYZ).
-    \item \textbf{?d} - Znaková sada obsahujúca arabské číslice (0123456789).
+    \item \textbf{?l} - znaková sada obsahuje malé písmená anglickej abecedy (abcdefghijklmnopqrstuvwxyz).
+    \item \textbf{?u} - táto znaková sada obsahuje veľké písmená anglickej abecedy (ABCDEFGHIJKLMNOPQRSTUVWXYZ).
+    \item \textbf{?d} - znaková sada obsahujúca arabské číslice (0123456789).
     \item \textbf{?h} - hexadecimálna znaková sada s malými písmenami (0123456789abcdef).
-    \item \textbf{?H} - Hexadecimálna znaková sada s veľkými písmenami (0123456789ABCDEF)
-    \item \textbf{?s} - Špeciálne znaky ako napríklad medzera, !"\#\$\%\&
+    \item \textbf{?H} - hexadecimálna znaková sada s veľkými písmenami (0123456789ABCDEF)
+    \item \textbf{?s} - špeciálne znaky ako napríklad medzera !"\#\$\%\&
     '()*+,-./:;<=>?@
-    \item \textbf{?a} - Jedná sa o zjednotenie znakových sád ?l?u?d?s
-    \item \textbf{?b} - V tejto znakovej sade sa nachádzajú všetky ASCII znaky (0x00 - 0xff).
+    \item \textbf{?a} - jedná sa o zjednotenie znakových sád ?l?u?d?s
+    \item \textbf{?b} - v tejto znakovej sade sa nachádzajú všetky ASCII znaky (0x00 - 0xff).
 \end{itemize}
+V systéme je možné vybrať si až 4 ďalšie ľubovolné znakové sady k jednej úlohe. Tieto znakové sady sa potom zadávajú zástupnými symbolmi \texttt{?1 - ?4}.
+
+Okrem znakových sád je možné pri útoku s maskami vybrať súbor s Markovými reťazcami. Tento súbor má zvyčajne príponu \texttt{.hcstat}, a je ho možné do systému nahrať, alebo vytvoriť analýzou slovníka s heslami priamo z prostredia webovej aplikácie. Jedná sa o súbor, v ktorom je uložená matica. Prvý stĺpec tejto matice obsahuje všetky znaky, z ktorých sa budú generovať heslá. Riadky matice sú usporiadané podľa pravdepodobnosti výskytu jednotlivých znakov. Príklad takejto matice je možné vidieť na obrázku \ref{fig:hcstatExample}. V prvom riadku matice sú znaky, ktorými najčastejšie začínajú heslá. Pri použití Markovho modelu sa negenerujú heslá postupne (napríklad pri použití masky \texttt{?l?l?l?l} sa negenerujú heslá v poradí \texttt{aaaa-zzzz}), ale práve podľa Markového modelu. Využitie tohto modelu pri generovaní hesiel je založené na pozorovaní, že ľudia pri tvorení hesiel používajú skrytý Markovský model. Pri vytváraní úlohy je možné taktiež určiť Markov prah, čo je kladné celé číslo, ktoré označuje do ktorého stĺpca v Markovom modely sa majú heslá generovať.
+
+Tento útok už bol v systéme implementovaný. K útoku som pridal možnosť zadať znakové sady, Markovský model a možnosť načítať masky so súboru.
 
 
+\begin{figure}[H]
+  \centering
+  \[
+  \kbordermatrix{
+      \\ 
+      \varepsilon & n & p & s & u  & \dots  \\
+      a & m & u & v & k & \dots \\
+      b & i & y & e & u & \dots \\
+      c & o & e & b & f & \dots \\
+      \vdots & \vdots & \vdots & \vdots & \vdots & \vdots \\
+      z & a & e & o & m  & \dots
+  }
+  \]
+    \caption{Príklad Markovho modelu}
+    \label{fig:hcstatExample}
+\end{figure}
 
+\subsection{Slovníkový útok}
+Jeden z najzákladnejších útokov je útok pomocou slovníku, ktorý obsahuje veľký počet hesiel. Na každom riadku slovníka sa nachádza jedno heslo. Okrem slovníku je možné zvoliť aj súbor s pravidlami. Každé pravidlo sa aplikuje na každé heslo so slovníka. Pravidlá sú reťazce znakov. Majú pomerne jednoduchú syntax a umožňujú modifikovať heslo rôznymi spôsobmi \footnote{\url{https://hashcat.net/wiki/doku.php?id=rule_based_attack}}. Medzi základné pravidlá patria následovné znaky.
+\begin{itemize}
+    \item \textbf{l} - všetky písmená v hesle prevedie na malé písmená.
+    \item \textbf{u} - prevedie prímená v hesle na veľké písmená.
+    \item \textbf{t} - malé písmená prevedie na veľké a veľké na malé.
+    \item \textbf{r} - otočí poradie písmen v hesle.
+    \item \textbf{\$X} - na koniec hesla vloží znak X.
+    \item \textbf{\^{}X} - na začiatok hesla vloží znak X. 
+    \item \textbf{[} - zmaže prvý znak hesla.
+    \item \textbf{]} - zmaže posledný znak hesla.
+\end{itemize}
+Pravidlá je možné medzi sebou aj kombinovať. Ak za každé heslo chcem pridať reťazec \texttt{123} a zároveň chcem celé heslo previesť na malé písmená, použijem pravidlo \texttt{l\$1\$2\$3}. V súbore s pravidlami sa môžu vyskytovať komentáre, ktoré začínajú znakom \texttt{\#}, a prázdne riadky.
 
 \chapter{Implementácia}\label{implementacia}
-Implementácia v~prostredí python3
 
 
 \section{Štruktúra databázy}
