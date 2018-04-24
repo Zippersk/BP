@@ -5,7 +5,7 @@ OSNOVA:
         ✔ Hashcat @done (18-04-15 22:05)
         ✔ BOINC @done (18-04-15 22:05)
         ✔ Architektúra Fitcracku @done (18-04-15 22:05)
-        ☐ Opísať jednotlivé súbory. Dictionary, markove reťazce, masky, charstey...
+        ✘ Opísať jednotlivé súbory. Dictionary, markove reťazce, masky, charstey... @cancelled (18-04-23 00:16)
 
     ✔ Technológie @done (18-04-15 22:05)
         ✔ HTTP @done (18-04-15 22:07)
@@ -33,13 +33,14 @@ OSNOVA:
      
         ✔ Uživateľské rozhranie @done (18-04-16 14:59)
             ☐ Návrh grafického rozhrania
-        ☐ Grafy
-            ☐ Package progress
-            ☐ Host progress
-            ☐ Pie
-        ☐ Typy podporovaných útokov
+        ✔ Grafy @done (18-04-23 13:32)
+            ✔ Package progress @done (18-04-23 13:32)
+            ✔ Host progress @done (18-04-23 13:32)
+            ✔ Pie @done (18-04-23 13:32)
+        ✔ Typy podporovaných útokov @done (18-04-23 13:09)
+        ✔ Notifikácie @done (18-04-23 13:51)
 
-    ☐ Implementácia
+    ✔ Implementácia @done (18-04-23 14:31)
         ☐ Backend
             ☐ Spracovanie jednotlivých útokov
                 ☐ Slovníkový
@@ -51,6 +52,7 @@ OSNOVA:
                 ☐ Opravnenia
         ☐ Frontend
             ☐ Vuetify
+        ☐ Databazova vrstva
 
     ☐ Testovanie/Experimenty
         ☐ Testovanie slovníkového útoku - vygenerovať random slovník a zobrať z neho jedno heslo. To heslo zahashovať podla nejakeho algoritmu. Hash vložiť do webadmina a spustiť job. Sledovať čo sa stane. Naprj je potrebne asi napísať hypotézu
@@ -63,8 +65,10 @@ LINKY:
 
 
 FIXY:
-    ☐ Do ER diagramu pridať Encrypted files
+    ✔ Do ER diagramu pridať Encrypted files @done (18-04-23 15:11)
     ☐ Do návrhu pridať text
+    ☐ Pridať BP o Markovských kokotinach do literatury
+    ☐ Do prílohy možno pridať celý trigger z DB.
 
 
 
