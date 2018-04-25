@@ -15,10 +15,10 @@ OSNOVA:
         ☐ Python
             ☐ Flask
             ☐ RestPlusFlask
+            ☐ SQLalchemy
         ☐ Vue
             ☐ SPA?
             ☐ Vuetify
-
 
     ✔ Návrh systému @done (18-04-15 22:07)
         ✔ Servoerová časť @done (18-04-15 22:07)

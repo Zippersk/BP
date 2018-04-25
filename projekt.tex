@@ -707,7 +707,7 @@ END IF;
   \end{lstlisting}
 \end{algorithm}
  Druhá časť trigeru je vyobrazená na výpise \ref{notificationTrigger}. Slúži na rozosielanie notifikácií užívateľom. Je dôležité aby triger vybral len tých užívateľov, ktorí majú k úlohe prístup (užívatelia s roľou, ktorá má oprávnenie na zobrazenie všetkých úloh, alebo užívatelia s oprávnením k úlohe v tabuľke \texttt{user\_permissions}).
-\begin{algorithm}
+\begin{algorithm}[H]
   \caption{Trigger, ktorý má na starosti rozposielanie notifikácií užívateľom.}
   \label{notificationTrigger}
   \begin{lstlisting}[
@@ -731,7 +731,70 @@ END IF;
 \end{algorithm}
 
 \section{Implementácia aplikačnej vrstvy}
+Aplikačná vrstva je implementovaná v prostredí Python3. Tvorí ju sada balíkov, ktoré plnia rozličné úlohy. Adresárovú štruktúru je možné vidieť na obrázku \ref{fig:serverStructure}.
+\begin{figure}[H]
+\begin{center}
+\begin{varwidth}{\linewidth}
+\begin{verbatim}
+\---src
+    +---api
+    |   \---fitcrack
+    |       +---attacks
+    |       \---endpoints
+    |           +---charset
+    |           +---dictionary
+    |           +---graph
+    |           +---hashcat
+    |           +---host
+    |           +---markov
+    |           +---masks
+    |           +---notifications
+    |           +---package
+    |           +---protectedFile
+    |           +---rule
+    |           +---serverInfo
+    |           \---user
+    \---database
+\end{verbatim}
+\end{varwidth}
+\end{center}
+\caption{Hierarchia balíčkov aplikačnej vrstvy.}
+\label{fig:serverStructure}
+\end{figure}
+V koreňovom adresári sa nachádza súbor \texttt{app.py}, ktorý obsahuje funkciu \texttt{main()}. Táto funkcie najprv prevedie inicializáciu systému, systém nakonfiguruje a načíta všetky koncové body aplikačného rozhrania, a následne spustí webový server. O chod webevého servera sa stará framework Flask. Ďalší dôležitý súbor v koreňovom adresári je \texttt{settings.py}, ktorý slúži na nastavenie servera. Je v ňom možné nakonfigurovať cestu k databázovému systému, debugovací režim, adresu a číslo portu servera. Tiež obsahuje cesty k zložkám na ukladanie slovníkov, Markovských modelov, cudzojazyčných znakových sád, súborov s pravidlami a zašifrovaných súborov. Ďalej sa v tomto súbore nachádzajú cesty k rôznym pomocným programom, ktoré systém využíva. Jedná sa o program Hashcat (viď \ref{hashcat}), MaskProcessor\footnote{\url{https://hashcat.net/wiki/doku.php?id=maskprocessor}}, XtoHashcat\footnote{\url{https://fitcrack.fit.vutbr.cz/?i=download}} a HashValidator\footnote{\url{https://github.com/Zippersk/hashValidator}}. Koreňový adresár obsahuje jediný balík s názvom \texttt{src}, v ktorom sú ďalšie balíky \texttt{database} a \texttt{api}. Balík \texttt{database} obsahuje modul s názvom \texttt{models.py}, ktorý má na starosti mapovanie databázy na abstraktný databázový model. Tento súbor obsahuje triedy, ktoré predstavujú jednotlivé tabuľky z databázy. Príklad takejto triedy je možné vidieť na výpise \ref{abstractDBClass}. 
+\begin{algorithm}
+  \caption{Trieda, ktorá predstavuje mapovanie na databázovú tabuľku.}
+  \label{abstractDBClass}
+  \begin{lstlisting}[
+             language=Python,
+             showspaces=false,
+             basicstyle=\ttfamily,
+             numbers=left,{}
+          ]
+class FcPackageGraph(Base):
+    __tablename__ = 'fc_package_graph'
 
+    id = Column(BigInteger, primary_key=True)
+    progress = Column(Numeric(5, 2), nullable=False)
+    package_id = Column(ForeignKey('fc_package.id'), nullable=False, index=True)
+    time = Column(DateTime, server_default=text("CURRENT_TIMESTAMP"))
+
+    package = relationship('FcPackage')
+
+    def as_graph(self):
+        return {
+            'time': str(getattr(self, 'time')),
+            getattr(self.package, 'id'): round(getattr(self, 'progress'))
+        }
+  \end{lstlisting}
+\end{algorithm}
+Tieto triedy boli vytvorené prostredníctvom programu sqlacodegen\footnote{\url{https://pypi.org/project/sqlacodegen/1.1.0/}}. Abstraktná vrstva nad databázou výrazne uľahčuje manipuláciu s databázovými objektami. K triedam je možné doimplementovať hybridné vlastnosti, ktoré bývajú zvyčajne vyjadrené na základe stĺpcov odpovedajúcej tabuľky. Napríklad, keďže je nájdené heslo pri úlohe uložené v stĺpci \texttt{result} vo formáte Base64\footnote{\url{https://sk.wikipedia.org/wiki/Base64}}, je možné vytvoriť hybridnú vlastnosť triedy, ktorá automaticky po načítaní dát z databázy dekóduje heslo uložené vo formáte Base64 a priradí ho do hybridnej vlastnosti. Abstraktná vrstva databázy je implementovaná prostredníctvom frameworku SQLalchemy.
+
+\subsection{Implementácia jednotlivých zdrojov}
+
+
+\subsection{Spracovanie útokov}
+Spracovanie jednotlivých útokov prebieha v balíčku \texttt{attacks}
 
 \chapter{Záver}\label{zaver}
 V~tejto práci sa mi podarilo navrhnúť implementáciu serverovej časti systému Fitcrack s~automaticky generovanou dokumentáciou. Zameral som sa na vylepšenia súčasnej verzie webového prostredia Fitcracku a navrhol som rozšírenia, ku príkladu systém viacerých užívateľov, ktoré spríjemnia užívateľom používanie. Taktiež som odstránil nedokonalosti súčasného riešenia, ako napríklad dostupnosť len z~webovej platformy. Systém, implementovaný podľa môjho návrhu bude dostupný zo všetkých platforiem, ktoré sú schopné sieťovej komunikácie. Súčasne sa zníži záťaž na server, pretože bude prerozdelená medzi klienta a server. Vďaka implementácie pomocou modulov bude celý systém ľahko rozšíriteľný. Návrh opísaný v~tejto práci tiež ošetruje niekoľko bezpečnostných dier súčasnej implementácie. Návrh spĺňa všetky zásady architektúry REST (viď \ref{zasadyREST}), a taktiež je vhodný na testovacie účely systému.
