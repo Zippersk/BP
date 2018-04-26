@@ -269,15 +269,15 @@ Cieľom mojej bakalárskej práce je navrhnúť a implementovať webový server,
 Keď užívateľ prostredníctvom webovej aplikácie pridá do systému úlohu, generátor, v prípade že nastal čas zahájenia úlohy, začne generovať pracovné jednotky pre priradených hosťov k úlohe. Jedná sa o program, ktorý beží v nekonečnom cykle. Generátor systému Fitcrack vytvára dva typy pracovných jednotiek.
 \begin{itemize}
     \item \textbf{Meranie výkonu} - tieto pracovné jednotky sú generované hosťom, ktorý sa práve do systému alebo k úlohe pripojili, poprípade hosťom, u ktorých nastala chyba. Slúžia k zmeraniu výkonu daného hosťa. Meranie výkonu má veľký význam pri generovaní normálnych pracovných jednotiek, pretože vďaka nameraným údajom vieme odhadnúť správne množstvo práce pre hosťa. Výsledkom tejto úlohy je počet vygenerovaných kryptografických šifier určitého formátu za jednu sekundu. 
-    \item \textbf{Normálne} - obsahujú potrebné informácie pre zvolený spôsob útoku. Môžu obsahovať slovník, masku, rozsah stavového priestoru, súbor s pravidlami, cudzojazyčné znakové sady a podobne. Počet hesiel na overenie v jednej pracovnej jednotke (náročnosť pracovnej jednotky) závisí na zložitosti výpočtu danej kryptografickej šifry a nameraného výkonu hosťa. Cieľom je aby sa doba výpočtu jednej pracovnej jednotky čo najviac približovala času zadaného pri vytváraní úlohy. Generátor udržuje v databázy dve naplánované úlohy pre jedného hosťa (pokiaľ sa už nevyčerpal celý stavový priestor hesiel). Prvá úloha sa práve počíta a druhá je pripravená k odoslaniu hneď po obdržaní výsledku prvej úlohy.
+    \item \textbf{Normálne} - obsahujú potrebné informácie pre zvolený spôsob útoku. Môžu obsahovať slovník, masku, rozsah stavového priestoru, súbor s pravidlami, cudzojazyčné znakové sady a podobne. Počet hesiel na overenie v jednej pracovnej jednotke (náročnosť pracovnej jednotky) závisí na zložitosti výpočtu danej kryptografickej šifry a nameraného výkonu hosťa. Cieľom je aby sa doba výpočtu jednej pracovnej jednotky čo najviac približovala času zadaného pri vytváraní úlohy. Generátor udržuje v databáze dve naplánované úlohy pre jedného hosťa (pokiaľ sa už nevyčerpal celý stavový priestor hesiel). Prvá úloha sa práve počíta a druhá je pripravená k odoslaniu hneď po obdržaní výsledku prvej úlohy.
 \end{itemize}
 
 \subsection{Asimilátor}
 \label{asimilator}
-Asimilátor slúži na spracovanie výsledkov od hosťov. Beží v nekonečnom slučke. Na začiatku každého cyklu kontroluje prítomnosť ešte nespracovaných výsledkov a tieto výsledky overí. Správa pre asimilátor môže obsahovať rôzne informácie (nájdené heslo, správu o chybe, čas výpočtu, typ pracovnej jednotky, stavový kód výsledku a podobne). Podľa obsahu správy asimilátor upravuje databázu. Napríklad v prípade že hosť heslo našiel hľadané heslo, asimilátor na základe tejto odpovedi upraví databázu. Vďaka tejto úprave ostatní hostia podieľajúci sa na danej úlohe, dostanú správu o zastavení výpočtu.
+Asimilátor slúži na spracovanie výsledkov od hosťov. Beží v nekonečnej slučke. Na začiatku každého cyklu kontroluje prítomnosť ešte nespracovaných výsledkov a tieto výsledky overí. Správa pre asimilátor môže obsahovať rôzne informácie (nájdené heslo, správu o chybe, čas výpočtu, typ pracovnej jednotky, stavový kód výsledku a podobne). Podľa obsahu správy asimilátor upravuje databázu. Napríklad v prípade že hosť heslo našiel hľadané heslo, asimilátor na základe tejto odpovedi upraví databázu. Vďaka tejto úprave ostatní hostia podieľajúci sa na danej úlohe, dostanú správu o zastavení výpočtu.
 
 \subsection{Hosť}
-Hosť je jeden výpočetný uzol pripojený k systému Fitcrack. Na hosťoch beží aplikácia Runner, ktorá prijíma úlohy od Generátora. Samotný výpočet potom riadu Runner a prebieha pomocou nástroja hashcat (viď \ref{hashcat}).
+Hosť je jeden výpočetný uzol pripojený k systému Fitcrack. Na hosťoch beží aplikácia Runner, ktorá prijíma úlohy od Generátora. Samotný výpočet potom riadi Runner a prebieha pomocou nástroja hashcat (viď \ref{hashcat}).
 
 
 
@@ -364,7 +364,7 @@ REST je úzko spojený s~protokolom HTTP, keďže ho prvý krát navrhol a popí
 Architektúra REST sa používa pre jednotný prístup ku zdrojom. Jedná sa o~spôsob, ako klient môže pomocou základných HTTP volaní vytvárať, čítať, editovať alebo mazať informácie zo serveru. Zdrojom môžu byť dáta alebo stav aplikácie, pokiaľ sa dá dátami vyjadriť. K~jednotlivým zdrojom sa pristupuje pomocou URI (viď. \ref{URI}). Každý zdroj musí mať vlastný identifikátor URI.
 
 \subsection{URI} \label{URI}
-URI (Uniform Resource Identifier – jednotný identifikátor zdroja) je veľmi obecný koncept. Základný formát je veľmi volný. Jedná sa o názov takzvanej schémy, oddelenej dvojbodkou od zvyšku URI. Tento zvyšok tvorí v podstate ľubovoľný reťazec znakov. Záleží na zvolenej schéme\cite{URIRFC}. V architektúre REST sa URI používa hlavne s použitím schémy HTTP alebo HTTPS. Príklad takejto URI s jej jednotlivými komponentami je uvedený nižšie na obrázku \ref{fig:formatURI}. Všeobecne sa URI so schémou http skladá z IP adresy alebo názvu hosta, nepovinne sa za hostom uvádza port (ak nie je uvedený tak sa predpokladá pre http port 80 a pre https 443). Ďalej sa uvádza cesta k zdroju a následne nepovinné query parametre oddelené ampersandom. Na konci URI sa môže objaviť fragment stránky, ktorý často obsahuje id HTML elementu na ktorý sa má prehliadač po otvorení URI zamerať.
+URI (Uniform Resource Identifier – jednotný identifikátor zdroja) je veľmi obecný koncept. Základný formát je veľmi voľný. Jedná sa o názov takzvanej schémy, oddelenej dvojbodkou od zvyšku URI. Tento zvyšok tvorí v podstate ľubovoľný reťazec znakov. Záleží na zvolenej schéme\cite{URIRFC}. V architektúre REST sa URI používa hlavne s použitím schémy HTTP alebo HTTPS. Príklad takejto URI s jej jednotlivými komponentami je uvedený nižšie na obrázku \ref{fig:formatURI}. Všeobecne sa URI so schémou http skladá z IP adresy alebo názvu hosta, nepovinne sa za hostom uvádza port (ak nie je uvedený tak sa predpokladá pre http port 80 a pre https 443). Ďalej sa uvádza cesta k zdroju a následne nepovinné query parametre oddelené ampersandom. Na konci URI sa môže objaviť fragment stránky, ktorý často obsahuje id HTML elementu na ktorý sa má prehliadač po otvorení URI zamerať.
 
 
 
@@ -426,8 +426,8 @@ Architektúra REST definuje štyri základné metódy pre prístup k~jednotlivý
 
 
 \chapter{Návrh systému}\label{navrh}
-V tejto kapitole je popísaný koncepčný návrh systému. Součástí tohoto návrhu je
-diagram prípadov užitia, návrh databáze, ....
+V tejto kapitole je popísaný koncepčný návrh systému. Součásťou tohto návrhu je
+diagram prípadov užitia, návrh databázy, ....
 @TODO:
 Poslednú časť tejto kapitoly tvorí návrh webovej prezentácie.
 
@@ -547,7 +547,7 @@ Súčasná verzia systému Fitcrack nepodporuje viacerých užívateľov. Aby bo
 \begin{itemize}
     \item \textbf{Spravovanie užívateľov} - S takýmto oprávnením môže užívateľ vytvárať, mazať a modifikovať iných užívateľov.
     \item \textbf{Pridávanie novej úlohy} - Užívateľ môže pridať do systému novú úlohu
-    \item \textbf{Nahrávanie súborov} - Užívateľ má oprávnenie do systému nahrať slovník, cudzojazyčné znakové sady, súbory s pravidlami, masky a súbory s markovými reťazcami. @TODO: Na všetko sa odkazovať do teórie
+    \item \textbf{Nahrávanie súborov} - Užívateľ má oprávnenie do systému nahrať slovník, cudzojazyčné znakové sady, súbory s pravidlami, masky a súbory s markovými reťazcami. 
     \item \textbf{Zobrazenie všetkých úloh} - Užívateľ vidí v systéme všetky vytvorené úlohy.
     \item \textbf{Editovanie úloh} - Užívateľ môže všetky úlohy modifikovať.
     \item \textbf{Operácie s úlohami} - Užívateľ môže vykonávať s úlohami operácie štart, stop a reštart.
@@ -646,19 +646,19 @@ Pri kombinačnom útoku je nutné vybrať dva slovníky (ľavý a pravý). Každ
 
 \subsection{Hybridné útoky} \label{hybridAttack}
 Posledné typy útokov, ktoré moje riešenie podporuje sú hybridné útoky. Jedná sa o spojenie slovníkového útoku s útokom s použitím masky. Užívateľ si v systéme vyberie slovník a zadá masku. Potom sa maska so slovníkom skombinuje a vytvorí sa tak kombinačný útok. Napríklad, keď užívateľ zadá masku \texttt{?d} a vyberie slovník ktorý obsahuje heslá \texttt{aaa, bbb, ccc}, výsledná množina hesiel je 
-\texttt{aaa0, aaa1, aaa2, aaa3, aaa4, aaa5, aaa6, aaa7, aaa8, aaa9, bbb0, ..., ccc9}. K maske aj slovníku je možné zadať jedno pravidlo. Hybridné útoky sú dva. Pri prvom je maska naľavo a slovník napravo, a pri druhom je slovník naľavo a maska napravo. Tento útok je nový v systéme Fitcrack.
+\texttt{aaa0, aaa1, aaa2, aaa3, aaa4, aaa5, aaa6, aaa7, aaa8, aaa9, bbb0, ..., ccc9}. K maske aj k slovníku je možné zadať jedno pravidlo. Hybridné útoky sú dva. Pri prvom je maska naľavo a slovník napravo, a pri druhom je slovník naľavo a maska napravo. Tento útok je nový v systéme Fitcrack.
 
 
 \section{Grafy}
 Keďže má byť nová aplikácia vizuálne prívetivá pre užívateľa, jej dôležitou súčasťou sú grafy. Navrhol som tri typy grafov.
 \begin{itemize}
-    \item \textbf{Graf progresu úlohy} \label{progressGraph} - tento graf je spojnicový a bude vykresľovať percentuálny pokrok jednej alebo viacerých úloh. Y-ová osa bude v percentách v rozmedzí 0 až 100. Na X-ovej osy bude čas. Tento graf zobrazuje koľko percent hesiel z celkovej množiny hesiel úlohy sa už skontrolovalo. Nezobrazuje progres hľadania hesla, keďže heslo môže byť nájdené hneď na začiatku množiny hesiel, alebo sa heslo nemusí nachádzať vôbec v množine hesiel danej úlohy.
+    \item \textbf{Graf progresu úlohy} \label{progressGraph} - tento graf je spojnicový a bude vykresľovať percentuálny pokrok jednej alebo viacerých úloh. Y-ová osa bude v percentách v rozmedzí 0 až 100. Na X-ovej ose bude čas. Tento graf zobrazuje koľko percent hesiel z celkovej množiny hesiel úlohy sa už skontrolovalo. Nezobrazuje progres hľadania hesla, keďže heslo môže byť nájdené hneď na začiatku množiny hesiel, alebo sa heslo nemusí nachádzať vôbec v množine hesiel danej úlohy.
     \item \textbf{Graf aktivity hosťov} - jedná sa taktiež o spojnicový graf, na ktorom je možné sledovať aktivitu jednotlivých hosťov. Na Y-ovej ose je možné vidieť počet kryptografických hešov, ktoré hosť počítal. Na X-ovej ose sa nachádza čas. Z tohto grafu by mala byť zrejmá aktivita Asimilátora (viď \ref{asimilator}), ktorý prispôsobuje počet hesiel v jednej pracovnej úlohe pre hosťa. Tento graf je možné zobraziť v rámci jednej úlohy, alebo v rámci systému.
     \item \textbf{Graf práce hosťov} - ide o koláčový graf, ktorý je možné zobraziť pre konkrétnu úlohu. Je z neho možné vyčítať množstvo práce jednotlivých hosťov v rámci úlohy.
 \end{itemize}
 
 \section{Notifikácie}
-Ďalšou novinkou v systéme je systém notifikácií. Tieto notifikácie slúžia na upozornenie užívateľov pri zmene stavu úlohy. Sú rozdelené do niekoľkých kategórií - informačné, varovné, chybové a notifikácie úspechu. Vďaka tomu je možné notifikácie od seba aj vizuálne (farebne) odlíšiť. Medzi informačné notifikácie patria upozornenia o vytvorení úlohy, o spustení úlohy a o dokončovaní úlohy. Medzi notifikácie úspechu patrí upozornenia o nájdení hesla. Varovná notifikácie sa odošle v prípade že sa úloha zastavila z dôvodu nastavenia konca doby výpočtu pri vytváraní alebo editovaní úlohy, ale heslo sa ešte nenašlo. Chybová notifikácie nastáva po vyčerpaní celej množiny hesiel danej úlohy a nenájdení hesla.
+Ďalšou novinkou v systéme je systém notifikácií. Tieto notifikácie slúžia na upozornenie užívateľov pri zmene stavu úlohy. Sú rozdelené do niekoľkých kategórií - informačné, varovné, chybové a notifikácie úspechu. Vďaka tomu je možné notifikácie od seba aj vizuálne (farebne) odlíšiť. Medzi informačné notifikácie patria upozornenia o vytvorení úlohy, o spustení úlohy a o dokončovaní úlohy. Medzi notifikácie úspechu patrí upozornenia o nájdení hesla. Varovná notifikácia sa odošle v prípade, že sa úloha zastavila z dôvodu nastavenia konca doby výpočtu pri vytváraní alebo editovaní úlohy, ale heslo sa ešte nenašlo. Chybová notifikácie nastáva po vyčerpaní celej množiny hesiel danej úlohy a nenájdení hesla.
 
 Notifikácie obsahujú príznak videnia daným užívateľom. Tak tiež sa notifikácie o úlohách odosielajú len užívateľom, ktorí majú k danej úlohe oprávnenia.
 
@@ -706,7 +706,7 @@ IF NEW.indexes_verified <> OLD.indexes_verified THEN
 END IF;
   \end{lstlisting}
 \end{algorithm}
- Druhá časť trigeru je vyobrazená na výpise \ref{notificationTrigger}. Slúži na rozosielanie notifikácií užívateľom. Je dôležité aby triger vybral len tých užívateľov, ktorí majú k úlohe prístup (užívatelia s roľou, ktorá má oprávnenie na zobrazenie všetkých úloh, alebo užívatelia s oprávnením k úlohe v tabuľke \texttt{user\_permissions}).
+ Druhá časť trigeru je vyobrazená na výpise \ref{notificationTrigger}. Slúži na rozosielanie notifikácií užívateľom. Je dôležité aby triger vybral len tých užívateľov, ktorí majú k úlohe prístup (užívatelia s rolou, ktorá má oprávnenie na zobrazenie všetkých úloh, alebo užívatelia s oprávnením k úlohe v tabuľke \texttt{user\_permissions}).
 \begin{algorithm}[H]
   \caption{Trigger, ktorý má na starosti rozposielanie notifikácií užívateľom.}
   \label{notificationTrigger}
@@ -788,11 +788,12 @@ class FcPackageGraph(Base):
         }
   \end{lstlisting}
 \end{algorithm}
+
 Tieto triedy boli vytvorené prostredníctvom programu sqlacodegen\footnote{\url{https://pypi.org/project/sqlacodegen/1.1.0/}}. Abstraktná vrstva nad databázou výrazne uľahčuje manipuláciu s databázovými objektami. K triedam je možné doimplementovať hybridné vlastnosti, ktoré bývajú zvyčajne vyjadrené na základe stĺpcov odpovedajúcej tabuľky. Napríklad, keďže je nájdené heslo pri úlohe uložené v stĺpci \texttt{result} vo formáte Base64\footnote{\url{https://sk.wikipedia.org/wiki/Base64}}, je možné vytvoriť hybridnú vlastnosť triedy, ktorá automaticky po načítaní dát z databázy dekóduje heslo uložené vo formáte Base64 a priradí ho do hybridnej vlastnosti. Abstraktná vrstva databázy je implementovaná prostredníctvom frameworku SQLalchemy (viď \ref{sqlAlchemy}).
 
 
 \subsection{Implementácia jednotlivých URI}
-Pri vytváraní funkcií na spracovanie jednotlivých žiadostí používam rozšírenie do frameworku \texttt{Flask} s názvom texttt{Flask-RESTPlus} (viď \ref{flaskRestplus}). Balík \texttt{endpoints} obsahuje ďalšie balíky, v ktorých prebieha ošetrenie jednotlivých žiadostí. Väčšina týchto balíkov v sebe obsahuje štyri súbory. Jedná sa o \texttt{argumentsParser.py}, \texttt{responseModels.py}, \texttt{functions.py} a modul, s rovnakým názvom ako má balík do ktorého patrí, v ktorom sú definované triedy na ošetrenie žiadostí. Tieto triedy obsahujú funkcie s názvom HTTP metód (viď \ref{httpMetody}). Príklad takejto triedy je možné vidieť na výpise \ref{endpointClass}.
+Pri vytváraní funkcií na spracovanie jednotlivých žiadostí používam rozšírenie do frameworku \texttt{Flask} s názvom \texttt{Flask-RESTPlus} (viď \ref{flaskRestplus}). Balík \texttt{endpoints} obsahuje ďalšie balíky, v ktorých prebieha ošetrenie jednotlivých žiadostí. Väčšina týchto balíkov v sebe obsahuje štyri súbory. Jedná sa o \texttt{argumentsParser.py}, \texttt{responseModels.py}, \texttt{functions.py} a modul, s rovnakým názvom ako má balík do ktorého patrí, v ktorom sú definované triedy na ošetrenie žiadostí. Tieto triedy obsahujú funkcie s názvom HTTP metód (viď \ref{httpMetody}). Príklad takejto triedy je možné vidieť na výpise \ref{endpointClass}.
 \begin{algorithm}
   \caption{Príklad triedy, ktorá ošetruje URI /jobs}
   \label{endpointClass}

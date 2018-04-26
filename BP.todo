@@ -15,7 +15,8 @@ OSNOVA:
         ✔ Open api specification @done (18-04-15 22:16)
         ☐ Python
             ☐ Flask
-            ☐ RestPlusFlask
+                ☐ Flask login
+                ☐ RestPlusFlask
             ☐ SQLalchemy
         ☐ Vue
             ☐ SPA?
@@ -62,7 +63,7 @@ OSNOVA:
     ☐ Záver
 
 LINKY:
-    ☐ https://www.herout.net/blog/2012/03/struktura-diplomove-prace/
+    ✔ https://www.herout.net/blog/2012/03/struktura-diplomove-prace/ @done (18-04-26 20:21)
 
 
 FIXY:
