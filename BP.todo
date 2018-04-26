@@ -10,6 +10,7 @@ OSNOVA:
     ✔ Technológie @done (18-04-15 22:05)
         ✔ HTTP @done (18-04-15 22:07)
             ☐ AJAX?
+            ☐ JSON?
         ✔ REST @done (18-04-15 22:07)
         ✔ Open api specification @done (18-04-15 22:16)
         ☐ Python
@@ -29,10 +30,10 @@ OSNOVA:
                 ✔ ER diagram @done (18-04-19 16:34)
             ✘ Obálka nástroja hashcat @cancelled (18-04-15 22:12)
             ✔ Generátor dokumentácie @done (18-04-15 22:13)
-            ☐ Uživatelia
+            ✔ Uživatelia @done (18-04-26 20:15)
      
         ✔ Uživateľské rozhranie @done (18-04-16 14:59)
-            ☐ Návrh grafického rozhrania
+            ✔ Návrh grafického rozhrania @done (18-04-26 20:15)
         ✔ Grafy @done (18-04-23 13:32)
             ✔ Package progress @done (18-04-23 13:32)
             ✔ Host progress @done (18-04-23 13:32)
@@ -41,18 +42,18 @@ OSNOVA:
         ✔ Notifikácie @done (18-04-23 13:51)
 
     ✔ Implementácia @done (18-04-23 14:31)
-        ☐ Backend
-            ☐ Spracovanie jednotlivých útokov
-                ☐ Slovníkový
-                ☐ Maska
-                ☐ Kombinačný
-                ☐ Hybridné útoky
-            ☐ Uživatelia
-                ☐ Notifikacie
-                ☐ Opravnenia
+        ✔ Backend @done (18-04-26 20:15)
+            ✔ Spracovanie jednotlivých útokov @done (18-04-26 20:15)
+                ✔ Slovníkový @done (18-04-26 20:15)
+                ✔ Maska @done (18-04-26 20:15)
+                ✔ Kombinačný @done (18-04-26 20:15)
+                ✔ Hybridné útoky @done (18-04-26 20:15)
+            ✔ Uživatelia @done (18-04-26 20:15)
+                ✔ Notifikacie @done (18-04-26 20:15)
+                ✔ Opravnenia @done (18-04-26 20:15)
         ☐ Frontend
             ☐ Vuetify
-        ☐ Databazova vrstva
+        ✔ Databazova vrstva @done (18-04-26 20:15)
 
     ☐ Testovanie/Experimenty
         ☐ Testovanie slovníkového útoku - vygenerovať random slovník a zobrať z neho jedno heslo. To heslo zahashovať podla nejakeho algoritmu. Hash vložiť do webadmina a spustiť job. Sledovať čo sa stane. Naprj je potrebne asi napísať hypotézu
@@ -69,6 +70,7 @@ FIXY:
     ☐ Do návrhu pridať text
     ☐ Pridať BP o Markovských kokotinach do literatury
     ☐ Do prílohy možno pridať celý trigger z DB.
+    ☐ Spomenuť pri implementacii ake všetky kokotinky využívame
 
 
 

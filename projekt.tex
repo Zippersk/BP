@@ -244,7 +244,7 @@ Hashcat\footnote{\url{https://hashcat.net}} je výkonný nástroj na obnovu hesi
 
 
 \section{BOINC} \label{BOINC}
-Systém Fitcrack je postavený na voľne šíriteľnom frameworku \textit{Berkeley Open Infrastructure for Network Computing} (BOINC)\footnote{\url{https://boinc.berkeley.edu/}}. Vďaka frameworku BOINC systém Fitcrack distribuuje dielčie úlohy medzi pripojených klientov, na ktorých prebieha pokus o~nájdenia hesla pomocou nástroja Hashcat.
+Systém Fitcrack je postavený na voľne šíriteľnom frameworku \textit{Berkeley Open Infrastructure for Network Computing} (BOINC)\footnote{\url{https://boinc.berkeley.edu/}}. Vďaka frameworku BOINC systém Fitcrack distribuuje dielčie úlohy medzi pripojených klientov, na ktorých prebieha pokus o~nájdenie hesla pomocou nástroja Hashcat.
 
 Systém BOINC tvorí server a klienti. Pri distribuovaní výpočetných úloh prebieha komunikácia medzi klientom a serverom prostredníctvom XML správ, ktoré sa prenášajú pomocou protokolu HTTP alebo HTTPS.
 Server je hlavnou súčasťou infraštruktúry BOINC. Stará sa o~distribuovanie úloh medzi klientov a spracováva výsledky od užívateľov.
@@ -588,7 +588,7 @@ Všetky ostatné stránky tvorí jednotné rozhranie, ktoré sa skladá z postra
 V systéme Fitcrack je možné vytvárať päť druhov útokov. Pôvodný systém Fitcrack podporoval len dva základné. Každý útok je jedinečný a vhodný na iné situácie.
 
 
-\subsection{Útok s maskami}
+\subsection{Útok s maskami} \label{maskAttack}
 Jedná sa o útok hrubou silou. Užívateľ  vo webovej aplikácií zadá jednotlivé masky. Maska je textový reťazec pozostávajúci z pevne daných znakov a zástupných symbolov. Zástupné symboly sa označujú znakom ''\texttt{?}'' a symbolom znakovej sady. Napríklad mask \texttt{password?d} bude generovať heslá \texttt{password0 - password9}. Zabudované znakové sady v systéme sú nasledovné.
 \begin{itemize}
     \item \textbf{?l} - znaková sada obsahuje malé písmená anglickej abecedy (abcdefghijklmnopqrstuvwxyz).
@@ -625,7 +625,7 @@ Tento útok už bol v systéme implementovaný. K útoku som pridal možnosť za
     \label{fig:hcstatExample}
 \end{figure}
 
-\subsection{Slovníkový útok}
+\subsection{Slovníkový útok} \label{dictAttack}
 Jeden z najzákladnejších útokov je útok pomocou slovníku, ktorý obsahuje veľký počet hesiel. Na každom riadku slovníka sa nachádza jedno heslo. Okrem slovníku je možné zvoliť aj súbor s pravidlami. Každé pravidlo sa aplikuje na každé heslo so slovníka. Pravidlá sú reťazce znakov. Majú pomerne jednoduchú syntax a umožňujú modifikovať heslo rôznymi spôsobmi \footnote{\url{https://hashcat.net/wiki/doku.php?id=rule_based_attack}}. Medzi základné pravidlá patria následovné znaky.
 \begin{itemize}
     \item \textbf{l} - všetky písmená v hesle prevedie na malé písmená.
@@ -641,10 +641,10 @@ Pravidlá je možné medzi sebou aj kombinovať. Ak za každé heslo chceme prid
 
 Zjednodušená verzia tohto útoku, bez možnosti aplikovať pravidlá, bola v systéme už implementovaná.
 
-\subsection{Kombinačný útok}
+\subsection{Kombinačný útok} \label{combAttack}
 Pri kombinačnom útoku je nutné vybrať dva slovníky (ľavý a pravý). Každé heslo z ľavého slovníka sa skonkatenuje s každým heslom z pravého slovníka. Takto vznikajú nové heslá. Z každého hesla v ľavom slovníku vznikne toľko nových hesiel, koľko je hesiel v pravom slovníku. Ku každému slovníku je možné uviesť jedno pravidlo, ktoré upraví heslá v celom slovníku. Tento útok pôvodná webová aplikácia nepodporovala.
 
-\subsection{Hybridné útoky}
+\subsection{Hybridné útoky} \label{hybridAttack}
 Posledné typy útokov, ktoré moje riešenie podporuje sú hybridné útoky. Jedná sa o spojenie slovníkového útoku s útokom s použitím masky. Užívateľ si v systéme vyberie slovník a zadá masku. Potom sa maska so slovníkom skombinuje a vytvorí sa tak kombinačný útok. Napríklad, keď užívateľ zadá masku \texttt{?d} a vyberie slovník ktorý obsahuje heslá \texttt{aaa, bbb, ccc}, výsledná množina hesiel je 
 \texttt{aaa0, aaa1, aaa2, aaa3, aaa4, aaa5, aaa6, aaa7, aaa8, aaa9, bbb0, ..., ccc9}. K maske aj slovníku je možné zadať jedno pravidlo. Hybridné útoky sú dva. Pri prvom je maska naľavo a slovník napravo, a pri druhom je slovník naľavo a maska napravo. Tento útok je nový v systéme Fitcrack.
 
@@ -761,7 +761,7 @@ Aplikačná vrstva je implementovaná v prostredí Python3. Tvorí ju sada balí
 \caption{Hierarchia balíčkov aplikačnej vrstvy.}
 \label{fig:serverStructure}
 \end{figure}
-V koreňovom adresári sa nachádza súbor \texttt{app.py}, ktorý obsahuje funkciu \texttt{main()}. Táto funkcie najprv prevedie inicializáciu systému, systém nakonfiguruje a načíta všetky koncové body aplikačného rozhrania, a následne spustí webový server. O chod webevého servera sa stará framework Flask. Ďalší dôležitý súbor v koreňovom adresári je \texttt{settings.py}, ktorý slúži na nastavenie servera. Je v ňom možné nakonfigurovať cestu k databázovému systému, debugovací režim, adresu a číslo portu servera. Tiež obsahuje cesty k zložkám na ukladanie slovníkov, Markovských modelov, cudzojazyčných znakových sád, súborov s pravidlami a zašifrovaných súborov. Ďalej sa v tomto súbore nachádzajú cesty k rôznym pomocným programom, ktoré systém využíva. Jedná sa o program Hashcat (viď \ref{hashcat}), MaskProcessor\footnote{\url{https://hashcat.net/wiki/doku.php?id=maskprocessor}}, XtoHashcat\footnote{\url{https://fitcrack.fit.vutbr.cz/?i=download}} a HashValidator\footnote{\url{https://github.com/Zippersk/hashValidator}}. Koreňový adresár obsahuje jediný balík s názvom \texttt{src}, v ktorom sú ďalšie balíky \texttt{database} a \texttt{api}. Balík \texttt{database} obsahuje modul s názvom \texttt{models.py}, ktorý má na starosti mapovanie databázy na abstraktný databázový model. Tento súbor obsahuje triedy, ktoré predstavujú jednotlivé tabuľky z databázy. Príklad takejto triedy je možné vidieť na výpise \ref{abstractDBClass}. 
+V koreňovom adresári sa nachádza súbor \texttt{app.py}, ktorý obsahuje funkciu \texttt{main()}. Táto funkcie najprv prevedie inicializáciu systému, systém nakonfiguruje a načíta všetky koncové body aplikačného rozhrania, a následne spustí webový server. O chod webevého servera sa stará framework Flask (viď \ref{Flask}). Ďalší dôležitý súbor v koreňovom adresári je \texttt{settings.py}, ktorý slúži na nastavenie servera. Je v ňom možné nakonfigurovať cestu k databázovému systému, debugovací režim, adresu a číslo portu servera. Tiež obsahuje cesty k zložkám na ukladanie slovníkov, Markovských modelov, cudzojazyčných znakových sád, súborov s pravidlami a zašifrovaných súborov. Ďalej sa v tomto súbore nachádzajú cesty k rôznym pomocným programom, ktoré systém využíva. Jedná sa o program Hashcat (viď \ref{hashcat}), MaskProcessor\footnote{\url{https://hashcat.net/wiki/doku.php?id=maskprocessor}}, XtoHashcat\footnote{\url{https://fitcrack.fit.vutbr.cz/?i=download}} a HashValidator\footnote{\url{https://github.com/Zippersk/hashValidator}}. Koreňový adresár obsahuje jediný balík s názvom \texttt{src}, v ktorom sú ďalšie balíky \texttt{database} a \texttt{api}. Balík \texttt{database} obsahuje modul s názvom \texttt{models.py}, ktorý má na starosti mapovanie databázy na abstraktný databázový model. Tento súbor obsahuje triedy, ktoré predstavujú jednotlivé tabuľky z databázy. Príklad takejto triedy je možné vidieť na výpise \ref{abstractDBClass}. 
 \begin{algorithm}
   \caption{Trieda, ktorá predstavuje mapovanie na databázovú tabuľku.}
   \label{abstractDBClass}
@@ -788,13 +788,69 @@ class FcPackageGraph(Base):
         }
   \end{lstlisting}
 \end{algorithm}
-Tieto triedy boli vytvorené prostredníctvom programu sqlacodegen\footnote{\url{https://pypi.org/project/sqlacodegen/1.1.0/}}. Abstraktná vrstva nad databázou výrazne uľahčuje manipuláciu s databázovými objektami. K triedam je možné doimplementovať hybridné vlastnosti, ktoré bývajú zvyčajne vyjadrené na základe stĺpcov odpovedajúcej tabuľky. Napríklad, keďže je nájdené heslo pri úlohe uložené v stĺpci \texttt{result} vo formáte Base64\footnote{\url{https://sk.wikipedia.org/wiki/Base64}}, je možné vytvoriť hybridnú vlastnosť triedy, ktorá automaticky po načítaní dát z databázy dekóduje heslo uložené vo formáte Base64 a priradí ho do hybridnej vlastnosti. Abstraktná vrstva databázy je implementovaná prostredníctvom frameworku SQLalchemy.
+Tieto triedy boli vytvorené prostredníctvom programu sqlacodegen\footnote{\url{https://pypi.org/project/sqlacodegen/1.1.0/}}. Abstraktná vrstva nad databázou výrazne uľahčuje manipuláciu s databázovými objektami. K triedam je možné doimplementovať hybridné vlastnosti, ktoré bývajú zvyčajne vyjadrené na základe stĺpcov odpovedajúcej tabuľky. Napríklad, keďže je nájdené heslo pri úlohe uložené v stĺpci \texttt{result} vo formáte Base64\footnote{\url{https://sk.wikipedia.org/wiki/Base64}}, je možné vytvoriť hybridnú vlastnosť triedy, ktorá automaticky po načítaní dát z databázy dekóduje heslo uložené vo formáte Base64 a priradí ho do hybridnej vlastnosti. Abstraktná vrstva databázy je implementovaná prostredníctvom frameworku SQLalchemy (viď \ref{sqlAlchemy}).
 
-\subsection{Implementácia jednotlivých zdrojov}
 
+\subsection{Implementácia jednotlivých URI}
+Pri vytváraní funkcií na spracovanie jednotlivých žiadostí používam rozšírenie do frameworku \texttt{Flask} s názvom texttt{Flask-RESTPlus} (viď \ref{flaskRestplus}). Balík \texttt{endpoints} obsahuje ďalšie balíky, v ktorých prebieha ošetrenie jednotlivých žiadostí. Väčšina týchto balíkov v sebe obsahuje štyri súbory. Jedná sa o \texttt{argumentsParser.py}, \texttt{responseModels.py}, \texttt{functions.py} a modul, s rovnakým názvom ako má balík do ktorého patrí, v ktorom sú definované triedy na ošetrenie žiadostí. Tieto triedy obsahujú funkcie s názvom HTTP metód (viď \ref{httpMetody}). Príklad takejto triedy je možné vidieť na výpise \ref{endpointClass}.
+\begin{algorithm}
+  \caption{Príklad triedy, ktorá ošetruje URI /jobs}
+  \label{endpointClass}
+  \begin{lstlisting}[
+             language=Python,
+             showspaces=false,
+             basicstyle=\ttfamily,
+             numbers=left,{}
+          ]
+@ns.route('/jobs')
+class jobs(Resource):
+
+    @api.expect(jobList_arguments)
+    @api.marshal_with(pageOfJobs_model)
+    def get(self):
+        args = jobList_arguments.parse_args(request)
+        jobs_page = FcJob.query.paginate(args['page'], args['per_page'])
+        return jobs_page
+
+    @api.expect(addJob_arguments)
+    @api.marshal_with(newJob_model)
+    def post(self):
+        data = request.json
+        job = create_job(data)
+        return { 'message': 'Job ' + job.name + ' succesful created.',
+                 'status': True }
+  \end{lstlisting}
+\end{algorithm}
+V module \texttt{argumentsParser.py} sa nachádzajú objekty, ktoré slúžia na spracovanie argumentov žiadostí. Volajú sa formou dekorátorov pred funkciou. Napríklad na výpise \ref{endpointClass} je možné vidieť volanie \texttt{jobList\_arguments} pomocou dekorátoru \texttt{api.expect}. V module \texttt{responseModels.py} sa nachádzajú modely odpovedí na žiadosti, ktoré daný balík spracováva. Tieto modely odpovedí sa volajú prostredníctvom dekorátora \texttt{api.marshal\_with}. Vďaka týmto modelom je možné aby funkcie ošetrujúce žiadosti vracali štruktúry z prostredia python (slovník, pole slovníkov, n-tice alebo množiny). Tieto štruktúry sú potom prekonvertované dekorátorom na textové reťazce vo formáte JSON, ktorými server odpovedá prezentačnej vrstve. V modele \texttt{functions.py} sú uložené funkcie, ktoré ktoré balík, ošetrujúci sadu URI používa. Z výpisu \ref{endpointClass} sa tu napríklad nachádza funkcia \texttt{create\_job}.
 
 \subsection{Spracovanie útokov}
-Spracovanie jednotlivých útokov prebieha v balíčku \texttt{attacks}
+Spracovanie úlohy na aplikačnej vrstve prebieha v niekoľkých fázach. Najprv sa získa hash určený na lámanie. Ten je možné buď zadať priamo, alebo nahrať šifrovaný súbor, z ktorého systém pomocou programu \texttt{XtoHashcat}\footnote{\url{https://fitcrack.fit.vutbr.cz/?i=download}} hash extrahuje. Následné overí formát hashu pomocou nástroja \texttt{hashValidator}. Jedná sa o nástroj, napísaný v jazyku C, ktorý som vytvoril zjednodušením a úpravou programu Hashcat (viď \ref{hashcat}). Týmto spôsobom som sa chcel zbaviť závislostí ktoré program Hashcat vyžaduje pri niektorých funkciách čo nie sú využívané na serverovej časti systému. Po overení hashu sa systém pokúsí nájsť heslo v tabuľke \texttt{hashcache}. V prípade že sa heslo v databáze nenašlo prebieha spracovanie jednotlivých útokov v module \texttt{attacks}. Spracovanie jednotlivých útokov sa od seba líši a sú popísané v zozname nižšie.
+\begin{itemize}
+    \item \textbf{Slovníkový útok} - pri tomto útoku sa v tele žiadosti vyžaduje identifikátor slovníka. Podľa tohto identifikátora sa vyhľadá v databáze v tabuľke \texttt{dictionary} slovník s príslušným identifikátorom. Potom sa overí či slovník existuje v súborovom systéme. Ak je zadaný súbor s pravidlami, taktiež sa vyhľadá v databáze (v tabuľke \texttt{rule}) a overí sa jeho existencia na disku. Na konci spracovávania útoku sa vypočíta veľkosť množiny hesiel danej úlohy. Pri tomto type útokov je veľkosť tejto množiny rovná súčinu počtu pravidiel a počtu hesiel v slovníku (ak nebol vybraný súbor s pravidlami tak len počtu hesiel v slovníku). O podrobnejšom priebehu útoku sa je možné dočítať v podkapitole \ref{dictAttack}.
+    \item \textbf{Kombinačný útok} -tento útok vyžaduje zadané dva identifikátory slovníkov. Po overení existencie oboch slovníkov sa vypočíta veľkosť množiny hesiel ako súčet počtu hesiel v slovníkoch. Podrobnosti o tomto type útoku sú uvedené v podkapitole \ref{combAttack}
+    \item \textbf{Útok s maskami} - spracovanie tohto typu útoku je najzložitejšie. Najprv sa musí skontrolovať syntax každej masky. Potom sa overuje existencia Markovho modelu a súborov s cudzojazyčnými znakovými sadami. Veľkosť množiny hesiel sa pre tento útok počíta pomocou masiek. Za každý zástupný znak v maske sa veľkosť množiny hesiel pre danú masku vynásobí počtu symbolov, ktoré zástupný znak symbolizuje (pre \texttt{?d} 10, pre \texttt{?l} 26 a pod.). Veľkosti množín hesiel pre jednotlivé masky sa potom spočítajú a výsledok je celková veľkosť množiny hesiel pre všetky masky. Viac o tomto type útoku je uvedené v kapitole \ref{maskAttack}.
+    \item \textbf{Hybridné útoky} -najprv sa skontroluje syntax zadanej masky a následne sa z nej pomocou programu MaskProcessor\footnote{\url{https://hashcat.net/wiki/doku.php?id=maskprocessor}} vytvorí slovník, ktorý sa uloží na disk. Slovník zadaný užívateľom sa načíta z databázy a skontroluje sa jeho existencia na disku. Veľkosť množiny hesiel sa vypočíta pomocou súčinu počtu hesiel v oboch slovníkov (tak isto ako u kombinačného útoku). Tento útok je detailnejšie rozobraný v podkapitole \ref{hybridAttack}.
+\end{itemize}
+Po spracovaní útoku je nutné vytvoriť konfiguráciu útoku pre generátor vo formáte TLV\footnote{\url{https://en.wikipedia.org/wiki/Type-length-value}}. Potom sa už len záznam uloží do databáze a priradia sa k nemu hostia. Aplikačnej vrstve sa odošle správa o úspešnom pridaní úlohy do databáze.
+
+
+\subsection{Autentizácia užívateľov}
+Na autentizáciu užívateľov som vybral modul \texttt{Flask-Login}\footnote{\url{https://flask-login.readthedocs.io/en/latest/}}. Jedná sa o rozšírenie do frameworku \texttt{Flask}, ktoré poskytuje správu nad sedením užívateľov (prihlásenie, odhlásenie a zapamätanie si užívateľa). Toto rozšírenie pridáva do systému dekorátor \texttt{login\_required}, ktorý zabezpečuje aby sa neprihlásený užívateľ nedostal k zdrojom, ktoré sú viditeľne len pre prihlásených užívateľov.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 \chapter{Záver}\label{zaver}
 V~tejto práci sa mi podarilo navrhnúť implementáciu serverovej časti systému Fitcrack s~automaticky generovanou dokumentáciou. Zameral som sa na vylepšenia súčasnej verzie webového prostredia Fitcracku a navrhol som rozšírenia, ku príkladu systém viacerých užívateľov, ktoré spríjemnia užívateľom používanie. Taktiež som odstránil nedokonalosti súčasného riešenia, ako napríklad dostupnosť len z~webovej platformy. Systém, implementovaný podľa môjho návrhu bude dostupný zo všetkých platforiem, ktoré sú schopné sieťovej komunikácie. Súčasne sa zníži záťaž na server, pretože bude prerozdelená medzi klienta a server. Vďaka implementácie pomocou modulov bude celý systém ľahko rozšíriteľný. Návrh opísaný v~tejto práci tiež ošetruje niekoľko bezpečnostných dier súčasnej implementácie. Návrh spĺňa všetky zásady architektúry REST (viď \ref{zasadyREST}), a taktiež je vhodný na testovacie účely systému.
