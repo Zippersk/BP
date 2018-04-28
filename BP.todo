@@ -7,6 +7,8 @@ OSNOVA:
         ✔ Architektúra Fitcracku @done (18-04-15 22:05)
         ✘ Opísať jednotlivé súbory. Dictionary, markove reťazce, masky, charstey... @cancelled (18-04-23 00:16)
 
+    ☐ Pôvodné riešenie
+ 
     ✔ Technológie @done (18-04-15 22:05)
         ✔ HTTP @done (18-04-15 22:07)
             ☐ AJAX?
@@ -44,6 +46,7 @@ OSNOVA:
 
     ✔ Implementácia @done (18-04-23 14:31)
         ✔ Backend @done (18-04-26 20:15)
+            ☐ odhasovanie doby výpočtu
             ✔ Spracovanie jednotlivých útokov @done (18-04-26 20:15)
                 ✔ Slovníkový @done (18-04-26 20:15)
                 ✔ Maska @done (18-04-26 20:15)
@@ -52,8 +55,8 @@ OSNOVA:
             ✔ Uživatelia @done (18-04-26 20:15)
                 ✔ Notifikacie @done (18-04-26 20:15)
                 ✔ Opravnenia @done (18-04-26 20:15)
-        ☐ Frontend
-            ☐ Vuetify
+        ✔ Frontend @done (18-04-27 14:52)
+            ✔ Vuetify @done (18-04-27 14:52)
         ✔ Databazova vrstva @done (18-04-26 20:15)
 
     ☐ Testovanie/Experimenty
@@ -63,7 +66,7 @@ OSNOVA:
     ☐ Záver
 
 LINKY:
-    ✔ https://www.herout.net/blog/2012/03/struktura-diplomove-prace/ @done (18-04-26 20:21)
+    ✔ https://www.herout.net/blog/2012/03/struktura-diplomove-prace/ @done (18-04-26 20:21) 
 
 
 FIXY:
