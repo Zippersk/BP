@@ -6,9 +6,10 @@ OSNOVA:
         ✔ BOINC @done (18-04-15 22:05)
         ✔ Architektúra Fitcracku @done (18-04-15 22:05)
         ✘ Opísať jednotlivé súbory. Dictionary, markove reťazce, masky, charstey... @cancelled (18-04-23 00:16)
-
-    ☐ Pôvodné riešenie
+        ✔ Pôvodné riešenie web admina @done (18-04-29 15:56)
  
+
+  
     ✔ Technológie @done (18-04-15 22:05)
         ✔ HTTP @done (18-04-15 22:07)
             ☐ AJAX?
@@ -46,7 +47,7 @@ OSNOVA:
 
     ✔ Implementácia @done (18-04-23 14:31)
         ✔ Backend @done (18-04-26 20:15)
-            ☐ odhasovanie doby výpočtu
+            ✔ odhadovanie doby výpočtu @done (18-04-30 12:17)
             ✔ Spracovanie jednotlivých útokov @done (18-04-26 20:15)
                 ✔ Slovníkový @done (18-04-26 20:15)
                 ✔ Maska @done (18-04-26 20:15)
@@ -59,9 +60,9 @@ OSNOVA:
             ✔ Vuetify @done (18-04-27 14:52)
         ✔ Databazova vrstva @done (18-04-26 20:15)
 
-    ☐ Testovanie/Experimenty
-        ☐ Testovanie slovníkového útoku - vygenerovať random slovník a zobrať z neho jedno heslo. To heslo zahashovať podla nejakeho algoritmu. Hash vložiť do webadmina a spustiť job. Sledovať čo sa stane. Naprj je potrebne asi napísať hypotézu
-        ☐ Testovanie maskovacieho útoku - podobne ako predchadzajúci experiment.
+    ✔ Testovanie/Experimenty @done (18-04-28 21:09)
+        ✔ Testovanie slovníkového útoku - vygenerovať random slovník a zobrať z neho jedno heslo. To heslo zahashovať podla nejakeho algoritmu. Hash vložiť do webadmina a spustiť job. Sledovať čo sa stane. Naprj je potrebne asi napísať hypotézu @done (18-04-28 21:09)
+        ✘ Testovanie maskovacieho útoku - podobne ako predchadzajúci experiment. @cancelled (18-04-28 21:09)
 
     ☐ Záver
 
@@ -71,10 +72,10 @@ LINKY:
 
 FIXY:
     ✔ Do ER diagramu pridať Encrypted files @done (18-04-23 15:11)
-    ☐ Do návrhu pridať text
+    ✔ Do návrhu pridať text @done (18-04-30 12:48)
     ☐ Pridať BP o Markovských kokotinach do literatury
     ☐ Do prílohy možno pridať celý trigger z DB.
-    ☐ Spomenuť pri implementacii ake všetky kokotinky využívame
+    ✔ Spomenuť pri implementacii ake všetky kokotinky využívame @done (18-04-30 12:49)
 
 
 
