@@ -141,7 +141,7 @@
   keywords.cs={REST, Fitcrack, API, SPA}, % klíčová slova v českém či slovenském jazyce / keywords in czech or slovak language
   keywords.en={REST, Fitcrack, API, SPA}, % klíčová slova v anglickém jazyce / keywords in english
   % Abstrakt / Abstract
-  abstract.cs={Táto práca rieši návrh a implementáciu webovej aplikácie na vzdialenú správu systému Fitcrack. Jedná sa o systém, ktorý slúži na distribuovanú obnovu hesiel. Serverová časť webovej aplikácie je navrhnutá s použitím architektúry REST, ktorá znižuje zátaž na server a zároveň zjednodušuje testovanie systému. Prezentačná vrstva systému je implementovaná ako moderná jednostránková webová prezentácia (Single page aplication). So serverovou časťou komunikuje pomocou asynchrónnych žiadosti (AJAX) ktorých obsah je vo formáte JSON. Súčasťou webovej aplikácie je príjemné responzívne užívateľské rozhranie, systém užívateľov s oprávneniami a rôzne pokročilejšie grafické prvky ako napríklad grafy.
+  abstract.cs={Táto práca rieši návrh a implementáciu webovej aplikácie na vzdialenú správu systému Fitcrack. Jedná sa o~systém, ktorý slúži na distribuovanú obnovu hesiel. Serverová časť webovej aplikácie je navrhnutá s~použitím architektúry REST, ktorá znižuje zátaž na server a zároveň zjednodušuje testovanie systému. Prezentačná vrstva systému je implementovaná ako moderná jednostránková webová prezentácia (Single page aplication). So serverovou časťou komunikuje pomocou asynchrónnych žiadosti (AJAX) ktorých obsah je vo formáte JSON. Súčasťou webovej aplikácie je príjemné responzívne užívateľské rozhranie, systém užívateľov s~oprávneniami a rôzne pokročilejšie grafické prvky ako napríklad grafy.
 
   
   }, % abstrakt v českém či slovenském jazyce / abstract in czech or slovak language
@@ -230,7 +230,7 @@ V~tejto práci popisujem všeobecný opis a implementáciu webovej aplikácie, k
 
 Súčasná implementácia je veľmi ťažko rozšíriteľná. Taktiež obsahuje niekoľko bezpečnostných dier. Nové riešenie prináša do systému Fitcrack väčšiu bezpečnosť a rozšíriteľnosť, umožňuje testovanie systému a vďaka architektúre klient-server znižuje záťaž na serverovú časť systému.
 
-Táto práca pozostáva z~ôsmych kapitol. Popis systému Fitcrack spolu s~nástrojmi, ktoré využíva sa nachádza v~kapitole \ref{Fitcrack}. Opis využitých technológií, ktoré som pri návrhu nového systému na vzdialenú správu Fitcracku použil, sa nachádza v~kapitole \ref{technologie}. Samotným návrhom riešenia, ktorý je rozdelený do modulov, sa zaoberám v~kapitole \ref{navrh}. V~jednotlivých podkapitolách popisujem každý modul. S implmentáciou aplikácie sa zaoberám v kapitole \ref{implementacia}. V kapitole \ref{testovanie} som systém otestoval a podrobil experimentu. Nakoniec v~záverečnej kapitole \ref{zaver} hodnotím výsledky mojej práce. 
+Táto práca pozostáva z~ôsmych kapitol. Popis systému Fitcrack spolu s~nástrojmi, ktoré využíva sa nachádza v~kapitole \ref{Fitcrack}. Opis využitých technológií, ktoré som pri návrhu nového systému na vzdialenú správu Fitcracku použil, sa nachádza v~kapitole \ref{technologie}. Samotným návrhom riešenia, ktorý je rozdelený do modulov, sa zaoberám v~kapitole \ref{navrh}. V~jednotlivých podkapitolách popisujem každý modul. S~implmentáciou aplikácie sa zaoberám v~kapitole \ref{implementacia}. V~kapitole \ref{testovanie} som systém otestoval a podrobil experimentu. Nakoniec v~záverečnej kapitole \ref{zaver} hodnotím výsledky mojej práce. 
 
 
 
@@ -263,26 +263,26 @@ Ako je možné vidieť na obrázku \ref{fig:archFitcrack}, architektúra systém
 
 
 \subsection{Webový server}
-Cieľom mojej bakalárskej práce je navrhnúť a implementovať webový server, cez ktorý budú môcť užívatelia spravovať celý systém Fitcrack. K webovému serveru môže byť naraz pripojených viacero užívateľov, ktorí vykonávajú rôzne činnosti (analyzovanie výsledkov dokončených úloh, sledovanie aktivity jednotlivých hosťov, pridávanie nových úloh, sledovanie progresu práve prebiehajúcich úloh atď.). Po pripojení užívateľa na webový server cez internetový prehliadač, sa užívateľovi odošle webová aplikácia, ktorá komunikuje so serverom prostredníctvom REST API (viď \ref{rest}). Prostredníctvom webovej aplikácie je možné do systému pridávať nové úlohy, monitorovať prebiehajúce, analyzovať dokončené úlohy, monitorovať správanie hosťov a podobne. Viac o návrhu webového servera sa je možné dočítať v kapitole \ref{navrh}.
+Cieľom mojej bakalárskej práce je navrhnúť a implementovať webový server, cez ktorý budú môcť užívatelia spravovať celý systém Fitcrack. K~webovému serveru môže byť naraz pripojených viacero užívateľov, ktorí vykonávajú rôzne činnosti (analyzovanie výsledkov dokončených úloh, sledovanie aktivity jednotlivých hosťov, pridávanie nových úloh, sledovanie progresu práve prebiehajúcich úloh atď.). Po pripojení užívateľa na webový server cez internetový prehliadač, sa užívateľovi odošle webová aplikácia, ktorá komunikuje so serverom prostredníctvom REST API (viď \ref{rest}). Prostredníctvom webovej aplikácie je možné do systému pridávať nové úlohy, monitorovať prebiehajúce, analyzovať dokončené úlohy, monitorovať správanie hosťov a podobne. Viac o~návrhu webového servera sa je možné dočítať v~kapitole \ref{navrh}.
 
 \subsection{Generátor}
-Keď užívateľ prostredníctvom webovej aplikácie pridá do systému úlohu, generátor, v prípade že nastal čas zahájenia úlohy, začne generovať pracovné jednotky pre priradených hosťov k úlohe. Jedná sa o program, ktorý beží v nekonečnom cykle. Generátor systému Fitcrack vytvára dva typy pracovných jednotiek.
+Keď užívateľ prostredníctvom webovej aplikácie pridá do systému úlohu, generátor, v~prípade že nastal čas zahájenia úlohy, začne generovať pracovné jednotky pre priradených hosťov k~úlohe. Jedná sa o~program, ktorý beží v~nekonečnom cykle. Generátor systému Fitcrack vytvára dva typy pracovných jednotiek.
 \begin{itemize}
-    \item \textbf{Meranie výkonu} - tieto pracovné jednotky sú generované hosťom, ktorý sa práve do systému alebo k úlohe pripojili, poprípade hosťom, u ktorých nastala chyba. Slúžia k zmeraniu výkonu daného hosťa. Meranie výkonu má veľký význam pri generovaní normálnych pracovných jednotiek, pretože vďaka nameraným údajom vieme odhadnúť správne množstvo práce pre hosťa. Výsledkom tejto úlohy je počet vygenerovaných kryptografických šifier určitého formátu za jednu sekundu. 
-    \item \textbf{Normálne} - obsahujú potrebné informácie pre zvolený spôsob útoku. Môžu obsahovať slovník, masku, rozsah stavového priestoru, súbor s pravidlami, cudzojazyčné znakové sady a podobne. Počet hesiel na overenie v jednej pracovnej jednotke (náročnosť pracovnej jednotky) závisí na zložitosti výpočtu danej kryptografickej šifry a nameraného výkonu hosťa. Cieľom je, aby sa doba výpočtu jednej pracovnej jednotky čo najviac približovala času zadaného pri vytváraní úlohy. Generátor udržuje v databáze dve naplánované úlohy pre jedného hosťa (pokiaľ sa už nevyčerpal celý stavový priestor hesiel). Prvá úloha sa práve počíta a druhá je pripravená k odoslaniu hneď po obdržaní výsledku prvej úlohy.
+    \item \textbf{Meranie výkonu} - tieto pracovné jednotky sú generované hosťom, ktorý sa práve do systému alebo k~úlohe pripojili, poprípade hosťom, u~ktorých nastala chyba. Slúžia k~zmeraniu výkonu daného hosťa. Meranie výkonu má veľký význam pri generovaní normálnych pracovných jednotiek, pretože vďaka nameraným údajom vieme odhadnúť správne množstvo práce pre hosťa. Výsledkom tejto úlohy je počet vygenerovaných kryptografických šifier určitého formátu za jednu sekundu. 
+    \item \textbf{Normálne} - obsahujú potrebné informácie pre zvolený spôsob útoku. Môžu obsahovať slovník, masku, rozsah stavového priestoru, súbor s~pravidlami, cudzojazyčné znakové sady a podobne. Počet hesiel na overenie v~jednej pracovnej jednotke (náročnosť pracovnej jednotky) závisí na zložitosti výpočtu danej kryptografickej šifry a nameraného výkonu hosťa. Cieľom je, aby sa doba výpočtu jednej pracovnej jednotky čo najviac približovala času zadaného pri vytváraní úlohy. Generátor udržuje v~databáze dve naplánované úlohy pre jedného hosťa (pokiaľ sa už nevyčerpal celý stavový priestor hesiel). Prvá úloha sa práve počíta a druhá je pripravená k~odoslaniu hneď po obdržaní výsledku prvej úlohy.
 \end{itemize}
 
 \subsection{Asimilátor}
 \label{asimilator}
-Asimilátor slúži na spracovanie výsledkov od hosťov. Beží v nekonečnej slučke. Na začiatku každého cyklu kontroluje prítomnosť ešte nespracovaných výsledkov a tieto výsledky overí. Správa pre asimilátor môže obsahovať rôzne informácie (nájdené heslo, správu o chybe, čas výpočtu, typ pracovnej jednotky, stavový kód výsledku a podobne). Podľa obsahu správy asimilátor upravuje databázu. Napríklad v prípade že hosť heslo našiel hľadané heslo, asimilátor na základe tejto odpovedi upraví databázu. Vďaka tejto úprave ostatní hostia podieľajúci sa na danej úlohe, dostanú správu o zastavení výpočtu.
+Asimilátor slúži na spracovanie výsledkov od hosťov. Beží v~nekonečnej slučke. Na začiatku každého cyklu kontroluje prítomnosť ešte nespracovaných výsledkov a tieto výsledky overí. Správa pre asimilátor môže obsahovať rôzne informácie (nájdené heslo, správu o~chybe, čas výpočtu, typ pracovnej jednotky, stavový kód výsledku a podobne). Podľa obsahu správy asimilátor upravuje databázu. Napríklad v~prípade že hosť heslo našiel hľadané heslo, asimilátor na základe tejto odpovedi upraví databázu. Vďaka tejto úprave ostatní hostia podieľajúci sa na danej úlohe, dostanú správu o~zastavení výpočtu.
 
 \subsection{Hosť}
-Hosť je jeden výpočetný uzol pripojený k systému Fitcrack. Na hosťoch beží aplikácia Runner, ktorá prijíma úlohy od Generátora. Samotný výpočet potom riadi Runner a prebieha pomocou nástroja hashcat (viď \ref{hashcat}).
+Hosť je jeden výpočetný uzol pripojený k~systému Fitcrack. Na hosťoch beží aplikácia Runner, ktorá prijíma úlohy od Generátora. Samotný výpočet potom riadi Runner a prebieha pomocou nástroja hashcat (viď \ref{hashcat}).
 
 
 
 \chapter{Pôvodné riešenie webovej aplikácie systému Fitcrack}
-Pre systém Fitcrack už bola v minulosti vyvinutá webová aplikácia, ktorá slúžila ako prototyp. Jej webové rozhranie je možné vidieť na obrázkoch \ref{fig:oldFitcrack} a  \ref{fig:oldFitcrack2}. Táto aplikácia bola napísaná v jazykoch PHP, javascript, HTML a CSS.
+Pre systém Fitcrack už bola v~minulosti vyvinutá webová aplikácia, ktorá slúžila ako prototyp. Jej webové rozhranie je možné vidieť na obrázkoch \ref{fig:oldFitcrack} a  \ref{fig:oldFitcrack2}. Táto aplikácia bola napísaná v~jazykoch PHP, javascript, HTML a CSS.
 \begin{figure}[H]
     \centering
     \includegraphics[scale=0.3]{obrazky/oldWebadminFrame.PNG}
@@ -290,7 +290,7 @@ Pre systém Fitcrack už bola v minulosti vyvinutá webová aplikácia, ktorá s
     \label{fig:oldFitcrack}
 \end{figure}
 
-Aplikácia mala niekoľko závažných problémov. To bol dôvod prečo som sa rozhodol nepokračovať vo vývoji tohto prototypu, ale začať od začiatku s novým riešením. Kedže pôvodná aplikácia nemala od seba oddelenú serverovú a klientskú časť aplikácie, testovanie aplikačnej logiky sa vykonávalo len veľmi ťažko. Server užívateľovi posielal vygenerované HTML dokumenty, ktoré v porovnaní s jednostránkovými webovými prezentáciami\footnote{\url{https://en.wikipedia.org/wiki/Single-page_application}} (single page application) zvyšujú zátaž na serverovú časť a predlžujú dobu odozvy u užívateľa. Taktiež sa s pôvodným riešením nedalo jednoducho komunikovať prostredníctvom aplikačného rozhrania z iných platforiem ako webu. To znemožnilo písanie automatizovaných skriptov. Ďalším nedostatkom pôvodného riešenia bola podpora len jedného užívateľa, ktorý nebol uložený v databáze, ale prihlasovacie údaje sa ukladali priamo do zdrojového kódu aplikácie. Veľkým nedostatkom systému bola podpora len dvoch útokov. Podporovaný bol slovníkový útok, avšak bez použitia pravidiel, a útok s maskami bez použitia markovského modelu. Pôvodná webová aplikácia nebola responzívna, užívateľ s menším displejom mal s jej používaním problém. Jednotlivé stránky sa po načítaní samovoľne neaktualizujú, takže sa zmeny v databáze neprejavia na prezentačnej vrstve bez znovunačítania stránky. V riešení chýbajú interaktívne prvky ako grafy a podobne. Celkovo aplikácia pôsobí zastaralo.
+Aplikácia mala niekoľko závažných problémov. To bol dôvod prečo som sa rozhodol nepokračovať vo vývoji tohto prototypu, ale začať od začiatku s~novým riešením. Kedže pôvodná aplikácia nemala od seba oddelenú serverovú a klientskú časť aplikácie, testovanie aplikačnej logiky sa vykonávalo len veľmi ťažko. Server užívateľovi posielal vygenerované HTML dokumenty, ktoré v~porovnaní s~jednostránkovými webovými prezentáciami\footnote{\url{https://en.wikipedia.org/wiki/Single-page_application}} (single page application) zvyšujú zátaž na serverovú časť a predlžujú dobu odozvy u~užívateľa. Taktiež sa s~pôvodným riešením nedalo jednoducho komunikovať prostredníctvom aplikačného rozhrania z~iných platforiem ako webu. To znemožnilo písanie automatizovaných skriptov. Ďalším nedostatkom pôvodného riešenia bola podpora len jedného užívateľa, ktorý nebol uložený v~databáze, ale prihlasovacie údaje sa ukladali priamo do zdrojového kódu aplikácie. Veľkým nedostatkom systému bola podpora len dvoch útokov. Podporovaný bol slovníkový útok, avšak bez použitia pravidiel, a útok s~maskami bez použitia markovského modelu. Pôvodná webová aplikácia nebola responzívna, užívateľ s~menším displejom mal s~jej používaním problém. Jednotlivé stránky sa po načítaní samovoľne neaktualizujú, takže sa zmeny v~databáze neprejavia na prezentačnej vrstve bez znovunačítania stránky. V~riešení chýbajú interaktívne prvky ako grafy a podobne. Celkovo aplikácia pôsobí zastaralo.
 \begin{figure}[H]
     \centering
     \includegraphics[scale=0.3]{obrazky/oldWebadmin2Frame.PNG}
@@ -378,7 +378,7 @@ REST je úzko spojený s~protokolom HTTP, keďže ho prvý krát navrhol a popí
 Architektúra REST sa používa pre jednotný prístup ku zdrojom. Jedná sa o~spôsob, ako klient môže pomocou základných HTTP volaní vytvárať, čítať, editovať alebo mazať informácie zo serveru. Zdrojom môžu byť dáta alebo stav aplikácie, pokiaľ sa dá dátami vyjadriť. K~jednotlivým zdrojom sa pristupuje pomocou URI (viď. \ref{URI}). Každý zdroj musí mať vlastný identifikátor URI.
 
 \subsection{URI} \label{URI}
-URI (Uniform Resource Identifier – jednotný identifikátor zdroja) je veľmi obecný koncept. Základný formát je veľmi voľný. Jedná sa o názov takzvanej schémy, oddelenej dvojbodkou od zvyšku URI. Tento zvyšok tvorí v podstate ľubovoľný reťazec znakov. Záleží na zvolenej schéme\cite{URIRFC}. V architektúre REST sa URI používa hlavne s použitím schémy HTTP alebo HTTPS. Príklad takejto URI s jej jednotlivými komponentami je uvedený nižšie na obrázku \ref{fig:formatURI}. Všeobecne sa URI so schémou http skladá z IP adresy alebo názvu hosta, nepovinne sa za hostom uvádza port (ak nie je uvedený tak sa predpokladá pre http port 80 a pre https 443). Ďalej sa uvádza cesta k zdroju a následne nepovinné query parametre oddelené ampersandom. Na konci URI sa môže objaviť fragment stránky, ktorý často obsahuje id HTML elementu na ktorý sa má prehliadač po otvorení URI zamerať.
+URI (Uniform Resource Identifier – jednotný identifikátor zdroja) je veľmi obecný koncept. Základný formát je veľmi voľný. Jedná sa o~názov takzvanej schémy, oddelenej dvojbodkou od zvyšku URI. Tento zvyšok tvorí v~podstate ľubovoľný reťazec znakov. Záleží na zvolenej schéme\cite{URIRFC}. V~architektúre REST sa URI používa hlavne s~použitím schémy HTTP alebo HTTPS. Príklad takejto URI s~jej jednotlivými komponentami je uvedený nižšie na obrázku \ref{fig:formatURI}. Všeobecne sa URI so schémou http skladá z~IP adresy alebo názvu hosta, nepovinne sa za hostom uvádza port (ak nie je uvedený tak sa predpokladá pre http port 80 a pre https 443). Ďalej sa uvádza cesta k~zdroju a následne nepovinné query parametre oddelené ampersandom. Na konci URI sa môže objaviť fragment stránky, ktorý často obsahuje id HTML elementu na ktorý sa má prehliadač po otvorení URI zamerať.
 
 
 
@@ -438,18 +438,18 @@ Architektúra REST definuje štyri základné metódy pre prístup k~jednotlivý
 \end{itemize}
 
 \section{Python}\label{python}
-Python\footnote{\url{https://www.python.org/}} je interpretovaný programovací jazyk, ktorý podporuje objektovo orientované, štruktúrované aj funkcionálne programovanie. Ponúka dynamickú typovú kontrolu. Je vyvíjaný ako open source projekt. V dôsledku nedostatkov a chýb pri návrhu jazyka sa v roku 2008 rozdelil vývoj do dvoch častí (Python 2.x a Python 3.x). Verzia 3.x opravuje nedostatky ktoré v sebe mala verzia 2.x a nedali sa odstrániť bez toho, aby došlo k výrazným zásahom do kompatibility. Obe verzie sú v súčasnej dobe vyvíjané a podporované vývojármi.
+Python\footnote{\url{https://www.python.org/}} je interpretovaný programovací jazyk, ktorý podporuje objektovo orientované, štruktúrované aj funkcionálne programovanie. Ponúka dynamickú typovú kontrolu. Je vyvíjaný ako open source projekt. V~dôsledku nedostatkov a chýb pri návrhu jazyka sa v~roku 2008 rozdelil vývoj do dvoch častí (Python 2.x a Python 3.x). Verzia 3.x opravuje nedostatky ktoré v~sebe mala verzia 2.x a nedali sa odstrániť bez toho, aby došlo k~výrazným zásahom do kompatibility. Obe verzie sú v~súčasnej dobe vyvíjané a podporované vývojármi.
 
 \subsection{SQLAlchemy}\label{SQLAlchemy}
-SQLAlchemy\footnote{\url{http://www.sqlalchemy.org/}} je knižnica, napísaná v jazyku Python, ktorá slúži na vytvorenie abstraktnej vrstvy nad databázou. Jednotlivé databázové tabuľky sa namapujú na triedy, s ktorými je potom možné robiť operácie filtrovanie, pridávanie a mazanie. Tie zmeny sa následne prejavia v databáze.
+SQLAlchemy\footnote{\url{http://www.sqlalchemy.org/}} je knižnica, napísaná v~jazyku Python, ktorá slúži na vytvorenie abstraktnej vrstvy nad databázou. Jednotlivé databázové tabuľky sa namapujú na triedy, s~ktorými je potom možné robiť operácie filtrovanie, pridávanie a mazanie. Tie zmeny sa následne prejavia v~databáze.
 
 \subsection{Flask}\label{flask}
-Flask\footnote{\url{http://flask.pocoo.org/}} je miniatúrny webový framework napísaný v jazyku Python. Narozdiel od svojho najväčšieho konkurenta - Django\footnote{\url{https://www.djangoproject.com/}}, Flask v sebe obsahuje len minimum vstavaných funkcií. Napríklad Flask nemá vstavanú abstraktnú databázovú vrstvu ani validáciu formulárov. Avšak Flask podporuje množstvo rozšírení (modulov), ktoré jeho funkčnosť rozširujú. Príklad stránky, ktorá po navštívení vypíše text \texttt{Ahoj svet!}, je možný vidieť na výpise \ref{flaskExample}
+Flask\footnote{\url{http://flask.pocoo.org/}} je miniatúrny webový framework napísaný v~jazyku Python. Narozdiel od svojho najväčšieho konkurenta - Django\footnote{\url{https://www.djangoproject.com/}}, Flask v~sebe obsahuje len minimum vstavaných funkcií. Napríklad Flask nemá vstavanú abstraktnú databázovú vrstvu ani validáciu formulárov. Avšak Flask podporuje množstvo rozšírení (modulov), ktoré jeho funkčnosť rozširujú. Príklad stránky, ktorá po navštívení vypíše text \texttt{Ahoj svet!}, je možný vidieť na výpise \ref{flaskExample}
 
 
 
 \begin{algorithm}[H]
-  \caption{Príklad jednoduchej aplikácie s použitím frameworku Flask}
+  \caption{Príklad jednoduchej aplikácie s~použitím frameworku Flask}
   \label{flaskExample}
   \begin{lstlisting}[
              language=Python,
@@ -470,19 +470,19 @@ if __name__ == "__main__":
 \end{algorithm}
 
 \subsubsection{Flask-RESTPlus}\label{RestPlusFlask}
-Flask-RESTPlus\footnote{\url{http://flask-restplus.readthedocs.io}} rozšírenie pre framework Flask, ktoré zjednodušuje vývoj aplikačného rozhrania s architektúrou REST. Do aplikácie pridáva sadu dekorátorov a nástrojov, a tiež uľahčuje tvorbu dokumentácie.
+Flask-RESTPlus\footnote{\url{http://flask-restplus.readthedocs.io}} rozšírenie pre framework Flask, ktoré zjednodušuje vývoj aplikačného rozhrania s~architektúrou REST. Do aplikácie pridáva sadu dekorátorov a nástrojov, a tiež uľahčuje tvorbu dokumentácie.
 
 \subsubsection{Flask-Login}\label{Flask login}
 Flask-Login\footnote{\url{https://flask-login.readthedocs.io}} je ďalšie rozšírenie do frameworku Flask, ktoré poskytuje správu sedení užívateľov. Pridáva do systému sadu funkcií, ktorými je možné implementovať prihlasovanie a odhlasovanie užívateľov, zapamätanie si užívateľa a zabezpečenie zdrojov pred užívateľom, ktorý na ne nemá práva.
 
 \section{Vue}\label{vue}
-Vue\footnote{\url{https://vuejs.org/}} je voľne šíriteľný framework napísaný v Javascripte, určený na tvorbu užívateľských rozhraní. Zvyčajne sa používa na vývoj jednostránkových aplikácií. Vyznačuje sa svojou nízkou veľkosťou a jednoduchosťou. Do aplikácií používajúce Vue je jednoduché integrovať iné knižnice. Vue taktiež obsahuje množstvo modulov, ktoré rozširujú možnosti aplikácie. Pri väčších aplikáciach je nutné jednotlivé časti rozdeliť do logických celkov - komponentov. Komponent je znovupoužiteľná časť aplikácie, ktorá v sebe obsahuje šablónu v syntaxe HTML, svoju javascriptovú logiku a kaskádové štýly v jazyku CSS. Jednou z výhod Vue je veľmi jednoduchá a intuitívna správa stavu aplikácie vďaka reaktivite, ktorú poskytuje. Pri zmene javascriptových objektov, ktoré sa používajú na vykreslenie komponentu, dôjde automaticky k znovu vykresleniu daného komponentu, bez nutnosti vyžadovania prekreslenia manuálne. Každý komponent si vytvorí zoznam závislostí pri prvom vykreslení, takže systém môže jednoducho určiť, kedy je komponent potrebný prekresliť.
+Vue\footnote{\url{https://vuejs.org/}} je voľne šíriteľný framework napísaný v~Javascripte, určený na tvorbu užívateľských rozhraní. Zvyčajne sa používa na vývoj jednostránkových aplikácií. Vyznačuje sa svojou nízkou veľkosťou a jednoduchosťou. Do aplikácií používajúce Vue je jednoduché integrovať iné knižnice. Vue taktiež obsahuje množstvo modulov, ktoré rozširujú možnosti aplikácie. Pri väčších aplikáciach je nutné jednotlivé časti rozdeliť do logických celkov - komponentov. Komponent je znovupoužiteľná časť aplikácie, ktorá v~sebe obsahuje šablónu v~syntaxe HTML, svoju javascriptovú logiku a kaskádové štýly v~jazyku CSS. Jednou z~výhod Vue je veľmi jednoduchá a intuitívna správa stavu aplikácie vďaka reaktivite, ktorú poskytuje. Pri zmene javascriptových objektov, ktoré sa používajú na vykreslenie komponentu, dôjde automaticky k~znovu vykresleniu daného komponentu, bez nutnosti vyžadovania prekreslenia manuálne. Každý komponent si vytvorí zoznam závislostí pri prvom vykreslení, takže systém môže jednoducho určiť, kedy je komponent potrebný prekresliť.
 
 \subsection{Vue CLI}\label{vueCli}
-Vue CLI\footnote{\url{https://vuejs.org/2015/12/28/vue-cli/}} je jednoduché terminálové rozhranie pre vytváranie nových Vue aplikácií. Cez toto rozhranie je možné vytvoriť aplikáciu podľa šablóny, vyvíjať ju na lokálnom webovom servery, ktorý má podporu automatického znovunačítania aplikácie po zmene zdrojového súboru (takzvaný hot-reloading), inštalovať do aplikácie rôzne moduly a zostaviť produkčnú verziu aplikácie, ktorá obsahuje minifikovaný zdrojový kód. Príklad práce s Vue CLI je možné vidieť na výpise \ref{lst:vueCLI}. Pre správne fungovanie Vue CLI je nutné mať nainštalovaný node.js\footnote{\url{https://nodejs.org}}.
+Vue CLI\footnote{\url{https://vuejs.org/2015/12/28/vue-cli/}} je jednoduché terminálové rozhranie pre vytváranie nových Vue aplikácií. Cez toto rozhranie je možné vytvoriť aplikáciu podľa šablóny, vyvíjať ju na lokálnom webovom servery, ktorý má podporu automatického znovunačítania aplikácie po zmene zdrojového súboru (takzvaný hot-reloading), inštalovať do aplikácie rôzne moduly a zostaviť produkčnú verziu aplikácie, ktorá obsahuje minifikovaný zdrojový kód. Príklad práce s~Vue CLI je možné vidieť na výpise \ref{lst:vueCLI}. Pre správne fungovanie Vue CLI je nutné mať nainštalovaný node.js\footnote{\url{https://nodejs.org}}.
 
 \begin{lstlisting}[
-             caption=Príklad práce s Vue CLI,
+             caption=Príklad práce s~Vue CLI,
              label={lst:vueCLI},
              frame=tlrb,
              language=bash,
@@ -502,14 +502,14 @@ npm run build
 \end{lstlisting}
 
 \subsection{Vue router}\label{vueRouter}
-Kedže Vue väčšinou slúži na vývoj jednostránkových webových prezentácií, je nutné pri aplikáciách vyriešiť URL adresáciu. Vue router\footnote{\url{https://router.vuejs.org}} je modul pre framework Vue, ktorý má na starosti navigáciu v aplikácií. Vue router používa konfiguračný súbor, v ktorom sú popísané jednotlivé cesty. Pri každej ceste je uvedený komponent, ktorý je pri zhode cesty vykreslený. Taktiež tento modul pridáva do aplikácie globálny objekt \texttt{router}, cez ktorý je možné navigáciu riadiť z javascriptového rozhrania.
+Kedže Vue väčšinou slúži na vývoj jednostránkových webových prezentácií, je nutné pri aplikáciách vyriešiť URL adresáciu. Vue router\footnote{\url{https://router.vuejs.org}} je modul pre framework Vue, ktorý má na starosti navigáciu v~aplikácií. Vue router používa konfiguračný súbor, v~ktorom sú popísané jednotlivé cesty. Pri každej ceste je uvedený komponent, ktorý je pri zhode cesty vykreslený. Taktiež tento modul pridáva do aplikácie globálny objekt \texttt{router}, cez ktorý je možné navigáciu riadiť z~javascriptového rozhrania.
 
 
 \chapter{Návrh systému}\label{navrh}
-V tejto kapitole je popísaný koncepčný návrh systému. Kvôli ľahšej rozšíriteľnosti a jednoduchšiemu testovaniu, je vhodné od seba klientskú a serverovú časť systému oddeliť. Súčasťou tohto návrhu je  návrh databázy, užívateľského rozhrania, typov útokov v systéme Fitcrack a návrh niekoľkých rozšírení do systému. 
+V~tejto kapitole je popísaný koncepčný návrh systému. Kvôli ľahšej rozšíriteľnosti a jednoduchšiemu testovaniu, je vhodné od seba klientskú a serverovú časť systému oddeliť. Súčasťou tohto návrhu je  návrh databázy, užívateľského rozhrania, typov útokov v~systéme Fitcrack a návrh niekoľkých rozšírení do systému. 
 
 \section{Návrh serverovej časti}\label{navrhServer}
-Serverová časť aplikácie má za úlohu sprostredkúvať komunikáciu medzi databázou a prezentačnou vrstvou. Funguje ako webový server, ktorý na žiadosti prezentačnej vrstvy odpovedá HTTP správou, so správne nastaveným stavovým kódom v hlavičke a telom správy vo formáte JSON.
+Serverová časť aplikácie má za úlohu sprostredkúvať komunikáciu medzi databázou a prezentačnou vrstvou. Funguje ako webový server, ktorý na žiadosti prezentačnej vrstvy odpovedá HTTP správou, so správne nastaveným stavovým kódom v~hlavičke a telom správy vo formáte JSON.
 
 \subsection{Rozdelenie systému na moduly}
 Pre lepšiu organizáciu som celý systém rozdelil do niekoľko modulov (viď obr. \ref{fig:moduly}). Jednotlivé moduly sú detailnejšie rozobrané v~nasledujúcich podkapitolách. 
@@ -535,11 +535,11 @@ Jedná sa o~modul, v~ktorom sú obslúžené dotazy na konkrétne URI (viď. \re
          \hline
          Popis& URI\\
          \hline
-          Operácie s kolekciou znakových sád & /charset/ \\
-          Operácie s konkrétnou znakovou sadou & /charset/<id> \\
+          Operácie s~kolekciou znakových sád & /charset/ \\
+          Operácie s~konkrétnou znakovou sadou & /charset/<id> \\
           Stiahnutie znakovej sady & /charset/<id>/download \\
-          Operácie s kolekciou slovníkov & /dictionary/ \\
-          Operácie s konskrétnym slovníkom & /dictionary/<id> \\
+          Operácie s~kolekciou slovníkov & /dictionary/ \\
+          Operácie s~konskrétnym slovníkom & /dictionary/<id> \\
           Dáta na vykreslenie grafu podielu práce hostov & /graph/hostPercentage/<job\_id> \\
           Dáta na vykreslenie grafu vyťaženosti hostov & /graph/hostsComputing \\
           Dáta na vykreslenie grafu vyťaženosti hosta & /graph/hostsComputing/<id> \\
@@ -547,38 +547,38 @@ Jedná sa o~modul, v~ktorom sú obslúžené dotazy na konkrétne URI (viď. \re
           Dáta na vykreslenie grafu progresu úlohy & /graph/packagesProgress/<id> \\
           Útoky podporované nástrojom hashcat & /hashcat/attackModes \\
           Typy hešov podporované nástrojom hashcat & /hashcat/hashTypes \\
-          Operácie s kolekciou hosťov & /hosts/ \\
-          Operácie s konkrétnym hosťom & /hosts/<id> \\
-          Získanie informácií o hosťoch & /hosts/info \\
-          Operácie s kolekciou úloh & /job/ \\
-          Operácie s konkrétnou úlohou & /job/<id> \\
+          Operácie s~kolekciou hosťov & /hosts/ \\
+          Operácie s~konkrétnym hosťom & /hosts/<id> \\
+          Získanie informácií o~hosťoch & /hosts/info \\
+          Operácie s~kolekciou úloh & /job/ \\
+          Operácie s~konkrétnou úlohou & /job/<id> \\
           Štart/stop/reštart úlohy & /job/<id>/action \\
-          Operácie s hosťami, ktorí sa podielajú na úlohe & /job/<id>/host \\
+          Operácie s~hosťami, ktorí sa podielajú na úlohe & /job/<id>/host \\
           Získanie pracovných jednotiek úlohy & /job/<id>/workunit \\
           Výpočet odhadu doby trvania úlohy & /job/crackingTime \\
-          Získanie informácií o úlohách & /job/info \\
+          Získanie informácií o~úlohách & /job/info \\
           Overenie formátu hešu & /job/verifyHash \\
-          Operácie s kolekciou Markovských modelov & /markovChains/ \\
-          Operácie s konkrétnym Markovským modelom & /markovChains/<id> \\
+          Operácie s~kolekciou Markovských modelov & /markovChains/ \\
+          Operácie s~konkrétnym Markovským modelom & /markovChains/<id> \\
           Vytvorenie Markovského modelu zo slovníka & /markovChains/makeFromDictionary \\
-          Operácie s kolekciou masiek & /masks/ \\
-          Operácie s konkrétnou maskou & /masks/<id> \\
+          Operácie s~kolekciou masiek & /masks/ \\
+          Operácie s~konkrétnou maskou & /masks/<id> \\
           Stiahnutie binárneho Markovho modelu & /masks/<id>/download \\
-          Operácie s upozorneniami & /notifications/ \\
+          Operácie s~upozorneniami & /notifications/ \\
           Získanie počtu nových upozornení & /notifications/count \\
-          Operácie s kolekciou šifrovaných súborov & /protectedFiles/ \\
-          Operácie s konkrétnym šifrovacím súborom & /protectedFiles/<id> \\
-          Operácie s kolekciou pravidiel & /rule/ \\
-          Operácie s konkrétnym pravidlom & /rule/<id> \\
+          Operácie s~kolekciou šifrovaných súborov & /protectedFiles/ \\
+          Operácie s~konkrétnym šifrovacím súborom & /protectedFiles/<id> \\
+          Operácie s~kolekciou pravidiel & /rule/ \\
+          Operácie s~konkrétnym pravidlom & /rule/<id> \\
           Operácie so serverovými nastaveniami & /serverInfo/control \\
-          Získanie informácií o behu servera & /serverInfo/info \\
-          Operácie s kolekciou užívateľov & /user/ \\
-          Operácie s konkrétnym užívateľom & /user/<id> \\
-          Zistenie či je užívateľ prihlásený v systéme & /user/isLoggedIn \\
+          Získanie informácií o~behu servera & /serverInfo/info \\
+          Operácie s~kolekciou užívateľov & /user/ \\
+          Operácie s~konkrétnym užívateľom & /user/<id> \\
+          Zistenie či je užívateľ prihlásený v~systéme & /user/isLoggedIn \\
           Prihlásenie užívateľa do systému & /user/login \\
           Odhlásenie užívateľa zo systému & /user/logout \\
-          Operácie s kolekciou užívateľských rolí & /user/role \\
-          Operácie s konkrétnou užívateľskou roľou & /user/role/<id> \\
+          Operácie s~kolekciou užívateľských rolí & /user/role \\
+          Operácie s~konkrétnou užívateľskou roľou & /user/role/<id> \\
          \hline
         \end{tabular}
       \caption{Zoznam dostupných URI.}
@@ -615,16 +615,16 @@ Generátor dokumentácie po spustení webového servera spracuje zdrojové kódy
 \end{figure}
 
 \subsection{Autentifikácia a oprávnenia užívateľov}
-Súčasná verzia systému Fitcrack nepodporuje viacerých užívateľov. Aby bolo možné do systému pridať užívateľov, je nutné rozšíriť databázu (viď. \ref{navrhDB}). Ako spôsob riešenia právomocí užívateľom som vybral systém oprávnení na základe rolí. Každý užívateľ bude mať uvedenú roľu, ktorá mu udeľuje právomoci na určité akcie. Jedná sa o jednoduchý systém, plne postačujúci pre menší počet užívateľov. Jednotlivé právomoci sú nasledujúce.
+Súčasná verzia systému Fitcrack nepodporuje viacerých užívateľov. Aby bolo možné do systému pridať užívateľov, je nutné rozšíriť databázu (viď. \ref{navrhDB}). Ako spôsob riešenia právomocí užívateľom som vybral systém oprávnení na základe rolí. Každý užívateľ bude mať uvedenú roľu, ktorá mu udeľuje právomoci na určité akcie. Jedná sa o~jednoduchý systém, plne postačujúci pre menší počet užívateľov. Jednotlivé právomoci sú nasledujúce.
 
 
 \begin{itemize}
-    \item \textbf{Spravovanie užívateľov} - S takýmto oprávnením môže užívateľ vytvárať, mazať a modifikovať iných užívateľov.
+    \item \textbf{Spravovanie užívateľov} - S~takýmto oprávnením môže užívateľ vytvárať, mazať a modifikovať iných užívateľov.
     \item \textbf{Pridávanie novej úlohy} - Užívateľ môže pridať do systému novú úlohu
-    \item \textbf{Nahrávanie súborov} - Užívateľ má oprávnenie do systému nahrať slovník, cudzojazyčné znakové sady, súbory s pravidlami, masky a súbory s markovými reťazcami. 
-    \item \textbf{Zobrazenie všetkých úloh} - Užívateľ vidí v systéme všetky vytvorené úlohy.
+    \item \textbf{Nahrávanie súborov} - Užívateľ má oprávnenie do systému nahrať slovník, cudzojazyčné znakové sady, súbory s~pravidlami, masky a súbory s~markovými reťazcami. 
+    \item \textbf{Zobrazenie všetkých úloh} - Užívateľ vidí v~systéme všetky vytvorené úlohy.
     \item \textbf{Editovanie úloh} - Užívateľ môže všetky úlohy modifikovať.
-    \item \textbf{Operácie s úlohami} - Užívateľ môže vykonávať s úlohami operácie štart, stop a reštart.
+    \item \textbf{Operácie s~úlohami} - Užívateľ môže vykonávať s~úlohami operácie štart, stop a reštart.
 \end{itemize}
 
 
@@ -632,9 +632,9 @@ Súčasná verzia systému Fitcrack nepodporuje viacerých užívateľov. Aby bo
 
 
 \section{Návrh klientskej časti}\label{navrhKlient}
-Klientskú časť tvorí moderná webová aplikácia, ktorá pomocou HTTP žiadostí komunikuje so serverom (viď \ref{http}). Analýzou požiadavkov som zistil, že aplikácia by mala byť čo najlepšie ovládateľná a prehľadná pre užívateľa. Taktiež je veľmi dôležité, aby bol vzhľad stránky dobre štrukturovaný a pútavý. Aplikácia musí byť dostupná aj pre užívateľov s menším rozlíšením displeja ako klasický počítačový monitor. Z tohto dôvodu sa bude aplikácia prispôsobovať užívateľskému rozlíšeniu (responzívnosť).
+Klientskú časť tvorí moderná webová aplikácia, ktorá pomocou HTTP žiadostí komunikuje so serverom (viď \ref{http}). Analýzou požiadavkov som zistil, že aplikácia by mala byť čo najlepšie ovládateľná a prehľadná pre užívateľa. Taktiež je veľmi dôležité, aby bol vzhľad stránky dobre štrukturovaný a pútavý. Aplikácia musí byť dostupná aj pre užívateľov s~menším rozlíšením displeja ako klasický počítačový monitor. Z~tohto dôvodu sa bude aplikácia prispôsobovať užívateľskému rozlíšeniu (responzívnosť).
 
-Keďže je systém uzavretý a vyžaduje prihlasovanie, je vhodné, aby úvodná stránka aplikácie obsahovala prihlasovací formulár (viď obrázok \ref{fig:loginScreen}). Systém bude distribuovaný s jedným užívateľom v databáze, ktorý bude slúžiť na prvotné prihlásenie. Po prihlásení prostredníctvom tohoto užívateľa je možné vytvárať nových užívateľov vo vnútri aplikácie.
+Keďže je systém uzavretý a vyžaduje prihlasovanie, je vhodné, aby úvodná stránka aplikácie obsahovala prihlasovací formulár (viď obrázok \ref{fig:loginScreen}). Systém bude distribuovaný s~jedným užívateľom v~databáze, ktorý bude slúžiť na prvotné prihlásenie. Po prihlásení prostredníctvom tohoto užívateľa je možné vytvárať nových užívateľov vo vnútri aplikácie.
 
 
 
@@ -655,31 +655,31 @@ Keďže je systém uzavretý a vyžaduje prihlasovanie, je vhodné, aby úvodná
 \end{minipage}
 \end{figure}
 
-Všetky ostatné stránky tvorí jednotné rozhranie, ktoré sa skladá z postranného bočného panelu, hornej lišty a hlavného obsahu, ktorý je generický pre každú stránku. Tento bočný panel obsahuje logo Fitcracku, a navigáciu. Pre zachovanie responzívnosti celej aplikácie sa tento panel pri zariadeniach  s menším rozlíšením skryje, a zobrazí až po stlačení tlačítka Menu. Horná lišta obsahuje vľavo tlačítko Menu a napravo tlačítko Upozornenia, ktoré indikuje počet nových upozornení. Po stlačení tlačítka Upozornenia sa z pravej strany obrazovky vysunie panel s upozorneniami. Vďaka jednotnému rozmiestneniu navigačných prvkov pre všetky stránky, má užívateľ vždy prístup k všetkým rubrikám. Návrh štruktúry rozloženia stránky je možné vidieť na obrázku \ref{fig:mainPage}.
+Všetky ostatné stránky tvorí jednotné rozhranie, ktoré sa skladá z~postranného bočného panelu, hornej lišty a hlavného obsahu, ktorý je generický pre každú stránku. Tento bočný panel obsahuje logo Fitcracku, a navigáciu. Pre zachovanie responzívnosti celej aplikácie sa tento panel pri zariadeniach  s~menším rozlíšením skryje, a zobrazí až po stlačení tlačítka Menu. Horná lišta obsahuje vľavo tlačítko Menu a napravo tlačítko Upozornenia, ktoré indikuje počet nových upozornení. Po stlačení tlačítka Upozornenia sa z~pravej strany obrazovky vysunie panel s~upozorneniami. Vďaka jednotnému rozmiestneniu navigačných prvkov pre všetky stránky, má užívateľ vždy prístup k~všetkým rubrikám. Návrh štruktúry rozloženia stránky je možné vidieť na obrázku \ref{fig:mainPage}.
 
 
-\section{Typy útokov v systéme Fitcrack}
-V systéme Fitcrack je možné vytvárať päť druhov útokov. Pôvodný systém Fitcrack podporoval len dva základné. Každý útok je jedinečný a vhodný na iné situácie.
+\section{Typy útokov v~systéme Fitcrack}
+V~systéme Fitcrack je možné vytvárať päť druhov útokov. Pôvodný systém Fitcrack podporoval len dva základné. Každý útok je jedinečný a vhodný na iné situácie.
 
 
-\subsection{Útok s maskami} \label{maskAttack}
-Jedná sa o útok hrubou silou. Užívateľ  vo webovej aplikácií zadá jednotlivé masky. Maska je textový reťazec pozostávajúci z pevne daných znakov a zástupných symbolov. Zástupné symboly sa označujú znakom ''\texttt{?}'' a symbolom znakovej sady. Napríklad mask \texttt{password?d} bude generovať heslá \texttt{password0 - password9}. Zabudované znakové sady v systéme sú nasledovné.
+\subsection{Útok s~maskami} \label{maskAttack}
+Jedná sa o~útok hrubou silou. Užívateľ  vo webovej aplikácií zadá jednotlivé masky. Maska je textový reťazec pozostávajúci z~pevne daných znakov a zástupných symbolov. Zástupné symboly sa označujú znakom ''\texttt{?}'' a symbolom znakovej sady. Napríklad mask \texttt{password?d} bude generovať heslá \texttt{password0 - password9}. Zabudované znakové sady v~systéme sú nasledovné.
 \begin{itemize}
     \item \textbf{?l} - znaková sada obsahuje malé písmená anglickej abecedy (abcdefghijklmnopqrstuvwxyz).
     \item \textbf{?u} - táto znaková sada obsahuje veľké písmená anglickej abecedy (ABCDEFGHIJKLMNOPQRSTUVWXYZ).
     \item \textbf{?d} - znaková sada obsahujúca arabské číslice (0123456789).
-    \item \textbf{?h} - hexadecimálna znaková sada s malými písmenami (0123456789abcdef).
-    \item \textbf{?H} - hexadecimálna znaková sada s veľkými písmenami (0123456789ABCDEF)
+    \item \textbf{?h} - hexadecimálna znaková sada s~malými písmenami (0123456789abcdef).
+    \item \textbf{?H} - hexadecimálna znaková sada s~veľkými písmenami (0123456789ABCDEF)
     \item \textbf{?s} - špeciálne znaky ako napríklad medzera !"\#\$\%\&
     '()*+,-./:;<=>?@
-    \item \textbf{?a} - jedná sa o zjednotenie znakových sád ?l?u?d?s
-    \item \textbf{?b} - v tejto znakovej sade sa nachádzajú všetky ASCII znaky (0x00 - 0xff).
+    \item \textbf{?a} - jedná sa o~zjednotenie znakových sád ?l?u?d?s
+    \item \textbf{?b} - v~tejto znakovej sade sa nachádzajú všetky ASCII znaky (0x00 - 0xff).
 \end{itemize}
-V systéme je možné vybrať si až 4 ďalšie ľubovolné znakové sady k jednej úlohe. Tieto znakové sady sa potom zadávajú zástupnými symbolmi \texttt{?1 - ?4}.
+V~systéme je možné vybrať si až 4 ďalšie ľubovolné znakové sady k~jednej úlohe. Tieto znakové sady sa potom zadávajú zástupnými symbolmi \texttt{?1 - ?4}.
 
-Okrem znakových sád je možné pri útoku s maskami vybrať súbor s Markovými reťazcami. Tento súbor má zvyčajne príponu \texttt{.hcstat}, a je ho možné do systému nahrať, alebo vytvoriť analýzou slovníka s heslami priamo z prostredia webovej aplikácie. Jedná sa o súbor, v ktorom je uložená matica. Prvý stĺpec tejto matice obsahuje všetky znaky, z ktorých sa budú generovať heslá. Riadky matice sú usporiadané podľa pravdepodobnosti výskytu jednotlivých znakov. Príklad takejto matice je možné vidieť na obrázku \ref{fig:hcstatExample}. V prvom riadku matice sú znaky, ktorými najčastejšie začínajú heslá. Pri použití Markovho modelu sa negenerujú heslá postupne (napríklad pri použití masky \texttt{?l?l?l?l} sa negenerujú heslá v poradí \texttt{aaaa-zzzz}), ale práve podľa Markového modelu. Využitie tohto modelu pri generovaní hesiel je založené na pozorovaní, že ľudia pri tvorení hesiel používajú skrytý Markovský model. Pri vytváraní úlohy je možné taktiež určiť Markov prah, čo je kladné celé číslo, ktoré označuje do ktorého stĺpca v Markovom modely sa majú heslá generovať \cite{markovskeModelyBP}. 
+Okrem znakových sád je možné pri útoku s~maskami vybrať súbor s~Markovými reťazcami. Tento súbor má zvyčajne príponu \texttt{.hcstat}, a je ho možné do systému nahrať, alebo vytvoriť analýzou slovníka s~heslami priamo z~prostredia webovej aplikácie. Jedná sa o~súbor, v~ktorom je uložená matica. Prvý stĺpec tejto matice obsahuje všetky znaky, z~ktorých sa budú generovať heslá. Riadky matice sú usporiadané podľa pravdepodobnosti výskytu jednotlivých znakov. Príklad takejto matice je možné vidieť na obrázku \ref{fig:hcstatExample}. V~prvom riadku matice sú znaky, ktorými najčastejšie začínajú heslá. Pri použití Markovho modelu sa negenerujú heslá postupne (napríklad pri použití masky \texttt{?l?l?l?l} sa negenerujú heslá v~poradí \texttt{aaaa-zzzz}), ale práve podľa Markového modelu. Využitie tohto modelu pri generovaní hesiel je založené na pozorovaní, že ľudia pri tvorení hesiel používajú skrytý Markovský model. Pri vytváraní úlohy je možné taktiež určiť Markov prah, čo je kladné celé číslo, ktoré označuje do ktorého stĺpca v~Markovom modely sa majú heslá generovať \cite{markovskeModelyBP}. 
 
-Tento útok už bol v systéme implementovaný. K útoku som pridal možnosť zadať znakové sady, Markovský model a možnosť načítať masky so súboru.
+Tento útok už bol v~systéme implementovaný. K~útoku som pridal možnosť zadať znakové sady, Markovský model a možnosť načítať masky so súboru.
 
 
 \begin{figure}[H]
@@ -687,12 +687,12 @@ Tento útok už bol v systéme implementovaný. K útoku som pridal možnosť za
   \[
   \kbordermatrix{
       \\ 
-      \varepsilon & n & p & s & u  & \dots  \\
-      a & m & u & v & k & \dots \\
-      b & i & y & e & u & \dots \\
-      c & o & e & b & f & \dots \\
+      \varepsilon & n & p & s~& u~& \dots  \\
+      a & m & u~& v~& k~& \dots \\
+      b & i & y & e & u~& \dots \\
+      c & o~& e & b & f & \dots \\
       \vdots & \vdots & \vdots & \vdots & \vdots & \vdots \\
-      z & a & e & o & m  & \dots
+      z~& a & e & o~& m  & \dots
   }
   \]
     \caption{Príklad Markovho modelu}
@@ -700,39 +700,39 @@ Tento útok už bol v systéme implementovaný. K útoku som pridal možnosť za
 \end{figure}
 
 \subsection{Slovníkový útok} \label{dictAttack}
-Jeden z najzákladnejších útokov je útok pomocou slovníku, ktorý obsahuje veľký počet hesiel. Na každom riadku slovníka sa nachádza jedno heslo. Okrem slovníku je možné zvoliť aj súbor s pravidlami. Každé pravidlo sa aplikuje na každé heslo so slovníka. Pravidlá sú reťazce znakov. Majú pomerne jednoduchú syntax a umožňujú modifikovať heslo rôznymi spôsobmi \footnote{\url{https://hashcat.net/wiki/doku.php?id=rule_based_attack}}. Medzi základné pravidlá patria následovné znaky.
+Jeden z~najzákladnejších útokov je útok pomocou slovníku, ktorý obsahuje veľký počet hesiel. Na každom riadku slovníka sa nachádza jedno heslo. Okrem slovníku je možné zvoliť aj súbor s~pravidlami. Každé pravidlo sa aplikuje na každé heslo so slovníka. Pravidlá sú reťazce znakov. Majú pomerne jednoduchú syntax a umožňujú modifikovať heslo rôznymi spôsobmi \footnote{\url{https://hashcat.net/wiki/doku.php?id=rule_based_attack}}. Medzi základné pravidlá patria následovné znaky.
 \begin{itemize}
-    \item \textbf{l} - všetky písmená v hesle prevedie na malé písmená.
-    \item \textbf{u} - prevedie prímená v hesle na veľké písmená.
+    \item \textbf{l} - všetky písmená v~hesle prevedie na malé písmená.
+    \item \textbf{u} - prevedie prímená v~hesle na veľké písmená.
     \item \textbf{t} - malé písmená prevedie na veľké a veľké na malé.
-    \item \textbf{r} - otočí poradie písmen v hesle.
+    \item \textbf{r} - otočí poradie písmen v~hesle.
     \item \textbf{\$X} - na koniec hesla vloží znak X.
     \item \textbf{\^{}X} - na začiatok hesla vloží znak X. 
     \item \textbf{[} - zmaže prvý znak hesla.
     \item \textbf{]} - zmaže posledný znak hesla.
 \end{itemize}
-Pravidlá je možné medzi sebou aj kombinovať. Ak za každé heslo chceme pridať reťazec \texttt{123} a zároveň chceme každé heslo previesť na malé písmená, použijem pravidlo \texttt{l\$1\$2\$3}. V súbore s pravidlami sa môžu vyskytovať komentáre, ktoré začínajú znakom \texttt{\#}, a prázdne riadky.
+Pravidlá je možné medzi sebou aj kombinovať. Ak za každé heslo chceme pridať reťazec \texttt{123} a zároveň chceme každé heslo previesť na malé písmená, použijem pravidlo \texttt{l\$1\$2\$3}. V~súbore s~pravidlami sa môžu vyskytovať komentáre, ktoré začínajú znakom \texttt{\#}, a prázdne riadky.
 
-Zjednodušená verzia tohto útoku, bez možnosti aplikovať pravidlá, bola v systéme už implementovaná.
+Zjednodušená verzia tohto útoku, bez možnosti aplikovať pravidlá, bola v~systéme už implementovaná.
 
 \subsection{Kombinačný útok} \label{combAttack}
-Pri kombinačnom útoku je nutné vybrať dva slovníky (ľavý a pravý). Každé heslo z ľavého slovníka sa skonkatenuje s každým heslom z pravého slovníka. Takto vznikajú nové heslá. Z každého hesla v ľavom slovníku vznikne toľko nových hesiel, koľko je hesiel v pravom slovníku. Ku každému slovníku je možné uviesť jedno pravidlo, ktoré upraví heslá v celom slovníku. Tento útok pôvodná webová aplikácia nepodporovala.
+Pri kombinačnom útoku je nutné vybrať dva slovníky (ľavý a pravý). Každé heslo z~ľavého slovníka sa skonkatenuje s~každým heslom z~pravého slovníka. Takto vznikajú nové heslá. Z~každého hesla v~ľavom slovníku vznikne toľko nových hesiel, koľko je hesiel v~pravom slovníku. Ku každému slovníku je možné uviesť jedno pravidlo, ktoré upraví heslá v~celom slovníku. Tento útok pôvodná webová aplikácia nepodporovala.
 
 \subsection{Hybridné útoky} \label{hybridAttack}
-Posledné typy útokov, ktoré moje riešenie podporuje sú hybridné útoky. Jedná sa o spojenie slovníkového útoku s útokom s použitím masky. Užívateľ si v systéme vyberie slovník a zadá masku. Potom sa maska so slovníkom skombinuje a vytvorí sa tak kombinačný útok. Napríklad, keď užívateľ zadá masku \texttt{?d} a vyberie slovník ktorý obsahuje heslá \texttt{aaa, bbb, ccc}, výsledná množina hesiel je 
-\texttt{aaa0, aaa1, aaa2, aaa3, aaa4, aaa5, aaa6, aaa7, aaa8, aaa9, bbb0, ..., ccc9}. K maske aj k slovníku je možné zadať jedno pravidlo. Hybridné útoky sú dva. Pri prvom je maska naľavo a slovník napravo, a pri druhom je slovník naľavo a maska napravo. Tento útok je nový v systéme Fitcrack.
+Posledné typy útokov, ktoré moje riešenie podporuje sú hybridné útoky. Jedná sa o~spojenie slovníkového útoku s~útokom s~použitím masky. Užívateľ si v~systéme vyberie slovník a zadá masku. Potom sa maska so slovníkom skombinuje a vytvorí sa tak kombinačný útok. Napríklad, keď užívateľ zadá masku \texttt{?d} a vyberie slovník ktorý obsahuje heslá \texttt{aaa, bbb, ccc}, výsledná množina hesiel je 
+\texttt{aaa0, aaa1, aaa2, aaa3, aaa4, aaa5, aaa6, aaa7, aaa8, aaa9, bbb0, ..., ccc9}. K~maske aj k~slovníku je možné zadať jedno pravidlo. Hybridné útoky sú dva. Pri prvom je maska naľavo a slovník napravo, a pri druhom je slovník naľavo a maska napravo. Tento útok je nový v~systéme Fitcrack.
 
 
 \section{Grafy}\label{graphs}
 Keďže má byť nová aplikácia vizuálne prívetivá pre užívateľa, jej dôležitou súčasťou sú grafy. Navrhol som tri typy grafov.
 \begin{itemize}
-    \item \textbf{Graf progresu úlohy} \label{progressGraph} - tento graf je spojnicový a bude vykresľovať percentuálny pokrok jednej alebo viacerých úloh. Y-ová osa bude v percentách v rozmedzí 0 až 100. Na X-ovej ose bude čas. Tento graf zobrazuje koľko percent hesiel z celkovej množiny hesiel úlohy sa už skontrolovalo. Nezobrazuje progres hľadania hesla, keďže heslo môže byť nájdené hneď na začiatku množiny hesiel, alebo sa heslo nemusí nachádzať vôbec v množine hesiel danej úlohy.
-    \item \textbf{Graf aktivity hosťov} - jedná sa taktiež o spojnicový graf, na ktorom je možné sledovať aktivitu jednotlivých hosťov. Na Y-ovej ose je možné vidieť počet kryptografických hešov, ktoré hosť počítal. Na X-ovej ose sa nachádza čas. Z tohto grafu by mala byť zrejmá aktivita Asimilátora (viď \ref{asimilator}), ktorý prispôsobuje počet hesiel v jednej pracovnej úlohe pre hosťa. Tento graf je možné zobraziť v rámci jednej úlohy, alebo v rámci systému.
-    \item \textbf{Graf práce hosťov} - ide o koláčový graf, ktorý je možné zobraziť pre konkrétnu úlohu. Je z neho možné vyčítať množstvo práce jednotlivých hosťov v rámci úlohy.
+    \item \textbf{Graf progresu úlohy} \label{progressGraph} - tento graf je spojnicový a bude vykresľovať percentuálny pokrok jednej alebo viacerých úloh. Y-ová osa bude v~percentách v~rozmedzí 0 až 100. Na X-ovej ose bude čas. Tento graf zobrazuje koľko percent hesiel z~celkovej množiny hesiel úlohy sa už skontrolovalo. Nezobrazuje progres hľadania hesla, keďže heslo môže byť nájdené hneď na začiatku množiny hesiel, alebo sa heslo nemusí nachádzať vôbec v~množine hesiel danej úlohy.
+    \item \textbf{Graf aktivity hosťov} - jedná sa taktiež o~spojnicový graf, na ktorom je možné sledovať aktivitu jednotlivých hosťov. Na Y-ovej ose je možné vidieť počet kryptografických hešov, ktoré hosť počítal. Na X-ovej ose sa nachádza čas. Z~tohto grafu by mala byť zrejmá aktivita Asimilátora (viď \ref{asimilator}), ktorý prispôsobuje počet hesiel v~jednej pracovnej úlohe pre hosťa. Tento graf je možné zobraziť v~rámci jednej úlohy, alebo v~rámci systému.
+    \item \textbf{Graf práce hosťov} - ide o~koláčový graf, ktorý je možné zobraziť pre konkrétnu úlohu. Je z~neho možné vyčítať množstvo práce jednotlivých hosťov v~rámci úlohy.
 \end{itemize}
 
 \section{Notifikácie}
-Ďalšou novinkou v systéme je systém notifikácií. Tieto notifikácie slúžia na upozornenie užívateľov pri zmene stavu úlohy. Sú rozdelené do niekoľkých kategórií - informačné, varovné, chybové a notifikácie úspechu. Vďaka tomu je možné notifikácie od seba aj vizuálne (farebne) odlíšiť. Medzi informačné notifikácie patria upozornenia o vytvorení úlohy, o spustení úlohy a o dokončovaní úlohy. Medzi notifikácie úspechu patrí upozornenia o nájdení hesla. Varovná notifikácia sa odošle v prípade, že sa úloha zastavila z dôvodu nastavenia konca doby výpočtu pri vytváraní alebo editovaní úlohy, ale heslo sa ešte nenašlo. Chybová notifikácie nastáva po vyčerpaní celej množiny hesiel danej úlohy a nenájdení hesla. Notifikácie obsahujú príznak videnia daným užívateľom. Tak tiež sa notifikácie o úlohách odosielajú len užívateľom, ktorí majú k danej úlohe oprávnenia.
+Ďalšou novinkou v~systéme je systém notifikácií. Tieto notifikácie slúžia na upozornenie užívateľov pri zmene stavu úlohy. Sú rozdelené do niekoľkých kategórií - informačné, varovné, chybové a notifikácie úspechu. Vďaka tomu je možné notifikácie od seba aj vizuálne (farebne) odlíšiť. Medzi informačné notifikácie patria upozornenia o~vytvorení úlohy, o~spustení úlohy a o~dokončovaní úlohy. Medzi notifikácie úspechu patrí upozornenia o~nájdení hesla. Varovná notifikácia sa odošle v~prípade, že sa úloha zastavila z~dôvodu nastavenia konca doby výpočtu pri vytváraní alebo editovaní úlohy, ale heslo sa ešte nenašlo. Chybová notifikácie nastáva po vyčerpaní celej množiny hesiel danej úlohy a nenájdení hesla. Notifikácie obsahujú príznak videnia daným užívateľom. Tak tiež sa notifikácie o~úlohách odosielajú len užívateľom, ktorí majú k~danej úlohe oprávnenia.
 
 
 
@@ -740,11 +740,11 @@ Keďže má byť nová aplikácia vizuálne prívetivá pre užívateľa, jej d�
 
 \chapter{Implementácia}\label{implementacia}
 Architektúru systému tvoria tri vrstvy - prezentačná, aplikačná a dátová (alebo databázová). Vrstvy medzi sebou spolupracujú a každá vrstva môže bežať na rôznej výpočetnej infraštruktúre. Architektúru systému je možné vidieť na obrázku \ref{fig:architektura}.
-Prezentačná vrstva má za hlavnú úlohu komunikovať s aplikačnou vrstvou a vizualizovať dáta užívateľovi. Zobrazenie vo webovej prezentácii je implementované pomocou SPA (Single Page Application). Hlavnou úlohou SPA je synchronizácia stavu objektov medzi dátovou a prezentačnou vrstvou. 
+Prezentačná vrstva má za hlavnú úlohu komunikovať s~aplikačnou vrstvou a vizualizovať dáta užívateľovi. Zobrazenie vo webovej prezentácii je implementované pomocou SPA (Single Page Application). Hlavnou úlohou SPA je synchronizácia stavu objektov medzi dátovou a prezentačnou vrstvou. 
 
-Cieľom aplikačnej vrstvy aplikácie je spracovanie požiadavkov od prezentačnej vrstvy a komunikácia s databázovou vrstvou. Komunikácia s prezentačnou vrstvou prebieha vo formáte JSON.
+Cieľom aplikačnej vrstvy aplikácie je spracovanie požiadavkov od prezentačnej vrstvy a komunikácia s~databázovou vrstvou. Komunikácia s~prezentačnou vrstvou prebieha vo formáte JSON.
 
-Databázová vrstva tvorí MySQL databáza, ktorá je vytvorená podľa ER diagramu z obrázka \ref{fig:ER}. Databázová vrstva spracováva požiadavky aplikačnej vrstvy a vykonáva operácie ako ukladanie dát, zobrazovanie dát, vyhľadávanie a mazanie dát.
+Databázová vrstva tvorí MySQL databáza, ktorá je vytvorená podľa ER diagramu z~obrázka \ref{fig:ER}. Databázová vrstva spracováva požiadavky aplikačnej vrstvy a vykonáva operácie ako ukladanie dát, zobrazovanie dát, vyhľadávanie a mazanie dát.
 
 \begin{figure}[H]
     \centering
@@ -754,7 +754,7 @@ Databázová vrstva tvorí MySQL databáza, ktorá je vytvorená podľa ER diagr
 \end{figure}
 
 \section{Implementácia databázovej vrstvy}
-Databázová vrstva je implementovaná pomocou databázového systému MySQL. Je vytvorená podľa entitno relačného diagramu, ktorý je možné vidieť na obrázku \ref{fig:ER}. Tvoria ju pôvodné tabuľky systému Fitcrack a nové tabuľky, ktoré umožňujú implementáciu rozšírení systému. Tabuľky \texttt{dictionary}, \texttt{rule}, \texttt{masks\_set}, \texttt{hcstats} a \texttt{charset} slúžia na ukladanie informácii o súboroch nahratých do systému. Majú jednotnú štruktúru. Tvorí ju jednoznačný identifikátor záznamu v rámci tabuľky, názov súboru, cesta k súboru, čas pridania do databázy a príznak zmazania, ktorý slúži na signalizáciu aplikačnej vrstve, aby už súbor označený ako zmazaný, neposielala ďalej prezentačnej vrstve. Súbory označené ako zmazané ostávajú v systéme naďalej uložené kvôli predchádzaniu chýb v prípade že úloha, ktorá súbor využíva stále beží. Ďalšie nové tabuľky sú \texttt{user} a \texttt{role}, ktoré slúžia umožňujú autentifikáciu užívateľov a správu oprávnení. Pri užívateľoch sa ukladá ich prihlasovacie meno, heslo v zahešovanej podobe s pridanou soľou, email a odkaz do tabuľky \texttt{role}, ktorá obsahuje jednotlivé užívateľov oprávnenia v rámci systému. Oprávnenia k jednotlivým úloham môžu byť pridané prostredníctvom tabuľky \texttt{user\_permissions}. Tabuľka \texttt{notification} slúži na uchovávanie upozornení pre užívateľov. Údaje o progrese úloh sa uchovávajú v tabuľke \texttt{package\_graph}. Z týchto údajov je následne možné na prezentačnej vrstve vytvoriť graf progresu (viď \ref{progressGraph}). V databáze sa tiež nachádza triger, ktorý sa vykoná vždy po upravení úlohy. Tento triger je možné rozdeliť na dve časti. Prvá časť je možné vidieť na výpise \ref{progressTriger} a slúži na počítanie progresu úlohy a pridávanie záznamov do tabuľky \texttt{package\_graph}.
+Databázová vrstva je implementovaná pomocou databázového systému MySQL. Je vytvorená podľa entitno relačného diagramu, ktorý je možné vidieť na obrázku \ref{fig:ER}. Tvoria ju pôvodné tabuľky systému Fitcrack a nové tabuľky, ktoré umožňujú implementáciu rozšírení systému. Tabuľky \texttt{dictionary}, \texttt{rule}, \texttt{masks\_set}, \texttt{hcstats} a \texttt{charset} slúžia na ukladanie informácii o~súboroch nahratých do systému. Majú jednotnú štruktúru. Tvorí ju jednoznačný identifikátor záznamu v~rámci tabuľky, názov súboru, cesta k~súboru, čas pridania do databázy a príznak zmazania, ktorý slúži na signalizáciu aplikačnej vrstve, aby už súbor označený ako zmazaný, neposielala ďalej prezentačnej vrstve. Súbory označené ako zmazané ostávajú v~systéme naďalej uložené kvôli predchádzaniu chýb v~prípade že úloha, ktorá súbor využíva stále beží. Ďalšie nové tabuľky sú \texttt{user} a \texttt{role}, ktoré slúžia umožňujú autentifikáciu užívateľov a správu oprávnení. Pri užívateľoch sa ukladá ich prihlasovacie meno, heslo v~zahešovanej podobe s~pridanou soľou, email a odkaz do tabuľky \texttt{role}, ktorá obsahuje jednotlivé užívateľov oprávnenia v~rámci systému. Oprávnenia k~jednotlivým úloham môžu byť pridané prostredníctvom tabuľky \texttt{user\_permissions}. Tabuľka \texttt{notification} slúži na uchovávanie upozornení pre užívateľov. Údaje o~progrese úloh sa uchovávajú v~tabuľke \texttt{package\_graph}. Z~týchto údajov je následne možné na prezentačnej vrstve vytvoriť graf progresu (viď \ref{progressGraph}). V~databáze sa tiež nachádza triger, ktorý sa vykoná vždy po upravení úlohy. Tento triger je možné rozdeliť na dve časti. Prvá časť je možné vidieť na výpise \ref{progressTriger} a slúži na počítanie progresu úlohy a pridávanie záznamov do tabuľky \texttt{package\_graph}.
 \begin{algorithm}
   \caption{Telo trigeru, ktorý pridáva záznamy do tabuľky \texttt{package\_graph}.}
   \label{progressTriger}
@@ -778,7 +778,7 @@ IF NEW.indexes_verified <> OLD.indexes_verified THEN
 END IF;
   \end{lstlisting}
 \end{algorithm}
- Druhá časť trigeru je vyobrazená na výpise \ref{notificationTrigger}. Slúži na rozosielanie notifikácií užívateľom. Je dôležité aby triger vybral len tých užívateľov, ktorí majú k úlohe prístup (užívatelia s rolou, ktorá má oprávnenie na zobrazenie všetkých úloh, alebo užívatelia s oprávnením k úlohe v tabuľke \texttt{user\_permissions}).
+ Druhá časť trigeru je vyobrazená na výpise \ref{notificationTrigger}. Slúži na rozosielanie notifikácií užívateľom. Je dôležité aby triger vybral len tých užívateľov, ktorí majú k~úlohe prístup (užívatelia s~rolou, ktorá má oprávnenie na zobrazenie všetkých úloh, alebo užívatelia s~oprávnením k~úlohe v~tabuľke \texttt{user\_permissions}).
 \begin{algorithm}[H]
   \caption{Trigger, ktorý má na starosti rozposielanie notifikácií užívateľom.}
   \label{notificationTrigger}
@@ -803,7 +803,7 @@ END IF;
 \end{algorithm}
 
 \section{Implementácia aplikačnej vrstvy}
-Aplikačná vrstva je implementovaná v prostredí Python3. Tvorí ju sada balíkov, ktoré plnia rozličné úlohy. Adresárovú štruktúru je možné vidieť na obrázku \ref{fig:serverStructure}.
+Aplikačná vrstva je implementovaná v~prostredí Python3. Tvorí ju sada balíkov, ktoré plnia rozličné úlohy. Adresárovú štruktúru je možné vidieť na obrázku \ref{fig:serverStructure}.
 \begin{figure}[H]
 \begin{center}
 \begin{varwidth}{\linewidth}
@@ -833,7 +833,7 @@ Aplikačná vrstva je implementovaná v prostredí Python3. Tvorí ju sada balí
 \caption{Hierarchia balíčkov aplikačnej vrstvy.}
 \label{fig:serverStructure}
 \end{figure}
-V koreňovom adresári sa nachádza súbor \texttt{app.py}, ktorý obsahuje funkciu \texttt{main()}. Táto funkcie najprv prevedie inicializáciu systému, systém nakonfiguruje a načíta všetky koncové body aplikačného rozhrania, a následne spustí webový server. O chod webevého servera sa stará framework Flask (viď \ref{Flask}). Ďalší dôležitý súbor v koreňovom adresári je \texttt{settings.py}, ktorý slúži na nastavenie servera. Je v ňom možné nakonfigurovať cestu k databázovému systému, debugovací režim, adresu a číslo portu servera. Tiež obsahuje cesty k zložkám na ukladanie slovníkov, Markovských modelov, cudzojazyčných znakových sád, súborov s pravidlami a zašifrovaných súborov. Ďalej sa v tomto súbore nachádzajú cesty k rôznym pomocným programom, ktoré systém využíva. Jedná sa o program Hashcat (viď \ref{hashcat}), MaskProcessor\footnote{\url{https://hashcat.net/wiki/doku.php?id=maskprocessor}}, XtoHashcat\footnote{\url{https://fitcrack.fit.vutbr.cz/?i=download}} a HashValidator\footnote{\url{https://github.com/Zippersk/hashValidator}}. Koreňový adresár obsahuje jediný balík s názvom \texttt{src}, v ktorom sú ďalšie balíky \texttt{database} a \texttt{api}. Balík \texttt{database} obsahuje modul s názvom \texttt{models.py}, ktorý má na starosti mapovanie databázy na abstraktný databázový model. Tento súbor obsahuje triedy, ktoré predstavujú jednotlivé tabuľky z databázy. Príklad takejto triedy je možné vidieť na výpise \ref{abstractDBClass}. 
+V~koreňovom adresári sa nachádza súbor \texttt{app.py}, ktorý obsahuje funkciu \texttt{main()}. Táto funkcie najprv prevedie inicializáciu systému, systém nakonfiguruje a načíta všetky koncové body aplikačného rozhrania, a následne spustí webový server. O~chod webevého servera sa stará framework Flask (viď \ref{Flask}). Ďalší dôležitý súbor v~koreňovom adresári je \texttt{settings.py}, ktorý slúži na nastavenie servera. Je v~ňom možné nakonfigurovať cestu k~databázovému systému, debugovací režim, adresu a číslo portu servera. Tiež obsahuje cesty k~zložkám na ukladanie slovníkov, Markovských modelov, cudzojazyčných znakových sád, súborov s~pravidlami a zašifrovaných súborov. Ďalej sa v~tomto súbore nachádzajú cesty k~rôznym pomocným programom, ktoré systém využíva. Jedná sa o~program Hashcat (viď \ref{hashcat}), MaskProcessor\footnote{\url{https://hashcat.net/wiki/doku.php?id=maskprocessor}}, XtoHashcat\footnote{\url{https://fitcrack.fit.vutbr.cz/?i=download}} a HashValidator\footnote{\url{https://github.com/Zippersk/hashValidator}}. Koreňový adresár obsahuje jediný balík s~názvom \texttt{src}, v~ktorom sú ďalšie balíky \texttt{database} a \texttt{api}. Balík \texttt{database} obsahuje modul s~názvom \texttt{models.py}, ktorý má na starosti mapovanie databázy na abstraktný databázový model. Tento súbor obsahuje triedy, ktoré predstavujú jednotlivé tabuľky z~databázy. Príklad takejto triedy je možné vidieť na výpise \ref{abstractDBClass}. 
 \begin{algorithm}
   \caption{Trieda, ktorá predstavuje mapovanie na databázovú tabuľku.}
   \label{abstractDBClass}
@@ -861,11 +861,11 @@ class FcPackageGraph(Base):
   \end{lstlisting}
 \end{algorithm}
 
-Tieto triedy boli vytvorené prostredníctvom programu sqlacodegen\footnote{\url{https://pypi.org/project/sqlacodegen/1.1.0/}}. Abstraktná vrstva nad databázou výrazne uľahčuje manipuláciu s databázovými objektami. K triedam je možné doimplementovať hybridné vlastnosti, ktoré bývajú zvyčajne vyjadrené na základe stĺpcov odpovedajúcej tabuľky. Napríklad, keďže je nájdené heslo pri úlohe uložené v stĺpci \texttt{result} vo formáte Base64\footnote{\url{https://sk.wikipedia.org/wiki/Base64}}, je možné vytvoriť hybridnú vlastnosť triedy, ktorá automaticky po načítaní dát z databázy dekóduje heslo uložené vo formáte Base64 a priradí ho do hybridnej vlastnosti. Abstraktná vrstva databázy je implementovaná prostredníctvom frameworku SQLalchemy (viď \ref{SQLAlchemy}).
+Tieto triedy boli vytvorené prostredníctvom programu sqlacodegen\footnote{\url{https://pypi.org/project/sqlacodegen/1.1.0/}}. Abstraktná vrstva nad databázou výrazne uľahčuje manipuláciu s~databázovými objektami. K~triedam je možné doimplementovať hybridné vlastnosti, ktoré bývajú zvyčajne vyjadrené na základe stĺpcov odpovedajúcej tabuľky. Napríklad, keďže je nájdené heslo pri úlohe uložené v~stĺpci \texttt{result} vo formáte Base64\footnote{\url{https://sk.wikipedia.org/wiki/Base64}}, je možné vytvoriť hybridnú vlastnosť triedy, ktorá automaticky po načítaní dát z~databázy dekóduje heslo uložené vo formáte Base64 a priradí ho do hybridnej vlastnosti. Abstraktná vrstva databázy je implementovaná prostredníctvom frameworku SQLalchemy (viď \ref{SQLAlchemy}).
 
 
 \subsection{Implementácia jednotlivých URI}
-Pri vytváraní funkcií na spracovanie jednotlivých žiadostí používam rozšírenie do frameworku \texttt{Flask} s názvom \texttt{Flask-RESTPlus} (viď \ref{RestPlusFlask}). Balík \texttt{endpoints} obsahuje ďalšie balíky, v ktorých prebieha ošetrenie jednotlivých žiadostí. Väčšina týchto balíkov v sebe obsahuje štyri súbory. Jedná sa o \texttt{argumentsParser.py}, \texttt{responseModels.py}, \texttt{functions.py} a modul, s rovnakým názvom ako má balík do ktorého patrí, v ktorom sú definované triedy na ošetrenie žiadostí. Tieto triedy obsahujú funkcie s názvom HTTP metód (viď \ref{httpMetody}). Príklad takejto triedy je možné vidieť na výpise \ref{endpointClass}.
+Pri vytváraní funkcií na spracovanie jednotlivých žiadostí používam rozšírenie do frameworku \texttt{Flask} s~názvom \texttt{Flask-RESTPlus} (viď \ref{RestPlusFlask}). Balík \texttt{endpoints} obsahuje ďalšie balíky, v~ktorých prebieha ošetrenie jednotlivých žiadostí. Väčšina týchto balíkov v~sebe obsahuje štyri súbory. Jedná sa o~\texttt{argumentsParser.py}, \texttt{responseModels.py}, \texttt{functions.py} a modul, s~rovnakým názvom ako má balík do ktorého patrí, v~ktorom sú definované triedy na ošetrenie žiadostí. Tieto triedy obsahujú funkcie s~názvom HTTP metód (viď \ref{httpMetody}). Príklad takejto triedy je možné vidieť na výpise \ref{endpointClass}.
 \begin{algorithm}
   \caption{Príklad triedy, ktorá ošetruje URI /jobs}
   \label{endpointClass}
@@ -894,36 +894,36 @@ class jobs(Resource):
                  'status': True }
   \end{lstlisting}
 \end{algorithm}
-V module \texttt{argumentsParser.py} sa nachádzajú objekty, ktoré slúžia na spracovanie argumentov žiadostí. Volajú sa formou dekorátorov pred funkciou. Napríklad na výpise \ref{endpointClass} je možné vidieť volanie \texttt{jobList\_arguments} pomocou dekorátoru \texttt{api.expect}. V module \texttt{responseModels.py} sa nachádzajú modely odpovedí na žiadosti, ktoré daný balík spracováva. Tieto modely odpovedí sa volajú prostredníctvom dekorátora \texttt{api.marshal\_with}. Vďaka týmto modelom je možné aby funkcie ošetrujúce žiadosti vracali štruktúry z prostredia python (slovník, pole slovníkov, n-tice alebo množiny). Tieto štruktúry sú potom prekonvertované dekorátorom na textové reťazce vo formáte JSON, ktorými server odpovedá prezentačnej vrstve. V modele \texttt{functions.py} sú uložené funkcie, ktoré ktoré balík, ošetrujúci sadu URI používa. Z výpisu \ref{endpointClass} sa tu napríklad nachádza funkcia \texttt{create\_job}.
+V~module \texttt{argumentsParser.py} sa nachádzajú objekty, ktoré slúžia na spracovanie argumentov žiadostí. Volajú sa formou dekorátorov pred funkciou. Napríklad na výpise \ref{endpointClass} je možné vidieť volanie \texttt{jobList\_arguments} pomocou dekorátoru \texttt{api.expect}. V~module \texttt{responseModels.py} sa nachádzajú modely odpovedí na žiadosti, ktoré daný balík spracováva. Tieto modely odpovedí sa volajú prostredníctvom dekorátora \texttt{api.marshal\_with}. Vďaka týmto modelom je možné aby funkcie ošetrujúce žiadosti vracali štruktúry z~prostredia python (slovník, pole slovníkov, n-tice alebo množiny). Tieto štruktúry sú potom prekonvertované dekorátorom na textové reťazce vo formáte JSON, ktorými server odpovedá prezentačnej vrstve. V~modele \texttt{functions.py} sú uložené funkcie, ktoré ktoré balík, ošetrujúci sadu URI používa. Z~výpisu \ref{endpointClass} sa tu napríklad nachádza funkcia \texttt{create\_job}.
 
 \subsection{Spracovanie útokov}
-Spracovanie úlohy na aplikačnej vrstve prebieha v niekoľkých fázach. Najprv sa získa heš určený na lámanie. Ten je možné buď zadať priamo, alebo nahrať šifrovaný súbor, z ktorého systém pomocou programu \texttt{XtoHashcat}\footnote{\url{https://fitcrack.fit.vutbr.cz/?i=download}} heš extrahuje. Následné overí formát hešu pomocou nástroja \texttt{hashValidator}. Jedná sa o nástroj, napísaný v jazyku C, ktorý som vytvoril zjednodušením a úpravou programu Hashcat (viď \ref{hashcat}). Týmto spôsobom som sa chcel zbaviť závislostí, ktoré program Hashcat vyžaduje pri niektorých funkciách čo nie sú využívané na serverovej časti systému. Po overení hešu sa systém pokúsí nájsť heslo v tabuľke \texttt{hashcache}. V prípade, že sa heslo v databáze nenašlo prebieha spracovanie jednotlivých útokov v module \texttt{attacks}. Spracovanie jednotlivých útokov sa od seba líši a sú popísané v zozname nižšie.
+Spracovanie úlohy na aplikačnej vrstve prebieha v~niekoľkých fázach. Najprv sa získa heš určený na lámanie. Ten je možné buď zadať priamo, alebo nahrať šifrovaný súbor, z~ktorého systém pomocou programu \texttt{XtoHashcat}\footnote{\url{https://fitcrack.fit.vutbr.cz/?i=download}} heš extrahuje. Následné overí formát hešu pomocou nástroja \texttt{hashValidator}. Jedná sa o~nástroj, napísaný v~jazyku C, ktorý som vytvoril zjednodušením a úpravou programu Hashcat (viď \ref{hashcat}). Týmto spôsobom som sa chcel zbaviť závislostí, ktoré program Hashcat vyžaduje pri niektorých funkciách čo nie sú využívané na serverovej časti systému. Po overení hešu sa systém pokúsí nájsť heslo v~tabuľke \texttt{hashcache}. V~prípade, že sa heslo v~databáze nenašlo prebieha spracovanie jednotlivých útokov v~module \texttt{attacks}. Spracovanie jednotlivých útokov sa od seba líši a sú popísané v~zozname nižšie.
 \begin{itemize}
-    \item \textbf{Slovníkový útok} - pri tomto útoku sa v tele žiadosti vyžaduje identifikátor slovníka. Podľa tohto identifikátora sa vyhľadá v databáze v tabuľke \texttt{dictionary} slovník s príslušným identifikátorom. Potom sa overí či slovník existuje v súborovom systéme. Ak je zadaný súbor s pravidlami, taktiež sa vyhľadá v databáze (v tabuľke \texttt{rule}) a overí sa jeho existencia na disku. Na konci spracovávania útoku sa vypočíta veľkosť množiny hesiel danej úlohy. Pri tomto type útokov je veľkosť tejto množiny rovná súčinu počtu pravidiel a počtu hesiel v slovníku (ak nebol vybraný súbor s pravidlami tak len počtu hesiel v slovníku). O podrobnejšom priebehu útoku sa je možné dočítať v podkapitole \ref{dictAttack}.
-    \item \textbf{Kombinačný útok} - tento útok vyžaduje zadané dva identifikátory slovníkov. Po overení existencie oboch slovníkov sa vypočíta veľkosť množiny hesiel ako súčet počtu hesiel v slovníkoch. Podrobnosti o tomto type útoku sú uvedené v podkapitole \ref{combAttack}
-    \item \textbf{Útok s maskami} - spracovanie tohto typu útoku je najzložitejšie. Najprv sa musí skontrolovať syntax každej masky. Potom sa overuje existencia Markovho modelu a súborov s cudzojazyčnými znakovými sadami. Veľkosť množiny hesiel sa pre tento útok počíta pomocou masiek. Za každý zástupný znak v maske sa veľkosť množiny hesiel pre danú masku vynásobí počtu symbolov, ktoré zástupný znak symbolizuje (pre \texttt{?d} 10, pre \texttt{?l} 26 a pod.). Veľkosti množín hesiel pre jednotlivé masky sa potom spočítajú a výsledok je celková veľkosť množiny hesiel pre všetky masky. Viac o tomto type útoku je uvedené v kapitole \ref{maskAttack}.
-    \item \textbf{Hybridné útoky} -najprv sa skontroluje syntax zadanej masky a následne sa z nej pomocou programu MaskProcessor\footnote{\url{https://hashcat.net/wiki/doku.php?id=maskprocessor}} vytvorí slovník, ktorý sa uloží na disk. Slovník zadaný užívateľom sa načíta z databázy a skontroluje sa jeho existencia na disku. Veľkosť množiny hesiel sa vypočíta pomocou súčinu počtu hesiel v oboch slovníkov (tak isto ako u kombinačného útoku). Tento útok je detailnejšie rozobraný v podkapitole \ref{hybridAttack}.
+    \item \textbf{Slovníkový útok} - pri tomto útoku sa v~tele žiadosti vyžaduje identifikátor slovníka. Podľa tohto identifikátora sa vyhľadá v~databáze v~tabuľke \texttt{dictionary} slovník s~príslušným identifikátorom. Potom sa overí či slovník existuje v~súborovom systéme. Ak je zadaný súbor s~pravidlami, taktiež sa vyhľadá v~databáze (v~tabuľke \texttt{rule}) a overí sa jeho existencia na disku. Na konci spracovávania útoku sa vypočíta veľkosť množiny hesiel danej úlohy. Pri tomto type útokov je veľkosť tejto množiny rovná súčinu počtu pravidiel a počtu hesiel v~slovníku (ak nebol vybraný súbor s~pravidlami tak len počtu hesiel v~slovníku). O~podrobnejšom priebehu útoku sa je možné dočítať v~podkapitole \ref{dictAttack}.
+    \item \textbf{Kombinačný útok} - tento útok vyžaduje zadané dva identifikátory slovníkov. Po overení existencie oboch slovníkov sa vypočíta veľkosť množiny hesiel ako súčet počtu hesiel v~slovníkoch. Podrobnosti o~tomto type útoku sú uvedené v~podkapitole \ref{combAttack}
+    \item \textbf{Útok s~maskami} - spracovanie tohto typu útoku je najzložitejšie. Najprv sa musí skontrolovať syntax každej masky. Potom sa overuje existencia Markovho modelu a súborov s~cudzojazyčnými znakovými sadami. Veľkosť množiny hesiel sa pre tento útok počíta pomocou masiek. Za každý zástupný znak v~maske sa veľkosť množiny hesiel pre danú masku vynásobí počtu symbolov, ktoré zástupný znak symbolizuje (pre \texttt{?d} 10, pre \texttt{?l} 26 a pod.). Veľkosti množín hesiel pre jednotlivé masky sa potom spočítajú a výsledok je celková veľkosť množiny hesiel pre všetky masky. Viac o~tomto type útoku je uvedené v~kapitole \ref{maskAttack}.
+    \item \textbf{Hybridné útoky} -najprv sa skontroluje syntax zadanej masky a následne sa z~nej pomocou programu MaskProcessor\footnote{\url{https://hashcat.net/wiki/doku.php?id=maskprocessor}} vytvorí slovník, ktorý sa uloží na disk. Slovník zadaný užívateľom sa načíta z~databázy a skontroluje sa jeho existencia na disku. Veľkosť množiny hesiel sa vypočíta pomocou súčinu počtu hesiel v~oboch slovníkov (tak isto ako u~kombinačného útoku). Tento útok je detailnejšie rozobraný v~podkapitole \ref{hybridAttack}.
 \end{itemize}
-Po spracovaní útoku je nutné vytvoriť konfiguráciu útoku pre generátor vo formáte TLV\footnote{\url{https://en.wikipedia.org/wiki/Type-length-value}}. Potom sa už len záznam uloží do databáze a priradia sa k nemu hostia. Aplikačnej vrstve sa odošle správa o úspešnom pridaní úlohy do databáze.
+Po spracovaní útoku je nutné vytvoriť konfiguráciu útoku pre generátor vo formáte TLV\footnote{\url{https://en.wikipedia.org/wiki/Type-length-value}}. Potom sa už len záznam uloží do databáze a priradia sa k~nemu hostia. Aplikačnej vrstve sa odošle správa o~úspešnom pridaní úlohy do databáze.
 
 
 \subsection{Autentizácia užívateľov}
-Na autentizáciu užívateľov som vybral modul \texttt{Flask-Login}\footnote{\url{https://flask-login.readthedocs.io/en/latest/}}. Jedná sa o rozšírenie do frameworku \texttt{Flask}, ktoré poskytuje správu nad sedením užívateľov (prihlásenie, odhlásenie a zapamätanie si užívateľa). Toto rozšírenie pridáva do systému dekorátor \texttt{login\_required}, ktorý zabezpečuje aby sa neprihlásený užívateľ nedostal k zdrojom, ktoré sú viditeľne len pre prihlásených užívateľov.
+Na autentizáciu užívateľov som vybral modul \texttt{Flask-Login}\footnote{\url{https://flask-login.readthedocs.io/en/latest/}}. Jedná sa o~rozšírenie do frameworku \texttt{Flask}, ktoré poskytuje správu nad sedením užívateľov (prihlásenie, odhlásenie a zapamätanie si užívateľa). Toto rozšírenie pridáva do systému dekorátor \texttt{login\_required}, ktorý zabezpečuje aby sa neprihlásený užívateľ nedostal k~zdrojom, ktoré sú viditeľne len pre prihlásených užívateľov.
 
 
 \subsection{Odhadovanie času výpočtu}
-Systém pri vytváraní úlohy poskytuje užívateľovi informácie o odhadovanom čase výpočtu, ktorý úloha zaberie. Prezentačná vrstva pre zobrazenie odhadovaného času pošle žiadosť na aplikačnú vrstvu s potrebnými údajmi na jeho vypočítanie. Na získanie odhadu času pre výpočet je potrebné niekoľko informácií. 
+Systém pri vytváraní úlohy poskytuje užívateľovi informácie o~odhadovanom čase výpočtu, ktorý úloha zaberie. Prezentačná vrstva pre zobrazenie odhadovaného času pošle žiadosť na aplikačnú vrstvu s~potrebnými údajmi na jeho vypočítanie. Na získanie odhadu času pre výpočet je potrebné niekoľko informácií. 
 \begin{itemize}
     \item \textbf{Typ hešu} - kedže časy výpočtu hešu sa od seba líšia pri rôznych kryptografických algoritmoch, je nutné vybrať typ hešovacej funkcie.
     \item \textbf{Hostia} - taktiež je nutné vybrať hosťov (výpočetné uzly), ktorý sa budú na úlohe podielať. Potom je možné spočítať celkovú silu hosťov pre určitú kryptografickú funkciu a získať tak celkové množstvo vypočítaných hešov za jednu sekundu.
-    \item \textbf{Informácie o útoku} - pre výpočet odhadovaného času je taktiež nutné vedieť veľkosť množiny hesiel danej úlohy. Tá sa pri rôznych typoch útokov získava inak, preto je potrebné uviesť v informáciach typ útoku a ďalšie informácie, ktoré sú potrebné na jej výpočet. Pri slovníkovom útoku je nutné poslať identifikátor slovníka, ktorý sa potom načíta z databázy kde je uvedená jeho veľkosť (počet hesiel, ktoré slovník obsahuje). Pri útokoch s maskami je potrebné poslať v žiadosti aj všetky zadané masky, z ktorých sa vypočíta veľkosť množiny hesiel, ktoré masky zastupujú. Pri kombinačnom útoku sa odosielajú v žiadosti na server identifikátory oboch slovníkov. Celkový počet hesiel zistíme vynásobením počtu hesiel ktoré jednotlivé slovníky obsahujú. Pri hybridnom útoku sa posiela v informáciach o útoku zadaná maska a identifikátor slovníku. Z týchto informácií je potom možné vypočítať veľkosť množiny hesiel vynásobením počtu hesiel v slovníku a počtu hesiel, ktoré zastupuje zadaná maska.
+    \item \textbf{Informácie o~útoku} - pre výpočet odhadovaného času je taktiež nutné vedieť veľkosť množiny hesiel danej úlohy. Tá sa pri rôznych typoch útokov získava inak, preto je potrebné uviesť v~informáciach typ útoku a ďalšie informácie, ktoré sú potrebné na jej výpočet. Pri slovníkovom útoku je nutné poslať identifikátor slovníka, ktorý sa potom načíta z~databázy kde je uvedená jeho veľkosť (počet hesiel, ktoré slovník obsahuje). Pri útokoch s~maskami je potrebné poslať v~žiadosti aj všetky zadané masky, z~ktorých sa vypočíta veľkosť množiny hesiel, ktoré masky zastupujú. Pri kombinačnom útoku sa odosielajú v~žiadosti na server identifikátory oboch slovníkov. Celkový počet hesiel zistíme vynásobením počtu hesiel ktoré jednotlivé slovníky obsahujú. Pri hybridnom útoku sa posiela v~informáciach o~útoku zadaná maska a identifikátor slovníku. Z~týchto informácií je potom možné vypočítať veľkosť množiny hesiel vynásobením počtu hesiel v~slovníku a počtu hesiel, ktoré zastupuje zadaná maska.
 \end{itemize}
-Odhadovaný čas úlohy v sekundách sa vypočíta podielom veľkosti množiny hesiel s celkovým výkonom hosťov. Jedná sa o odhadovaný čas, ktorý by úloha trvala, keby sa heslo našlo až úplne na konci množiny všetkých hesiel. V dôsledku toho končia väčšinou úlohy skôr. Niekedy sa však môže stať že úloha bude trvať dlhšie, ako je jej odhadovaný čas v dôsledku vyťaženia hosťov.
+Odhadovaný čas úlohy v~sekundách sa vypočíta podielom veľkosti množiny hesiel s~celkovým výkonom hosťov. Jedná sa o~odhadovaný čas, ktorý by úloha trvala, keby sa heslo našlo až úplne na konci množiny všetkých hesiel. V~dôsledku toho končia väčšinou úlohy skôr. Niekedy sa však môže stať že úloha bude trvať dlhšie, ako je jej odhadovaný čas v~dôsledku vyťaženia hosťov.
 
 \section{Implementácia prezentačnej vrstvy}
 
 
-Prezentačná vrstva je implementovaná ako SPA (singe Page Aplication alebo jednostránková aplikácia). Na rozdiel od klasických webových aplikácií poskytujú SPA užívateľsky príjemnejšie prostredie, ale vyžadujú použitie moderných webových prehliadačov. S aplikačnou vrstvou systému komunikuje pomocou žiadostí typu AJAX. Vďaka tomu je možné meniť obsah stránok bez potreby ich znovu načítať zo servera. Na zasielanie žiadostí a prijímanie odpovedí AJAX používam framework axios\footnote{\url{https://github.com/axios/axios}}. Kvôli ľahkému spracovaniu na prezentačnej vrstve prebieha komunikácia s aplikačnou vrstvou vo formáte JSON. Webová aplikácia je implementovaná pomocou frameworku Vue (viď \ref{vue}), ktorý výrazným spôsobom uľahčuje členenie aplikácie na jednotlivé komponenty, ktoré sú znovupoužiteľné. Výsledok implementácie prezentačnej vrstvy je možné vidieť na obrázkoch \ref{fig:detailPage}, kde je snímka z detailného pohľadu na úlohu.
+Prezentačná vrstva je implementovaná ako SPA (singe Page Aplication alebo jednostránková aplikácia). Na rozdiel od klasických webových aplikácií poskytujú SPA užívateľsky príjemnejšie prostredie, ale vyžadujú použitie moderných webových prehliadačov. S~aplikačnou vrstvou systému komunikuje pomocou žiadostí typu AJAX. Vďaka tomu je možné meniť obsah stránok bez potreby ich znovu načítať zo servera. Na zasielanie žiadostí a prijímanie odpovedí AJAX používam framework axios\footnote{\url{https://github.com/axios/axios}}. Kvôli ľahkému spracovaniu na prezentačnej vrstve prebieha komunikácia s~aplikačnou vrstvou vo formáte JSON. Webová aplikácia je implementovaná pomocou frameworku Vue (viď \ref{vue}), ktorý výrazným spôsobom uľahčuje členenie aplikácie na jednotlivé komponenty, ktoré sú znovupoužiteľné. Výsledok implementácie prezentačnej vrstvy je možné vidieť na obrázkoch \ref{fig:detailPage}, kde je snímka z~detailného pohľadu na úlohu.
 \begin{figure}[H]
     \centering
     \includegraphics[scale=0.25]{obrazky/jobDetail2Frame.PNG}
@@ -939,7 +939,7 @@ Pre zjednodušenie implementácie som každú stránku rozdelil na znovupoužite
     \caption{Detailná stránka úlohy rozdelená na komponenty}
     \label{fig:komponenty}
 \end{figure}
-Jednotlivé komponenty sú uložené v súboroch s príponou \texttt{.vue}, ktoré sa nachádzajú v zložke \texttt{src/components}. Príklad obsahuje takéhoto súboru je možné vidieť na výpise \ref{notifComponent}.
+Jednotlivé komponenty sú uložené v~súboroch s~príponou \texttt{.vue}, ktoré sa nachádzajú v~zložke \texttt{src/components}. Príklad obsahuje takéhoto súboru je možné vidieť na výpise \ref{notifComponent}.
 
 \begin{algorithm}[H]
   \caption{Zdrojový kód komponentu notifikácie}
@@ -974,21 +974,21 @@ Jednotlivé komponenty sú uložené v súboroch s príponou \texttt{.vue}, ktor
   \end{lstlisting}
 \end{algorithm}
 
-Komponenty sa zvyčajne skladajú z troch častí. Prvá časť je kód v jazyku HTML zabalený v elemente \texttt{template}. V tejto časti sa popíše štruktúra komponentu a tajtiež sa zviažu javascriptové premenné s HTML elementmi. Využije sa pri tom takzvaný Data-Binding\footnote{\url{https://vuejs.org/v2/guide/syntax.html}}, ktorý štandardne funguje obojsmerne (pri zmene hodnoty v javascripte sa zmení hodnota HTML elementu a tiež pri zmene HTML elementu užívateľom sa zmení hodnota javascriptovej premennej). V ďalšej časti komponentu sa popíše javascriptová logika. Táto časť je obalená v elemente \texttt{script}. Vo poli \texttt{props} obsahuje vlastnosti, ktoré sa predávajú z rodičovského komponentu. Premenné si komponent uchováva vo funkcii\footnote{\url{https://vuejs.org/v2/guide/components.html\#data-Must-Be-a-Function}} \texttt{data}. Jednotlivé funkcie sú uložené v objekte \texttt{methods}. Komponent má životný cyklus zložený z niekoľko fázý, ktoré je možné nájsť v prílohe @TODO. Zvyčajne najdôležitejšie stavy pre komponent sú:
+Komponenty sa zvyčajne skladajú z~troch častí. Prvá časť je kód v~jazyku HTML zabalený v~elemente \texttt{template}. V~tejto časti sa popíše štruktúra komponentu a tajtiež sa zviažu javascriptové premenné s~HTML elementmi. Využije sa pri tom takzvaný Data-Binding\footnote{\url{https://vuejs.org/v2/guide/syntax.html}}, ktorý štandardne funguje obojsmerne (pri zmene hodnoty v~javascripte sa zmení hodnota HTML elementu a tiež pri zmene HTML elementu užívateľom sa zmení hodnota javascriptovej premennej). V~ďalšej časti komponentu sa popíše javascriptová logika. Táto časť je obalená v~elemente \texttt{script}. Vo poli \texttt{props} obsahuje vlastnosti, ktoré sa predávajú z~rodičovského komponentu. Premenné si komponent uchováva vo funkcii\footnote{\url{https://vuejs.org/v2/guide/components.html\#data-Must-Be-a-Function}} \texttt{data}. Jednotlivé funkcie sú uložené v~objekte \texttt{methods}. Komponent má životný cyklus zložený z~niekoľko fázý, ktoré je možné nájsť v~prílohe @TODO. Zvyčajne najdôležitejšie stavy pre komponent sú:
 \begin{itemize}
-    \item \textbf{created} - stav v ktorom prebieha inicializácia komponentu. Komponent ešte nie je vykreslený na stránke.
+    \item \textbf{created} - stav v~ktorom prebieha inicializácia komponentu. Komponent ešte nie je vykreslený na stránke.
     \item \textbf{mounted} - komponent je zobrazený na stránke.
-    \item \textbf{destroyed} - fáza, v priebehu ktorej je komponent vymazaný zo stránky. Tento stav je vhodný pre dealokáciu zdrojov, ktoré komponent využíva (napríklad volanie javascriptovej funkcie \texttt{clearInterval}).
+    \item \textbf{destroyed} - fáza, v~priebehu ktorej je komponent vymazaný zo stránky. Tento stav je vhodný pre dealokáciu zdrojov, ktoré komponent využíva (napríklad volanie javascriptovej funkcie \texttt{clearInterval}).
 \end{itemize}
 
 
-Okrem vlastných komponentov, pre zefektívnenie práce používam aj niekotré komponenty zo sady komponentov \texttt{Vuetify}\footnote{\url{https://vuetifyjs.com/}}. Jedná sa o sadu responzívnych komponentov v modernom dizajne.
+Okrem vlastných komponentov, pre zefektívnenie práce používam aj niekotré komponenty zo sady komponentov \texttt{Vuetify}\footnote{\url{https://vuetifyjs.com/}}. Jedná sa o~sadu responzívnych komponentov v~modernom dizajne.
 
 \subsection{Globálne dáta}
-Dáta, ku ktorým majú prístup všetky komponenty, sú uložené v globálnom skladisku, ktoré sa nazýva \texttt{Store}. Nachádzajú sa v ňom dáta u užívateľovi (uživateľské meno, email a jednotlivé oprávnenia), príznak prihlásenia užívateľa, URL adresa serverovej časti a globálne funkcie.
+Dáta, ku ktorým majú prístup všetky komponenty, sú uložené v~globálnom skladisku, ktoré sa nazýva \texttt{Store}. Nachádzajú sa v~ňom dáta u~užívateľovi (uživateľské meno, email a jednotlivé oprávnenia), príznak prihlásenia užívateľa, URL adresa serverovej časti a globálne funkcie.
 
-\subsection{Navigácia v aplikácii}
-Pri jednostránkových aplikáciách (SPA) musí byť vyriešená adresácia pomocou URL. Ja som si pre navigáciu medzi jednotlivými stránkami vybral knižnicu \texttt{Vue Router}, ku ktorému som vytvoril konfiguračný súbor. Ten obsahuje popísané všetky cesty v aplikácií aj s komponentami, ktoré sa majú pri zhode cesty vykrsliť. Časť konfiguračného súboru je možné vidieť na výpise \ref{routerConfig}.
+\subsection{Navigácia v~aplikácii}
+Pri jednostránkových aplikáciách (SPA) musí byť vyriešená adresácia pomocou URL. Ja som si pre navigáciu medzi jednotlivými stránkami vybral knižnicu \texttt{Vue Router}, ku ktorému som vytvoril konfiguračný súbor. Ten obsahuje popísané všetky cesty v~aplikácií aj s~komponentami, ktoré sa majú pri zhode cesty vykrsliť. Časť konfiguračného súboru je možné vidieť na výpise \ref{routerConfig}.
 
 \begin{algorithm}[H]
   \caption{Konfiguračný súbor navigácie}
@@ -1025,41 +1025,41 @@ routes: [
 
 
 \subsection{Grafy}
-Výraznú časť užívateľského rozhrania aplikácie tvoria grafy, ktoré sú detailnejšie popísané v kapitole \ref{graphs}. Každý graf sa periodicky dotazuje servera so žiadosťou o nové dáta. Server odpovedá správou vo formáte JSON, v ktorej sa nachádzajú už spracované dáta grafu. Tým pádom sú grafy aktuálne aj bez nutnosti znovu načítania stránky. Na vykreslovanie grafov využívam javascriptovú knižnicu \texttt{morris.js}\footnote{\url{http://morrisjs.github.io/morris.js/index.html}}. Na obrázku \ref{fig:graf1} sa nachádzajú grafy jednej z úloh.
+Výraznú časť užívateľského rozhrania aplikácie tvoria grafy, ktoré sú detailnejšie popísané v~kapitole \ref{graphs}. Každý graf sa periodicky dotazuje servera so žiadosťou o~nové dáta. Server odpovedá správou vo formáte JSON, v~ktorej sa nachádzajú už spracované dáta grafu. Tým pádom sú grafy aktuálne aj bez nutnosti znovu načítania stránky. Na vykreslovanie grafov využívam javascriptovú knižnicu \texttt{morris.js}\footnote{\url{http://morrisjs.github.io/morris.js/index.html}}. Na obrázku \ref{fig:graf1} sa nachádzajú grafy jednej z~úloh.
 \begin{figure}[H]
     \centering
     \includegraphics[scale=0.53]{obrazky/graf1.PNG}
-    \caption{Grafy úlohy s jedným hosťom}
+    \caption{Grafy úlohy s~jedným hosťom}
     \label{fig:graf1}
 \end{figure} 
-Z grafu \texttt{Hashes in workunit} (počet hešov v pracovnej jednotke) je zrejmá práca Asimilátora (viď \ref{asimilator}), ktorý ma za úlohu prispôsobovať veľkosť pracovnej jednotky hosťom. V tej úlohe bol zapojený len jeden hosť s názvom \texttt{LAPTOP-824P9BQD}. Jednalo sa o pomerne výkonného hosťa, čo je možné vidieť aj podľa toho, že mu Asimilátor spolu s Generátorom prideľovali čo raz viac hešov na overenie v pracovnej jednotke. Toto zváčšovanie by pokračovalo až kým by hosť nespracovával pracovné jednotky tak rýchlo, ako bolo stanovené pri vytváraní úlohy, ale od polovice overených hešov nastáva zmena v algoritme pri generovaní nových pracovných jednotiek. Táto zmena nastáva v dôsledku zefektívnenia výpočtu a má za následok postupné zmenšovanie počtu hesiel na overenie vo všetkých ďalších vygenerovaných pracovných jednotkách.  Grafy so zapojením viacero hosťov je možné vidieť na obrázku \ref{fig:graf2}. Koláčový diágram značí, že v tomto prípade boli hostia výkonnostne pomerne vyrovnaný. 
+Z~grafu \texttt{Hashes in workunit} (počet hešov v~pracovnej jednotke) je zrejmá práca Asimilátora (viď \ref{asimilator}), ktorý ma za úlohu prispôsobovať veľkosť pracovnej jednotky hosťom. V~tej úlohe bol zapojený len jeden hosť s~názvom \texttt{LAPTOP-824P9BQD}. Jednalo sa o~pomerne výkonného hosťa, čo je možné vidieť aj podľa toho, že mu Asimilátor spolu s~Generátorom prideľovali čo raz viac hešov na overenie v~pracovnej jednotke. Toto zváčšovanie by pokračovalo až kým by hosť nespracovával pracovné jednotky tak rýchlo, ako bolo stanovené pri vytváraní úlohy, ale od polovice overených hešov nastáva zmena v~algoritme pri generovaní nových pracovných jednotiek. Táto zmena nastáva v~dôsledku zefektívnenia výpočtu a má za následok postupné zmenšovanie počtu hesiel na overenie vo všetkých ďalších vygenerovaných pracovných jednotkách.  Grafy so zapojením viacero hosťov je možné vidieť na obrázku \ref{fig:graf2}. Koláčový diágram značí, že v~tomto prípade boli hostia výkonnostne pomerne vyrovnaný. 
 \begin{figure}[H]
     \centering
     \includegraphics[scale=0.56]{obrazky/graf2.PNG}
-    \caption{Grafy úlohy s viacerými hosťami}
+    \caption{Grafy úlohy s~viacerými hosťami}
     \label{fig:graf2}
 \end{figure}
 
 \subsection{Prehľad úloh a stránkovanie}
-Stránku prehľadu úloh prehľadná tabuľka, ktorá obsahuje základné informácie o úlohách ako názov, typ útoku, aktuálny stav úlohy, progres, čas pridania, hľadané heslo a tlačítka, ktoré spúšťajú operácie s úlohou. Príklad tejto stránky je možné vidieť na obrázku \ref{fig:jobsPage}. Aby mala stránka rýchlu odozvu pri načítavaní úloh, implementoval som do nej systém stránkovania, kde načítavanie úloh prebieha po jednotlivých stránkach. Pri načítavaní novej stránky s úlohami sa posiela žiadosť na serverú časť aplikácie s parametrami \texttt{page} a \texttt{per\_page}, ktoré označujú číslo stránky s úlohami a počet úloh na stránke. Vďaka stránkovaniu sa znižuje réžia na prezentačnej vrstve (pretože nemusí vykreslovať a uchovávať si v pamäti všetky úlohy), na aplikačnej vrstve (pripravuje na odoslanie a prenáša menšie dáta) a aj na databázovej (SQL dotazy s veľkým počtom výsledkov bývajú pomalé).
+Stránku prehľadu úloh prehľadná tabuľka, ktorá obsahuje základné informácie o~úlohách ako názov, typ útoku, aktuálny stav úlohy, progres, čas pridania, hľadané heslo a tlačítka, ktoré spúšťajú operácie s~úlohou. Príklad tejto stránky je možné vidieť na obrázku \ref{fig:jobsPage}. Aby mala stránka rýchlu odozvu pri načítavaní úloh, implementoval som do nej systém stránkovania, kde načítavanie úloh prebieha po jednotlivých stránkach. Pri načítavaní novej stránky s~úlohami sa posiela žiadosť na serverú časť aplikácie s~parametrami \texttt{page} a \texttt{per\_page}, ktoré označujú číslo stránky s~úlohami a počet úloh na stránke. Vďaka stránkovaniu sa znižuje réžia na prezentačnej vrstve (pretože nemusí vykreslovať a uchovávať si v~pamäti všetky úlohy), na aplikačnej vrstve (pripravuje na odoslanie a prenáša menšie dáta) a aj na databázovej (SQL dotazy s~veľkým počtom výsledkov bývajú pomalé).
 \begin{figure}[H]
     \centering
     \includegraphics[scale=0.46]{obrazky/jobsFrame2.PNG}
-    \caption{Stránka s tabuľkou úloh}
+    \caption{Stránka s~tabuľkou úloh}
     \label{fig:jobsPage}
 \end{figure}
-Tabuľka taktiež podporuje zoradenie položiek podľa všetkých stĺpcov a vyhľadávanie v úloh, ale kedže je zavedený systém stránkovania a klientská časť nemá informácie o všetkých úlohách, zoradovanie a vyhľadávanie v úlohách vykonáva serverová časť ktorej sa odošle žiadosť s parametrami \texttt{order\_by}, ktorý označuje vlastnosť podľa ktorej sa majú úlohy zoradiť, a \texttt{descending}, ktorý hovorí o smere zoradenia (vzostupne/zostupne).
+Tabuľka taktiež podporuje zoradenie položiek podľa všetkých stĺpcov a vyhľadávanie v~úloh, ale kedže je zavedený systém stránkovania a klientská časť nemá informácie o~všetkých úlohách, zoradovanie a vyhľadávanie v~úlohách vykonáva serverová časť ktorej sa odošle žiadosť s~parametrami \texttt{order\_by}, ktorý označuje vlastnosť podľa ktorej sa majú úlohy zoradiť, a \texttt{descending}, ktorý hovorí o~smere zoradenia (vzostupne/zostupne).
 
 
 
 \chapter{Testovanie a experimenty}\label{testovanie}
-Testovanie je neoddeliteľnou súčasťou vývoja akéhokoľvek projektu. V rámci mojej baklárskej práce som uskotučnil dva typy testovania. Funkcionálne testovanie, ktoré malo za úlohu overiť funkčnosť systému, a testovanie užívateľského rozhrania, v ktorom som testoval ako rýchlo a efektívne užívateľ zvláda úlohy, a ako je pre užívateľa  prostredie prívetivé.
+Testovanie je neoddeliteľnou súčasťou vývoja akéhokoľvek projektu. V~rámci mojej baklárskej práce som uskotučnil dva typy testovania. Funkcionálne testovanie, ktoré malo za úlohu overiť funkčnosť systému, a testovanie užívateľského rozhrania, v~ktorom som testoval ako rýchlo a efektívne užívateľ zvláda úlohy, a ako je pre užívateľa  prostredie prívetivé.
 
 \section{Funkcionálne testovanie}
-Funkcionálne testovanie malo predovšetkým odhaliť chyby na aplikačnej vrstve. Testovanie prebehlo spôsobom posielania žiadostí na serverovú časť systému (REST API) a porovnávanie odpovedí servera so správnymi modelmi odpovedí. Týmto spôsobom som automaticky kontroloval syntaktickú správnosť odpovede, ktorá bola vo formáte JSON, a stavové kódy HTTP hlavičiek odpovedí. Toto testovanie odhalilo niekoľko chýb s oprávneniami užívateľov, ktoré boli opravené. Ďalej som cez REST API posielal na server žiadosti, ktoré vytvorili úlohy. Po načítaní detailu úlohy vo formáte JSON som kontroloval správne vypočítanú veľkosť množiny hesiel, priradených hosťov, určený typ hešu a ďalšie hodnoty. Tieto hodnoty som následne porovnal s hodnotami z databázy, pričom som zistil, že sa rovnajú.
+Funkcionálne testovanie malo predovšetkým odhaliť chyby na aplikačnej vrstve. Testovanie prebehlo spôsobom posielania žiadostí na serverovú časť systému (REST API) a porovnávanie odpovedí servera so správnymi modelmi odpovedí. Týmto spôsobom som automaticky kontroloval syntaktickú správnosť odpovede, ktorá bola vo formáte JSON, a stavové kódy HTTP hlavičiek odpovedí. Toto testovanie odhalilo niekoľko chýb s~oprávneniami užívateľov, ktoré boli opravené. Ďalej som cez REST API posielal na server žiadosti, ktoré vytvorili úlohy. Po načítaní detailu úlohy vo formáte JSON som kontroloval správne vypočítanú veľkosť množiny hesiel, priradených hosťov, určený typ hešu a ďalšie hodnoty. Tieto hodnoty som následne porovnal s~hodnotami z~databázy, pričom som zistil, že sa rovnajú.
 
 \section{Užívateľské testovanie}
-Ďalšou fázou testovania bolo testovanie užívateľom. Pre tento typ testovania bolo pozvaných 5 osôb, ktorých úlohou bolo vykonať niekoľko jednoduchých úloh. Jednalo sa o úlohy:
+Ďalšou fázou testovania bolo testovanie užívateľom. Pre tento typ testovania bolo pozvaných 5 osôb, ktorých úlohou bolo vykonať niekoľko jednoduchých úloh. Jednalo sa o~úlohy:
 \begin{itemize}
     \item prihlásenie
     \item vytvorenie nového užívateľa
@@ -1070,10 +1070,10 @@ Funkcionálne testovanie malo predovšetkým odhaliť chyby na aplikačnej vrstv
     \item sledovanie progresu úlohy
     \item zhodnotiť výsledok úlohy
 \end{itemize}
-Behom testovania nevznikli u testujúcich takmer žiadne problémy. Kedže sa jedná o pomerne zložitý systém, ktorý si vyžaduje aspoň minimálne znalosti o kryptografickom šifrovaní, nie všetkým testovaným boli princípy jednotlivých útokov jasné. Avšak aj napriek tomu testujúci splnili úlohy za veľmi krátku dobu. Užívateľské prostredie sa všetkým javilo ako jednoduché a intuitívne. Následne, vzhľadom na výsledky testovania som uskutočnil pár grafických zmien, ako napríklad zväčšenie a zvýraznenie niektorých ovládacích prvkov. Taktiež sa väčšine testujúcim páčil grafický dizajn a zvolené farby aplikácie.  
+Behom testovania nevznikli u~testujúcich takmer žiadne problémy. Kedže sa jedná o~pomerne zložitý systém, ktorý si vyžaduje aspoň minimálne znalosti o~kryptografickom šifrovaní, nie všetkým testovaným boli princípy jednotlivých útokov jasné. Avšak aj napriek tomu testujúci splnili úlohy za veľmi krátku dobu. Užívateľské prostredie sa všetkým javilo ako jednoduché a intuitívne. Následne, vzhľadom na výsledky testovania som uskutočnil pár grafických zmien, ako napríklad zväčšenie a zvýraznenie niektorých ovládacích prvkov. Taktiež sa väčšine testujúcim páčil grafický dizajn a zvolené farby aplikácie.  
 
 \section{Experiment}
-Cieľom experimentu je otestovať funkčnosť celého systému. Pomocou jednoduchého skriptu napísaného v jazyku Python som vygeneroval slovník, ktorý obsahuje 50 miliónov hesiel. Heslá sú tvorené piatimi znakmi anglickej abecedy. Na konci slovníka som pridal heslo \texttt{experiment123}. Obsah slovníka je naznačený na výpise \ref{lst:experimentDict}. Slovník zaberal po vygenerovaní 341 797kB diskového priestoru.
+Cieľom experimentu je otestovať funkčnosť celého systému. Pomocou jednoduchého skriptu napísaného v~jazyku Python som vygeneroval slovník, ktorý obsahuje 50 miliónov hesiel. Heslá sú tvorené piatimi znakmi anglickej abecedy. Na konci slovníka som pridal heslo \texttt{experiment123}. Obsah slovníka je naznačený na výpise \ref{lst:experimentDict}. Slovník zaberal po vygenerovaní 341 797kB diskového priestoru.
 \begin{figure}[H]
 \begin{center}
 \begin{varwidth}{\linewidth}
@@ -1094,21 +1094,21 @@ Cieľom experimentu je otestovať funkčnosť celého systému. Pomocou jednoduc
 \caption{Obsah experimentálneho slovníka}
 \label{lst:experimentDict}
 \end{figure}
-Slovník som nahral prostredníctvom webovej aplikácie do systému Fitcrack a pomenoval som ho \texttt{experiment.txt}. Overil som pridanie záznamu do databázy a vypočítanie správnej veľkosti množiny hesiel, ktorú slovník obsahuje. Potom som prostredníctvom programu \texttt{WinRar}\footnote{\url{https://www.win-rar.com/}} zkomprimoval a zašifroval skupinu súborov do archívu \texttt{faktury.zip}. Ako heslo som zadal \texttt{experiment123}, čo je posledné heslo v slovníku \texttt{experiment.txt}, takže systém bude musieť prejsť celý slovník. Následne som do systému pripojil dva uzly a vytvoril úlohu, do ktorej som nahral zašifrovaný archív a vybral slovníkový útok s vygenerovaným slovníkom \texttt{experiment.txt}. Typ heša sa správne automaticky nastavil. K tejto úlohe som pripojil dva uzly. Systém odhadol dobu výpočtu na 21 minút a 46 sekúnd. Stránku s vytváraním úlohy je možné vidieť na obrázku \ref{fig:exp1}. 
+Slovník som nahral prostredníctvom webovej aplikácie do systému Fitcrack a pomenoval som ho \texttt{experiment.txt}. Overil som pridanie záznamu do databázy a vypočítanie správnej veľkosti množiny hesiel, ktorú slovník obsahuje. Potom som prostredníctvom programu \texttt{WinRar}\footnote{\url{https://www.win-rar.com/}} zkomprimoval a zašifroval skupinu súborov do archívu \texttt{faktury.zip}. Ako heslo som zadal \texttt{experiment123}, čo je posledné heslo v~slovníku \texttt{experiment.txt}, takže systém bude musieť prejsť celý slovník. Následne som do systému pripojil dva uzly a vytvoril úlohu, do ktorej som nahral zašifrovaný archív a vybral slovníkový útok s~vygenerovaným slovníkom \texttt{experiment.txt}. Typ heša sa správne automaticky nastavil. K~tejto úlohe som pripojil dva uzly. Systém odhadol dobu výpočtu na 21 minút a 46 sekúnd. Stránku s~vytváraním úlohy je možné vidieť na obrázku \ref{fig:exp1}. 
 \begin{figure}[H]
     \centering
     \includegraphics[scale=0.4]{obrazky/exp1Frame.PNG}
     \caption{Vytváranie experimentálnej úlohy}
     \label{fig:exp1}
 \end{figure}
-Po spustení úlohy sa vyťaženie uzlov prudko zdvihlo. Jeden host svojim výkonom výrazne prevyšoval druhého. Po približne pol hodine sa zobrazila notifikácia o dokončení úlohy. Ako vidno na obrázku \ref{fig:exp2}, Fitcrack našiel heslo k archívu za 28 minút a 52 sekúnd.
+Po spustení úlohy sa vyťaženie uzlov prudko zdvihlo. Jeden host svojim výkonom výrazne prevyšoval druhého. Po približne pol hodine sa zobrazila notifikácia o~dokončení úlohy. Ako vidno na obrázku \ref{fig:exp2}, Fitcrack našiel heslo k~archívu za 28 minút a 52 sekúnd.
 \begin{figure}[H]
     \centering
     \includegraphics[scale=0.6]{obrazky/exp2.PNG}
     \caption{Vytváranie experimentálnej úlohy}
     \label{fig:exp2}
 \end{figure}
-Za pozornosť stoja aj grafy, ktoré je možné vidieť na obrázku \ref{fig:exp3}. Koláčový graf podporuje predpoklad o tom, že jeden hosť je výrazne výkonnejší ako druhý. Na grafe s progresom úlohy vidíme že progres stúpal približne lineárne. 
+Za pozornosť stoja aj grafy, ktoré je možné vidieť na obrázku \ref{fig:exp3}. Koláčový graf podporuje predpoklad o~tom, že jeden hosť je výrazne výkonnejší ako druhý. Na grafe s~progresom úlohy vidíme že progres stúpal približne lineárne. 
 \begin{figure}[H]
     \centering
     \includegraphics[scale=0.4]{obrazky/exp3.PNG}
@@ -1117,15 +1117,15 @@ Za pozornosť stoja aj grafy, ktoré je možné vidieť na obrázku \ref{fig:exp
 \end{figure}
 
 \chapter{Záver}\label{zaver}
-V rámci tejto práce som urobil rozbor systému Fitcrack a analyzoval požiadavky na webovú aplikáciu, ktorá má slúžiť na vzdialené správu systému. V rámci návrhu systému bola výrazne upravená schéma databázy, navrhnutý systém užívateľov a rozloženie prvkov na klientskej časti, popísané typy útokov ktoré bude webová aplikácia podporovať a navrhnuté druhy grafov.
+V~rámci tejto práce som urobil rozbor systému Fitcrack a analyzoval požiadavky na webovú aplikáciu, ktorá má slúžiť na vzdialené správu systému. V~rámci návrhu systému bola výrazne upravená schéma databázy, navrhnutý systém užívateľov a rozloženie prvkov na klientskej časti, popísané typy útokov ktoré bude webová aplikácia podporovať a navrhnuté druhy grafov.
 
-Po návrhu systému, prebehla jeho implementácia, ktorej súčasťou je moderné webové rozhranie, serverová časť komunikujúca prostredníctvom REST API a databázový systém MySQL. Oproti prechádzajúcemu riešeniu, poskytuje moja implementácia rôzne rozšírenia ako napríklad podpora viacerých užívateľov s ich oprávneniami, 3 nové typy útokov, systém upozornení, príjemné a prehľadné užívateľské rozhranie so zaujímavými grafickými prvkami ako sú napríklad grafy. Taktiež systém podporuje odhad času potrebného na dokončenie úlohy a overenie správneho formátu hešu. Keďže som od seba oddelil klientskú a serverovú vrstvu, systém je výkonnostne menej náročný. Vďaka použitiu jednostránkovej webovej prezentácia a komunikáciu so serverovou časťou prostredníctvom asynchrónnych žiadostí (AJAX), je možné periodicky aktualizovať dáta na prezentačnej vrstve a tým zabezpečiť konzistentnosť s databázovou vrstvou bez nutnosti znovu načítania stránky.
+Po návrhu systému, prebehla jeho implementácia, ktorej súčasťou je moderné webové rozhranie, serverová časť komunikujúca prostredníctvom REST API a databázový systém MySQL. Oproti prechádzajúcemu riešeniu, poskytuje moja implementácia rôzne rozšírenia ako napríklad podpora viacerých užívateľov s~ich oprávneniami, 3 nové typy útokov, systém upozornení, príjemné a prehľadné užívateľské rozhranie so zaujímavými grafickými prvkami ako sú napríklad grafy. Taktiež systém podporuje odhad času potrebného na dokončenie úlohy a overenie správneho formátu hešu. Keďže som od seba oddelil klientskú a serverovú vrstvu, systém je výkonnostne menej náročný. Vďaka použitiu jednostránkovej webovej prezentácia a komunikáciu so serverovou časťou prostredníctvom asynchrónnych žiadostí (AJAX), je možné periodicky aktualizovať dáta na prezentačnej vrstve a tým zabezpečiť konzistentnosť s~databázovou vrstvou bez nutnosti znovu načítania stránky.
 
 Po implementácií webovej aplikácie nasledovalo overenie funkčnosti prostredníctvom užívateľského a funkcionálneho testovania. Testovanie objavilo niekoľko drobných chýb, ktoré boli opravené. Potom nasledoval experiment, ktorý overil správnu funkčnosť celého systému Fitcrack.
 
 
 \section{Výhľad do budúcna}
-Keďže si myslím, že systém Fitcrack môže byť v budúcnosti úspešný, mám záujem webovú aplikáciu ďalej rozširovať. Plánujem pridať možnosť nahrávania slovníkov priamo z diskového priestora serveru, pridať logovací systém, možnosť zobrazenia databázy hešov, ktoré sa už v minulosti našli a množstvo ďalších vylepšení. Taktiež by bolo vhodné zbaviť sa závislosti serverovej časti na nástroji Hashcat, ktorý server používa už len na výpočet veľkosti množiny hesiel.
+Keďže si myslím, že systém Fitcrack môže byť v~budúcnosti úspešný, mám záujem webovú aplikáciu ďalej rozširovať. Plánujem pridať možnosť nahrávania slovníkov priamo z~diskového priestora serveru, pridať logovací systém, možnosť zobrazenia databázy hešov, ktoré sa už v~minulosti našli a množstvo ďalších vylepšení. Taktiež by bolo vhodné zbaviť sa závislosti serverovej časti na nástroji Hashcat, ktorý server používa už len na výpočet veľkosti množiny hesiel.
 
 
 
