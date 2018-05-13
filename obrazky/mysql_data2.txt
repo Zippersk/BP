@@ -1,0 +1,464 @@
+-- phpMyAdmin SQL Dump
+-- version 4.0.10deb1
+-- http://www.phpmyadmin.net
+--
+-- Hostiteľ: localhost
+-- Vygenerované: Št 05.Apr 2018, 20:48
+-- Verzia serveru: 5.5.59-0ubuntu0.14.04.1
+-- Verzia PHP: 5.5.9-1ubuntu4.24
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+
+--
+-- Databáza: `fitcrack`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Štruktúra tabuľky pre tabuľku `fc_benchmark`
+--
+
+CREATE TABLE IF NOT EXISTS `fc_benchmark` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `boinc_host_id` bigint(20) unsigned NOT NULL,
+  `hash_type` int(11) unsigned DEFAULT NULL,
+  `power` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `last_update` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=3110 ;
+
+-- --------------------------------------------------------
+
+--
+-- Štruktúra tabuľky pre tabuľku `fc_charset`
+--
+
+CREATE TABLE IF NOT EXISTS `fc_charset` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL,
+  `path` varchar(400) NOT NULL,
+  `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `deleted` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=67 ;
+
+-- --------------------------------------------------------
+
+--
+-- Štruktúra tabuľky pre tabuľku `fc_dictionary`
+--
+
+CREATE TABLE IF NOT EXISTS `fc_dictionary` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `path` varchar(400) NOT NULL,
+  `keyspace` int(11) NOT NULL,
+  `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `deleted` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `path` (`path`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=44 ;
+
+-- --------------------------------------------------------
+
+--
+-- Štruktúra tabuľky pre tabuľku `fc_hashcache`
+--
+
+CREATE TABLE IF NOT EXISTS `fc_hashcache` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `hash_type` int(11) unsigned DEFAULT NULL,
+  `hash` longtext COLLATE utf8_bin,
+  `result` text COLLATE utf8_bin,
+  `added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=67 ;
+
+-- --------------------------------------------------------
+
+--
+-- Štruktúra tabuľky pre tabuľku `fc_hcstats`
+--
+
+CREATE TABLE IF NOT EXISTS `fc_hcstats` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `path` varchar(400) NOT NULL,
+  `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `deleted` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=14 ;
+
+-- --------------------------------------------------------
+
+--
+-- Štruktúra tabuľky pre tabuľku `fc_host`
+--
+
+CREATE TABLE IF NOT EXISTS `fc_host` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `boinc_host_id` bigint(20) unsigned NOT NULL,
+  `power` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `package_id` bigint(20) unsigned NOT NULL,
+  `status` smallint(1) unsigned NOT NULL DEFAULT '0',
+  `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=74 ;
+
+-- --------------------------------------------------------
+
+--
+-- Štruktúra tabuľky pre tabuľku `fc_host_activity`
+--
+
+CREATE TABLE IF NOT EXISTS `fc_host_activity` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `boinc_host_id` bigint(20) unsigned NOT NULL,
+  `package_id` bigint(20) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=1461 ;
+
+-- --------------------------------------------------------
+
+--
+-- Štruktúra tabuľky pre tabuľku `fc_job`
+--
+
+CREATE TABLE IF NOT EXISTS `fc_job` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `package_id` bigint(20) NOT NULL,
+  `workunit_id` bigint(20) unsigned NOT NULL,
+  `host_id` bigint(20) unsigned NOT NULL,
+  `boinc_host_id` bigint(20) unsigned NOT NULL,
+  `start_index` bigint(20) unsigned NOT NULL,
+  `start_index_2` bigint(20) unsigned NOT NULL,
+  `hc_keyspace` bigint(20) unsigned NOT NULL,
+  `mask_id` bigint(20) unsigned NOT NULL,
+  `duplicated` tinyint(1) NOT NULL DEFAULT '0',
+  `duplicate` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `cracking_time` double unsigned NOT NULL DEFAULT '0',
+  `retry` int(1) NOT NULL DEFAULT '0',
+  `finished` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=2647 ;
+
+-- --------------------------------------------------------
+
+--
+-- Štruktúra tabuľky pre tabuľku `fc_mask`
+--
+
+CREATE TABLE IF NOT EXISTS `fc_mask` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `package_id` bigint(20) unsigned NOT NULL,
+  `mask` varchar(30) COLLATE utf8_bin DEFAULT NULL,
+  `current_index` bigint(20) unsigned NOT NULL,
+  `keyspace` bigint(20) unsigned NOT NULL,
+  `hc_keyspace` bigint(20) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=161 ;
+
+-- --------------------------------------------------------
+
+--
+-- Štruktúra tabuľky pre tabuľku `fc_masks_set`
+--
+
+CREATE TABLE IF NOT EXISTS `fc_masks_set` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL,
+  `path` varchar(400) NOT NULL,
+  `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `deleted` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=31 ;
+
+-- --------------------------------------------------------
+
+--
+-- Štruktúra tabuľky pre tabuľku `fc_notification`
+--
+
+CREATE TABLE IF NOT EXISTS `fc_notification` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) DEFAULT NULL,
+  `source_type` int(11) DEFAULT '0',
+  `source_id` bigint(20) unsigned DEFAULT NULL,
+  `old_value` smallint(6) DEFAULT NULL,
+  `new_value` smallint(6) DEFAULT NULL,
+  `seen` tinyint(1) DEFAULT '0',
+  `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  KEY `source_id` (`source_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=167 ;
+
+-- --------------------------------------------------------
+
+--
+-- Štruktúra tabuľky pre tabuľku `fc_package`
+--
+
+CREATE TABLE IF NOT EXISTS `fc_package` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `token` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `attack` varchar(40) COLLATE utf8_bin NOT NULL,
+  `attack_mode` tinyint(3) unsigned NOT NULL,
+  `attack_submode` tinyint(3) NOT NULL DEFAULT '0',
+  `hash_type` int(10) unsigned NOT NULL,
+  `hash` longtext COLLATE utf8_bin NOT NULL,
+  `status` smallint(1) unsigned NOT NULL DEFAULT '0',
+  `result` text COLLATE utf8_bin,
+  `keyspace` bigint(20) unsigned NOT NULL,
+  `hc_keyspace` bigint(20) unsigned NOT NULL,
+  `indexes_verified` bigint(20) unsigned NOT NULL,
+  `current_index` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `current_index_2` bigint(20) unsigned NOT NULL,
+  `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `name` text COLLATE utf8_bin NOT NULL,
+  `comment` text COLLATE utf8_bin NOT NULL,
+  `time_start` timestamp NULL DEFAULT NULL,
+  `time_end` timestamp NULL DEFAULT NULL,
+  `cracking_time` double NOT NULL DEFAULT '0',
+  `seconds_per_job` bigint(20) unsigned NOT NULL DEFAULT '3600',
+  `config` longtext COLLATE utf8_bin NOT NULL,
+  `dict1` varchar(255) COLLATE utf8_bin NOT NULL,
+  `dict2` varchar(255) COLLATE utf8_bin NOT NULL,
+  `charset1` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `charset2` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `charset3` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `charset4` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `rules` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `rule_left` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `rule_right` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `markov_hcstat` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `markov_threshold` int(20) NOT NULL DEFAULT '0',
+  `replicate_factor` int(10) unsigned NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=714 ;
+
+--
+-- Spúšťače `fc_package`
+--
+DROP TRIGGER IF EXISTS `package_notification`;
+DELIMITER //
+CREATE TRIGGER `package_notification` AFTER UPDATE ON `fc_package`
+ FOR EACH ROW BEGIN
+	DECLARE user_idCursor int;
+	DECLARE done INT DEFAULT FALSE;
+	DECLARE adminCursor CURSOR FOR (SELECT id FROM fc_user WHERE role_id IN (SELECT id FROM fc_role WHERE VIEW_ALL_PACKAGES=true));
+	DECLARE userWithPermissionCursor CURSOR FOR (SELECT user_id FROM fc_user_permissions WHERE (package_id=NEW.id AND VIEW=true));
+	DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+	-- insert progress info to graph table
+	IF NEW.indexes_verified <> OLD.indexes_verified THEN
+		INSERT INTO fc_package_graph (progress, package_id) VALUES ( 
+	        IF(NEW.hc_keyspace = 0 OR NEW.status = 1 OR NEW.status = 2,
+	           100,
+	           ROUND((NEW.indexes_verified / NEW.hc_keyspace) * 100, 2)
+	          ),
+	      
+	        NEW.id  );
+	END IF;
+
+	-- package status changed. We need to send notifications!
+	IF NEW.status <> OLD.status THEN
+	
+		IF NEW.status = 10 THEN
+			INSERT INTO fc_package_graph (progress, package_id) VALUES ( 0, NEW.id);
+		END IF;
+
+		IF NEW.status = 1 OR NEW.status = 2 THEN
+			INSERT INTO fc_package_graph (progress, package_id) VALUES ( 100, NEW.id);
+		END IF;
+
+		-- send notification to admin
+		OPEN userWithPermissionCursor;
+			user_loop: LOOP
+				FETCH userWithPermissionCursor INTO user_idCursor;
+			    IF done THEN
+			    	LEAVE user_loop;
+			    END IF;
+				INSERT INTO fc_notification  VALUES (DEFAULT, user_idCursor, DEFAULT,NEW.id,OLD.status,NEW.status,DEFAULT, DEFAULT);
+			END LOOP;
+		CLOSE userWithPermissionCursor;
+
+		SET done = FALSE;
+
+		-- send notification to user that can view this package
+		OPEN adminCursor;
+			admin_loop: LOOP
+				FETCH adminCursor INTO user_idCursor;
+			    IF done THEN
+			    	LEAVE admin_loop;
+			    END IF;
+				INSERT INTO fc_notification  VALUES (DEFAULT, user_idCursor, DEFAULT,NEW.id,OLD.status,NEW.status,DEFAULT, DEFAULT);
+			END LOOP;
+		CLOSE adminCursor;
+	END IF;
+
+END
+//
+DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Štruktúra tabuľky pre tabuľku `fc_package_graph`
+--
+
+CREATE TABLE IF NOT EXISTS `fc_package_graph` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `progress` decimal(4,2) NOT NULL,
+  `package_id` bigint(20) unsigned NOT NULL,
+  `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `package_id` (`package_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=375 ;
+
+-- --------------------------------------------------------
+
+--
+-- Štruktúra tabuľky pre tabuľku `fc_role`
+--
+
+CREATE TABLE IF NOT EXISTS `fc_role` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) NOT NULL,
+  `MANAGE_USERS` tinyint(1) NOT NULL DEFAULT '0',
+  `ADD_NEW_PACKAGE` tinyint(1) NOT NULL DEFAULT '0',
+  `UPLOAD_DICTIONARIES` tinyint(1) NOT NULL DEFAULT '0',
+  `VIEW_ALL_PACKAGES` tinyint(1) NOT NULL DEFAULT '0',
+  `EDIT_ALL_PACKAGES` tinyint(1) NOT NULL DEFAULT '0',
+  `OPERATE_ALL_PACKAGES` tinyint(1) NOT NULL DEFAULT '0',
+  `ADD_USER_PERMISSIONS_TO_PACKAGE` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
+
+-- --------------------------------------------------------
+
+--
+-- Štruktúra tabuľky pre tabuľku `fc_rule`
+--
+
+CREATE TABLE IF NOT EXISTS `fc_rule` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL,
+  `path` varchar(400) NOT NULL,
+  `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `deleted` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=59 ;
+
+-- --------------------------------------------------------
+
+--
+-- Štruktúra tabuľky pre tabuľku `fc_settings`
+--
+
+CREATE TABLE IF NOT EXISTS `fc_settings` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `delete_finished_jobs` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `default_seconds_per_job` int(10) unsigned NOT NULL DEFAULT '3600',
+  `default_replicate_factor` int(10) unsigned NOT NULL DEFAULT '1',
+  `default_verify_hash_format` tinyint(1) unsigned NOT NULL DEFAULT '1',
+  `default_check_hashcache` tinyint(3) unsigned NOT NULL DEFAULT '1',
+  `default_job_timeout_factor` int(10) unsigned NOT NULL DEFAULT '6',
+  `default_bench_all` tinyint(1) unsigned NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+
+-- Insert default settings row
+
+INSERT INTO `fc_settings` (`id`, `delete_finished_jobs`, `default_seconds_per_job`, `default_replicate_factor`, `default_verify_hash_format`, `default_check_hashcache`, `default_job_timeout_factor`, `default_bench_all`) VALUES
+(1, 0, 3600, 1, 1, 1, 6, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Štruktúra tabuľky pre tabuľku `fc_user`
+--
+
+CREATE TABLE IF NOT EXISTS `fc_user` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(64) NOT NULL,
+  `password` varchar(128) NOT NULL,
+  `mail` varchar(200) NOT NULL,
+  `role_id` int(11) NOT NULL,
+  `deleted` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `role_id` (`role_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=11 ;
+
+-- --------------------------------------------------------
+
+--
+-- Štruktúra tabuľky pre tabuľku `fc_user_permissions`
+--
+
+CREATE TABLE IF NOT EXISTS `fc_user_permissions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `package_id` bigint(20) unsigned NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `view` tinyint(1) NOT NULL DEFAULT '0',
+  `modify` tinyint(1) NOT NULL DEFAULT '0',
+  `operate` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `package_id` (`package_id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+--
+-- Obmedzenie pre exportované tabuľky
+--
+
+--
+-- Obmedzenie pre tabuľku `fc_notification`
+--
+ALTER TABLE `fc_notification`
+  ADD CONSTRAINT `fc_notification_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `fc_user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fc_notification_ibfk_2` FOREIGN KEY (`source_id`) REFERENCES `fc_package` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Obmedzenie pre tabuľku `fc_package_graph`
+--
+ALTER TABLE `fc_package_graph`
+  ADD CONSTRAINT `fc_package_graph_ibfk_1` FOREIGN KEY (`package_id`) REFERENCES `fc_package` (`id`);
+
+--
+-- Obmedzenie pre tabuľku `fc_user`
+--
+ALTER TABLE `fc_user`
+  ADD CONSTRAINT `fc_user_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `fc_role` (`id`);
+
+--
+-- Obmedzenie pre tabuľku `fc_user_permissions`
+--
+ALTER TABLE `fc_user_permissions`
+  ADD CONSTRAINT `fc_user_permissions_ibfk_1` FOREIGN KEY (`package_id`) REFERENCES `fc_package` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fc_user_permissions_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `fc_user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+
+
+
+
+--
+-- Insert default BENCH_ALL package
+--
+
+INSERT INTO `fc_package` (`id`, `token`, `attack`, `attack_mode`, `attack_submode`, `hash_type`, `hash`, `status`, `result`, `keyspace`, `hc_keyspace`, `indexes_verified`, `current_index`, `current_index_2`, `time`, `name`, `comment`, `time_start`, `time_end`, `cracking_time`, `seconds_per_job`, `config`, `dict1`, `dict2`, `charset1`, `charset2`, `charset3`, `charset4`, `rules`, `rule_left`, `rule_right`, `markov_hcstat`, `markov_threshold`, `replicate_factor`) VALUES
+(1, 'ad97b17dc57f0b4ab480bf57bea0f2e301ab4725386e12b9521ab86efb36f8d9', 'dict', 0, 0, 0, '', 0, NULL, 0, 0, 0, 0, 0, '2017-12-26 09:27:28', 'BENCH_ALL', 'This is default package for benchmarking all hosts.', '2018-01-01 11:12:14', NULL, 0, 3600, '|||attack_mode|UInt|1|0|||\n|||name|String|7|Test DB|||\n|||enable_opencl|Bool|1|1|||\n', '', '', '', '', '', '', NULL, '', '', NULL, 0, 1);

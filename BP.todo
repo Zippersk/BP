@@ -73,10 +73,11 @@ LINKY:
 FIXY:
     ✔ Do ER diagramu pridať Encrypted files @done (18-04-23 15:11)
     ✔ Do návrhu pridať text @done (18-04-30 12:48)
-    ☐ Pridať BP o Markovských kokotinach do literatury
-    ☐ Do prílohy možno pridať celý trigger z DB.
+    ✔ Pridať BP o Markovských kokotinach do literatury @done (18-05-13 11:19)
+    ✘ Do prílohy možno pridať celý trigger z DB. @cancelled (18-05-13 11:19)
     ✔ Spomenuť pri implementacii ake všetky kokotinky využívame @done (18-04-30 12:49)
-    ☐ Zmeniť hosť na nejake synonymum napr vypočetný uzol...
+    ✔ Zmeniť hosť na nejake synonymum napr vypočetný uzol... @done (18-05-13 11:19)
+    ☐ Literatura o sql injection?
 
 
 
