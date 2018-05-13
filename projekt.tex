@@ -15,8 +15,8 @@
 %   projekt-01-kapitoly-chapters.tex - obsah práce / the thesis content
 %   projekt-30-prilohy-appendices.tex - přílohy / appendices
 %==============================================================================
-\documentclass[slovak]{fitthesis}
-%\documentclass[slovak, cprint]{fitthesis}
+\documentclass[zadani,slovak]{fitthesis}
+%\documentclass[slovak, print]{fitthesis}
 
 % bez zadání - pro začátek práce, aby nebyl problém s překladem
 %\documentclass[english]{fitthesis} % without assignment - for the work start to avoid compilation problem
@@ -138,8 +138,8 @@
   supervisor.title.p={Ing.},   %titul před jménem (nepovinné) / title before the name (optional)
   %supervisor.title.a={Ph.D.},    %titul za jménem (nepovinné) / title after the name (optional)
   % Klíčová slova / keywords
-  keywords.cs={REST, Fitcrack, API, SPA}, % klíčová slova v českém či slovenském jazyce / keywords in czech or slovak language
-  keywords.en={REST, Fitcrack, API, SPA}, % klíčová slova v anglickém jazyce / keywords in english
+  keywords.cs={REST, Fitcrack, API, SPA, jednostránková aplikácia, Vue, Flask, SqlAlchemy}, % klíčová slova v českém či slovenském jazyce / keywords in czech or slovak language
+  keywords.en={REST, Fitcrack, API, SPA, single page aplication, Vue, Flask, SqlAlchemy}, % klíčová slova v anglickém jazyce / keywords in english
   % Abstrakt / Abstract
   abstract.cs={Táto práca rieši návrh a implementáciu webovej aplikácie na vzdialenú správu systému Fitcrack. Jedná sa o~systém, ktorý slúži na distribuovanú obnovu hesiel. Serverová časť webovej aplikácie je navrhnutá s~použitím architektúry REST, ktorá znižuje zátaž na server a zároveň zjednodušuje testovanie systému. Prezentačná vrstva systému je implementovaná ako moderná jednostránková webová prezentácia (Single-page aplication). So serverovou časťou komunikuje pomocou asynchrónnych žiadosti (AJAX), ktorých obsah je vo formáte JSON. Súčasťou webovej aplikácie je príjemné responzívne užívateľské rozhranie, systém užívateľov s~oprávneniami a rôzne pokročilejšie grafické prvky, ako napríklad grafy.
 
@@ -383,7 +383,7 @@ REST je úzko spojený s~protokolom HTTP, keďže ho prvýkrát navrhol a popís
 Architektúra REST sa používa pre jednotný prístup ku zdrojom. Jedná sa o~spôsob, ako klient môže pomocou základných HTTP volaní vytvárať, čítať, editovať alebo mazať informácie zo serveru. Zdrojom môžu byť dáta alebo stav aplikácie, pokiaľ sa dá dátami vyjadriť. K~jednotlivým zdrojom sa pristupuje pomocou URI (viď. \ref{URI}). Každý zdroj musí mať vlastný identifikátor URI.
 
 \subsection{URI} \label{URI}
-URI (Uniform Resource Identifier – jednotný identifikátor zdroja) je veľmi obecný koncept. Základný formát je veľmi voľný. Jedná sa o~názov takzvanej schémy, oddelenej dvojbodkou od zvyšku URI. Tento zvyšok tvorí v~podstate ľubovoľný reťazec znakov. Záleží na zvolenej schéme\cite{URIRFC}. V~architektúre REST sa URI používa hlavne s~použitím schémy HTTP alebo HTTPS. Príklad takejto URI s~jej jednotlivými komponentami je uvedený nižšie na obrázku \ref{fig:formatURI}. Všeobecne sa URI so schémou http skladá z~IP adresy alebo doménového mena, nepovinne sa za doménovým menom uvádza port (ak nie je uvedený tak sa predpokladá pre http port 80 a pre https 443). Ďalej sa uvádza cesta k~zdroju a následne nepovinné query parametre oddelené ampersandom. Na konci URI sa môže objaviť fragment stránky, ktorý často obsahuje id HTML elementu na ktorý sa má prehliadač po otvorení URI zamerať.
+URI (Uniform Resource Identifier – jednotný identifikátor zdroja) je veľmi obecný koncept. Základný formát je veľmi voľný. Jedná sa o~názov takzvanej schémy, oddelenej dvojbodkou od zvyšku URI. Tento zvyšok tvorí v~podstate ľubovoľný reťazec znakov. Záleží na zvolenej schéme \cite{URIRFC}. V~architektúre REST sa URI používa hlavne s~použitím schémy HTTP alebo HTTPS. Príklad takejto URI s~jej jednotlivými komponentami je uvedený nižšie na obrázku \ref{fig:formatURI}. Všeobecne sa URI so schémou http skladá z~IP adresy alebo doménového mena, nepovinne sa za doménovým menom uvádza port (ak nie je uvedený tak sa predpokladá pre http port 80 a pre https 443). Ďalej sa uvádza cesta k~zdroju a následne nepovinné query parametre oddelené ampersandom. Na konci URI sa môže objaviť fragment stránky, ktorý často obsahuje id HTML elementu na ktorý sa má prehliadač po otvorení URI zamerať.
 
 
 
@@ -536,7 +536,7 @@ Základným modulom v~systéme je jeho jadro, ktoré spĺňa úlohu webového se
 
 
 \subsubsection{Logika konečných bodov}
-Jedná sa o~modul, v~ktorom sú obslúžené dotazy na konkrétne URI (viď. \ref{URI}). Zoznam dostupných URI je uvedený v~tabuľke \ref{zoznamURItable}. Väčšina konečných bodov podporuje viac typov HTTP metód (viď. \ref{httpMetody}). Podľa výberu metódy sa vykoná operácia so zdrojom. Niektoré konečné body podporujú takzvané query parametre za url adresou. Pri chybe v~tomto module, webový server odpovedá HTTP správami, ktoré začínajú číslom 4 (viď \ref{4XX}). Ak užívateľ žiada o~neplatnú kombináciu URI adresy a HTTP metódy, je mu vrátená HTTP správa s~kódom 404. V~prípade že je užívateľ neprihlásený a žiada o~zdroj, ktorý vyžaduje autentifikáciu, v~odpovedi dostane HTTP správu s~kódom 401. Pokiaľ je užívateľ prihlásený, ale na zdroj o~ktorý žiada nemá dostačujúce oprávnenia, tento modul vracia HTTP správu s~kódom 403. V~inakšom prípade je dotaz týmto modulom spracovaný. Ak nedôjde k~chybe počas spracovávania dotazu, modul vygeneruje odpoveď vo formáte JSON\ref{json}, ktorú pridá do tela HTTP odpovede s~kódom 200 (viď \ref{2XX}).
+Jedná sa o~modul, v~ktorom sú obslúžené dotazy na konkrétne URI (viď. \ref{URI}). Zoznam dostupných URI je uvedený v~tabuľke \ref{zoznamURItable}. Väčšina konečných bodov podporuje viac typov HTTP metód (viď. \ref{httpMetody}). Podľa výberu metódy sa vykoná operácia so zdrojom. Niektoré konečné body podporujú takzvané query parametre za url adresou. Pri chybe v~tomto module, webový server odpovedá HTTP správami, ktoré začínajú číslom 4 (viď \ref{4XX}). Ak užívateľ žiada o~neplatnú kombináciu URI adresy a HTTP metódy, je mu vrátená HTTP správa s~kódom 404. V~prípade že je užívateľ neprihlásený a žiada o~zdroj, ktorý vyžaduje autentifikáciu, v~odpovedi dostane HTTP správu s~kódom 401. Pokiaľ je užívateľ prihlásený, ale na zdroj o~ktorý žiada nemá dostačujúce oprávnenia, tento modul vracia HTTP správu s~kódom 403. V~inakšom prípade je dotaz týmto modulom spracovaný. Ak nedôjde k~chybe počas spracovávania dotazu, modul vygeneruje odpoveď vo formáte JSON (viď \ref{json}), ktorú pridá do tela HTTP odpovede s~kódom 200 (viď \ref{2XX}).
 
 
 \begin{table}[h]
@@ -752,7 +752,7 @@ Keďže má byť nová aplikácia vizuálne prívetivá pre užívateľa, jej d�
 Architektúru systému tvoria tri vrstvy - prezentačná, aplikačná a dátová (alebo databázová). Vrstvy medzi sebou spolupracujú a každá vrstva môže bežať na rôznej výpočtovej infraštruktúre. Architektúru systému je možné vidieť na obrázku \ref{fig:architektura}.
 Prezentačná vrstva má za hlavnú úlohu komunikovať s~aplikačnou vrstvou a vizualizovať dáta užívateľovi. Zobrazenie vo webovej prezentácii je implementované pomocou SPA (Single-page Application). Hlavnou úlohou SPA je synchronizácia stavu objektov medzi dátovou a prezentačnou vrstvou. 
 
-Cieľom aplikačnej vrstvy aplikácie je spracovanie požiadaviek od prezentačnej vrstvy a komunikácia s~databázovou vrstvou. Komunikácia s~prezentačnou vrstvou prebieha vo formáte JSON\ref{json}.
+Cieľom aplikačnej vrstvy aplikácie je spracovanie požiadaviek od prezentačnej vrstvy a komunikácia s~databázovou vrstvou. Komunikácia s~prezentačnou vrstvou prebieha vo formáte JSON (viď \ref{json}).
 
 Databázovú vrstvu tvorí MySQL databáza, ktorá je vytvorená podľa ER diagramu z~obrázka \ref{fig:ER}. Databázová vrstva spracováva požiadavky aplikačnej vrstvy a vykonáva operácie ako ukladanie dát, zobrazovanie dát, vyhľadávanie a mazanie dát.
 
@@ -1253,67 +1253,243 @@ Keďže si myslím, že systém Fitcrack môže byť v~budúcnosti úspešný, m
   
 
 \chapter{Obsah priloženého pamäťového média}
+Na priloženom CD sa nachádza:
+\begin{itemize}
+    \item zdrojový kód textu bakalárskej práce napísaný v jazyku \LaTeX,
+    \item táto práca vo formáte \texttt{.pdf},
+    \item zdrojové kódy serverovej časti webovej aplikácie,
+    \item zdrojové kódy klientskej časti webovej aplikácie,
+    \item skript na vytvorenie databázy v jazyku SQL.
+\end{itemize}
+
+
+\addtocontents{toc}{\protect\setcounter{tocdepth}{-1}}
 
 \chapter{Databázová štruktúra}
 \label{DBstructure}
 
 Databáza, ktorá slúži na uchovávanie dát systému Fitcrack sa skladá množstva tabuliek. Niektoré tabuľky patria systému BOINC\footnote{\url{https://boinc.berkeley.edu/trac/wiki/DataBase}}, ktorý s nimi pracuje, a systém Fitcrack ich nemodifikuje. Ostatné tabuľky patria už priamo systému Fitcrack. Obsahujú dáta, ktoré slúžia na generovanie úloh, ukladanie výsledkov výpočtu, nájdených hesiel atď. V následujúcich sekciách opisujem štruktúry jednotlivých tabuliek, ktoré využíva systém Fitcrack.
 
-\section{hashcache}
+\section{hashcache} \label{fcHashcache}
+Tabuľka \texttt{hashcache} slúži na ukladanie už nájdených hesiel spolu s hešom. Vďaka tomu je možné upozorniť užívateľa v prípade že vytvára úlohy s hešom, ktorý sa už v minulosti počítal. Schéma tabuľky je nasledovná:
+\begin{itemize}
+    \item \textbf{id} - jednoznačný identifikátor záznamu,
+    \item \textbf{hash\_type} - typ kryptografického algoritmu použitý v úlohe,
+    \item \textbf{hash} - heš, s ktorým bola úloha vytvorená,
+    \item \textbf{result} - získané heslo v kódovaní Base64\footnote{\url{https://sk.wikipedia.org/wiki/Base64}},
+    \item \textbf{added} - čas pridania záznamu.
+\end{itemize}
 
-\section{host}
+\section{host} \label{fcHost}
+Táto tabuľka obsahuje aktívne výpočtové uzly, ktoré sa aktuálne podieľajú na výpočte niektorej z úlohy. Táto tabuľka má na starosti zviazať výpočtové uzly s úlohami, ku ktorým sú priradené. Schéma tabuľky je nasledovná:
+\begin{itemize}
+    \item \textbf{id} - jednoznačný identifikátor záznamu,
+    \item \textbf{boinc\_host\_id} - identifikátor uzla z BIONC tabuľky,
+    \item \textbf{power} - posledný nameraný výkon uzla,
+    \item \textbf{package\_id} - identifikátor úlohy, ku ktorej je uzol pridelený,
+    \item \textbf{status} - stav hosta, môže nadobúdať tieto hodnoty:
+      \begin{itemize}
+        \item \textbf{0} - na výpočtovom uzly prebieha meranie výkonu,
+        \item \textbf{1} - na uzly prebieha klasický výpočet,
+        \item \textbf{3} - uzol dokončil všetky prácu,
+        \item \textbf{4} - na výpočtovom uzly došlo k chybe,
+      \end{itemize}
+    \item \textbf{time} - čas pridania záznamu.
+\end{itemize}
+
 
 \section{host\_activity}
-
+V tejto tabuľke je uložená história aktivity uzlov. Schéma tejto tabuľky je nasledovná:
+\begin{itemize}
+    \item \textbf{id} - jednoznačný identifikátor záznamu,
+    \item \textbf{boinc\_host\_id} - identifikátor uzla z BIONC tabuľky,
+    \item \textbf{package\_id} - identifikátor úlohy, ku ktorej je uzol pridelený.
+\end{itemize}
 
 \section{job}
+Do tejto tabuľky sa ukladajú informácie o pracovných jednotkách, ktoré sú pridelené výpočtovým uzlom. Schéma tejto tabuľky je nasledovná:
+\begin{itemize}
+    \item \textbf{id} - jednoznačný identifikátor záznamu,
+    \item \textbf{package\_id} - identifikátor úlohy, ku ktorej pracovná jednotka patrí,
+    \item \textbf{workunit\_id} - identifikátor pracovnej úlohy z BOINC tabuľky,
+    \item \textbf{host\_id} - identifikátor výpočtového uzla z tabuľky \texttt{host} (schéma tabuľky je uvedená sekcii \ref{fcHost}),
+    \item \textbf{boinc\_host\_id} - identifikátor uzla z BIONC tabuľky,
+    \item \textbf{start\_index} - index stavového priestoru, kde začína prehľadávanie,
+    \item \textbf{start\_index\_2} - index pre prvý slovník v kombinačnom útoku,
+    \item \textbf{hc\_keyspace} - veľkosť množiny hesiel v danej pracovnej jednotke, 
+    \item \textbf{passwords\_verified} - počet už overených hesiel v pracovnej jednotke 
+    \item \textbf{mask\_id} -  odkaz do tabuľky \texttt{mask} (schéma tabuľky je uvedená v sekcii \ref{fcMask}),
+    \item \textbf{duplicated} - jedná sa o príznak, ktorý udáva, či bola pracovná jednotka v dôsledku chyby rozdelená na viac pracovných jednotiek,
+    \item \textbf{duplicate} - pri duplikovanej pracovnej jednotke obsahuje identifikátor pôvodnej pracovnej jednotky,
+    \item \textbf{time} - čas pridania záznamu,
+    \item \textbf{cracking\_time} - doba trvania pracovnej jednotky,
+    \item \textbf{retry} - príznak, či sa jedná o znovu priradenú pracovnú jednotku,
+    \item \textbf{finished} - príznak dokončenia pracovnej jednotky.
+    
+\end{itemize}
 
+\section{mask} \label{fcMask}
+V tejto tabuľke sú uložené masky pre útoky s maskami. Schéma tabuľky je nasledovná:
+\begin{itemize}
+    \item \textbf{id} - jednoznačný identifikátor záznamu,
+    \item \textbf{package\_id} - identifikátor úlohy, ku ktorej je maska pridelená,
+    \item \textbf{mask} - samotná maska uložená ako textový reťazec,
+    \item \textbf{current\_index} - počet už overených hesiel z danej masky,
+    \item \textbf{keyspace} - veľkosť množiny možných hesiel,
+    \item \textbf{hc\_keyspace} - veľkosť množiny možných hesiel vypočítaná programom Hashcat.
+\end{itemize}
 
-\section{mask}
 
 
 \section{package}
+Do tejto tabuľky sa ukladajú záznamy o úlohách. Obsahuje základné údaje o úlohe (dobu výpočtu, nájdené heslo, veľkosť množiny hesiel atď.). Schéma tejto tabuľky je nasledovná:
+\begin{itemize}
+    \item \textbf{id} - jednoznačný identifikátor záznamu,
+    \item \textbf{token} - unikátny identifikátor záznamu,
+    \item \textbf{attack} - názov útoku,
+    \item \textbf{attack\_mode} - typ útoku,
+    \item \textbf{attack\_submode} - podtyp útoku,
+    \item \textbf{hash\_type} - typ kryptografického heša,
+    \item \textbf{hash} - kryptografický heš,
+    \item \textbf{status} - stav úlohy,
+    \item \textbf{result} - nájdené heslo v kódovaná Base64,
+    \item \textbf{keyspace} - veľkosť množiny hesiel danej úlohy,
+    \item \textbf{hc\_keyspace} - veľkosť množiny hesiel danej úlohy vypočítaná programom Hashcat,
+    \item \textbf{passwords\_verified} -  počet už overených hesiel z úlohy,
+    \item \textbf{current\_index} - aktuálny indexy množiny hesiel, od ktorého bude generovaná nasledujúca pracovná jednotka,
+    \item \textbf{current\_index\_2} - aktuálny index v prvom slovníky pri kombinačnom útoku,
+    \item \textbf{time} - čas pridania záznamu,
+    \item \textbf{name} - názov úlohy,
+    \item \textbf{comment} - komentár k úlohe,
+    \item \textbf{time\_start} - plánovaný začiatok úlohy,
+    \item \textbf{time\_end} - plánovaný koniec úlohy,
+    \item \textbf{cracking\_time} - doba výpočtu,
+    \item \textbf{seconds\_per\_job} - doba po ktorú má bežať pracovná jednotka,
+    \item \textbf{config} - konfiguračný textový reťazec pre Generátor vo formáte TLV\footnote{\url{https://en.wikipedia.org/wiki/Type-length-value}},
+    \item \textbf{dict1} - názov slovníku pri slovníkovom útoku alebo názov ľavého slovníku pri kombinačnom útoku,
+    \item \textbf{dict2} - názov pravého slovníku pri kombinačnom útoku,
+    \item \textbf{charset1} - Špeciálna (cudzojazyčná) znaková sa č. 1,
+    \item \textbf{charset2} - Špeciálna (cudzojazyčná) znaková sa č. 2,
+    \item \textbf{charset3} - Špeciálna (cudzojazyčná) znaková sa č. 3,
+    \item \textbf{charset4} - Špeciálna (cudzojazyčná) znaková sa č. 4,
+    \item \textbf{rules} - názov súboru s pravidlami pri slovníkovom útoku,
+    \item \textbf{rule\_left} - pravidlo pre modifikáciu ľavého slovníka pri kombinačnom útoku,
+    \item \textbf{rule\_right} - pravidlo pre modifikáciu pravého slovníka pri kombinačnom útoku,
+    \item \textbf{markov\_hcstat} - názov súboru s Markovovým modelom pri útoku s maskami,
+    \item \textbf{markov\_threshold} - obmedzenie počtu znakov v riadku Markovovej matice,
+    \item \textbf{replicate\_factor} - replikačný faktor pre danú úlohu.
+\end{itemize}
 
 
 \section{settings}
+Táto tabuľka slúži na nastavenie systému Fitcrack. Má nasledovnú štruktúru:
+\begin{itemize}
+\item \textbf{id} - jednoznačný identifikátor záznamu,
+\item \textbf{delete\_finished\_jobs} - príznak udávajúci, či má asimilátor mazať dokončené pracovné jednotky,
+\item \textbf{default\_seconds\_per\_job} - implicitné nastavenie doby trvania pracovnej jednotky,
+\item \textbf{default\_replicate\_factor} - východzie nastavenie replikačného faktoru pre úlohy,
+\item \textbf{default\_verify\_hash\_format} - východzie nastavenie overovania formátu heša pri zadávaní úlohy,
+\item \textbf{default\_check\_hashcache} - východzie nastavenie kontroly databázy známych hešov (viď. \ref{fcHashcache}) pri vytváraní úlohy,
+\item \textbf{default\_job\_timeout\_factor} - doba za ktorú budú pracovné jednotky prehlásené za nedokončené a pridelené iným výpočtovým uzlom.
+\end{itemize}
 
+\section{benchmark}
+Tabuľka obsahuje záznamy o meraní výkonu výpočtových uzlov. Schéma tabuľky je nasledovná:
+\begin{itemize}
+\item \textbf{id} - jednoznačný identifikátor záznamu,
+\item \textbf{boinc\_host\_id} - identifikátor uzla z BIONC tabuľky,
+\item \textbf{hash\_type} -  typ testovaného kryptografického heša,
+\item \textbf{power} - nameraná rýchlosť v počte hešov za sekundu,
+\item \textbf{last\_update} - čas poslednej aktualizácie záznamu.
+\end{itemize}
 
-\section{dictionary}
+\section{dictionary, rule, charset, hcstats a masks\_set}
+Tieto tabuľky slúžia na uchovávanie informácií o nahratých súboroch. V tabuľke \texttt{dictionary} sa nachádzajú záznamy o nahratých slovníkov do systému Fitcrack, v tabuľke \texttt{rule} informácie o nahratých súboroch s pravidlami, v \texttt{charset} sú uložené informácie o vlastných znakových sadách, v tabuľke \texttt{hcstats} sa nachádzajú informácie o Markovových modeloch nahratých do systému a v tabuľke \texttt{mask\_set} sú informácie o súboroch v ktorých sú uložené masky. Všetky tieto tabuľky majú rovnakú schému, ktorá je nasledovná:
 
-
-\section{rule}
-
-
-\section{charset}
-
-
-\section{hcstats}
+\begin{itemize}
+    \item \textbf {id} - jednoznačný identifikátor záznamu,
+    \item \textbf {name} - názov súboru,
+    \item \textbf {path} - cesta k súboru,
+    \item \textbf {time} - čas pridania záznamu,
+    \item \textbf {deleted} - príznak vymazania súboru.
+\end{itemize}
 
 
 \section{encrypted\_file}
-
+V tejto tabuľke sa nachádzajú informácie o zašifrovaných súboroch nahratých do systému.  Schéma tabuľky je nasledovná:
+\begin{itemize}
+    \item \textbf {id} - jednoznačný identifikátor záznamu,
+    \item \textbf {name} - názov šifrovaného súboru,
+    \item \textbf {path} - cesta k súboru,
+    \item \textbf {hash} - kryptografický heš, ktorým je súbor zašifrovaný,
+    \item \textbf {hash\_type} - typ kryptografického heša,
+    \item \textbf {time} - čas pridania záznamu.
+\end{itemize}
 
 \section{notification}
-
-
-\section{masks\_set}
+Tabuľka slúži na uloženie upozornení pre užívateľov. Schéma tejto tabuľky je nasledovná:
+\begin{itemize}
+    \item \textbf {id} - jednoznačný identifikátor záznamu,
+    \item \textbf {source\_type} - typ zdroja upozornenia, zvyčajne ide o úlohu,
+    \item \textbf {source\_id} - identifikátor zdroja upozornenia (napríklad identifikátor úlohy)
+    \item \textbf {old\_value} - pôvodná hodnota zmenenej vlastnosti, ktorá vyvolala upozornenie,
+    \item \textbf {new\_value} - nová hodnota zmenenej vlastnosti, ktorá vyvolala upozornenie,
+    \item \textbf {seen} - príznak videnia upozornenia užívateľom,
+    \item \textbf {user\_id} - identifikátor užívateľa, pre ktorého je upozornenie určené,
+    \item \textbf {time} - čas pridania záznamu.
+\end{itemize}
 
 
 \section{package\_graph}
+Táto tabuľka slúži na vykreslenie grafu pokroku úlohy. Schéma je nasledovná:
+\begin{itemize}
+    \item \textbf {id} - jednoznačný identifikátor záznamu,
+    \item \textbf {progress} - pokrok úlohy v percentách,
+    \item \textbf {time} - čas pridania záznamu.
+\end{itemize}
 
 
 \section{user\_permissions}
-
+Táto tabuľka sa aktuálne nevyužíva, ale v budúcnosti plánujem do systému zaviesť systém oprávnení nad konkrétnymi úlohami. Jednotlivé oprávnenia k úlohe sú riešené formou príznakov. Štruktúra tejto tabuľky je nasledovná:
+\begin{itemize}
+    \item \textbf {id} - jednoznačný identifikátor záznamu,
+    \item \textbf {package\_id} - identifikátor úlohy, ku ktorej sa oprávnenie viaže,
+    \item \textbf {used\_id} - identifikátor užívateľa,
+    \item \textbf {modify} - príznak modifikácie úlohy,
+    \item \textbf {view} - príznak zobrazenia úlohy,
+    \item \textbf {operate} - príznak spúšťania, opakovania a zastavovania úlohy.
+\end{itemize}
 
 \section{user}
+Tabuľka obsahuje informácie o užívateľoch systému Fitcrack, spolu s ich prihlasovacími údajmi. Schéma tejto tabuľky je nasledovná:
+\begin{itemize}
+    \item \textbf {id} - jednoznačný identifikátor záznamu,
+    \item \textbf {role\_id} - odkaz na užívateľskú rolu (viď \ref{fcRole}), ktorú má užívateľ priradenú,
+    \item \textbf {username} - prihlasovacie meno,
+    \item \textbf {password} - heš užívateľského hesla,
+    \item \textbf {mail} - emailová adresa užívateľa,
+    \item \textbf {deleted} - príznak vymazania užívateľa.
+\end{itemize}
 
 
-\section{role}
 
 
-\section{benchmark}
+\section{role} \label{fcRole}
+V tejto tabuľke sú uložené jednotlivé užívateľské role. Každé oprávnenie je riešenie príznakom. V budúcnosti môžu pribudnúť ďalšie oprávnenia. Schéma tejto tabuľky je nasledovná:
 
 
+
+\begin{itemize}
+\item \textbf{id} - jednoznačný identifikátor záznamu,
+\item \textbf{name} - názov užívateľskej role,
+\item \textbf{MANAGE\_USERS} - užívateľ s rolou s týmto oprávneným môže modifikovať iných užívateľov,
+\item \textbf{ADD\_NEW\_PACKAGE} -  užívateľ s rolou s týmto oprávneným môže pridávať nové úlohy,
+\item \textbf{UPLOAD\_DICTIONARIES} -  užívateľ s rolou s týmto oprávneným môže nahrávať slovníky,
+\item \textbf{VIEW\_ALL\_PACKAGES} -  užívateľ s rolou s týmto oprávneným môže vidieť všetky úlohy,
+\item \textbf{EDIT\_ALL\_PACKAGES} -  užívateľ s rolou s týmto oprávneným môže modifikovať všetky úlohy,
+\item \textbf{OPERATE\_ALL\_PACKAGES} -  užívateľ s rolou s týmto oprávneným môže spúšťať, opakovať a zastavovať všetky úlohy,
+\item \textbf{ADD\_USER\_PERMISSIONS\_TO\_PACKAGE} -  užívateľ s rolou s týmto oprávneným k úlohám môže pridávať oprávnenia iným užívateľom.
+\end{itemize}
 
   % Přílohy / Appendices
   %\input{projekt-30-prilohy-appendices}
